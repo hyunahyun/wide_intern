@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manage Motion ID Page</title>
   <link rel='stylesheet' href='css/bootstrap.min.css'>
-	
+		
 	<style>
 		h4, caption {text-align: center}
 		#dropdownMenu1 {margin: 0px}
@@ -29,12 +29,10 @@
 						타입 선택
 						<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-					<li role="presentation"><input class="cate" type="submit" value="펜"></li>
-					<li role="presentation"><input class="cate" type="submit" value="조이스틱"></li>
+					<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 					</ul>
 				</div>
-				<input class="btn btn-default" type="button" value="추가">
+				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="추가">
 			</div>
 			<div class="row">
 				<table class="table table-bordered">
@@ -54,12 +52,12 @@
 			</div>
 			<div class="row">
 				<p id="count"></p>
-				<input class="btn btn-default" type="submit" value="다운로드">
 				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#DeleteModal" value="삭제">
 				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#ModifyModal" value="수정">
 			</div>
 	</div>
 	
+	<!--삭제 모달 창-->
 	<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -68,14 +66,14 @@
 					<h4 class="modal-title">삭제하기</h4>
 				</div>
 				<div class="modal-body">
-					<h5>반드시 인덱스로 검색 후, 아래 사항들을 확인하시고 석제버튼 누르시길 바랍니다. (인덱스 수정 X)</h5>
+					<h5>반드시 인덱스로 검색 후, 아래 사항들을 확인하시고 석제버튼 누르시기 바랍니다. (인덱스 수정 X)</h5>
 					<div class="row modal-row">
 						<p>인덱스 : </p>
 						<input type="text" class="form-control" id="search_seq1" placeholder="인덱스를 입력하세요.">
 						<input type="submit" class="search" id="search_dele" value="검색">
 					</div>
 					<h5>검색 결과</h5>
-					<p id="search_type1">타입 : </p>
+					<p id="search_type1">카테고리 : </p>
 					<p id="search_motionid1">모션아이디 : </p>
 					<p id="search_ver1">버전 : </p>
 					<p id="search_state1">등록상태 : </p>
@@ -88,6 +86,7 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	
+	<!--수정 모달 창-->
 	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -96,7 +95,7 @@
 					<h4 class="modal-title">수정하기</h4>
 				</div>
 				<div class="modal-body">
-					<h5>반드시 인덱스로 검색 후, 아래 사항들을 수정하시고 수정버튼 누르시길 바랍니다. (인덱스 수정 X)</h5>
+					<h5>반드시 인덱스로 검색 후, 아래 사항들을 수정하시고 수정버튼 누르시기 바랍니다. (인덱스 수정 X)</h5>
 					<div class="row modal-row">
 						<p>인덱스 : </p>
 						<input type="text" class="form-control" id="search_seq2" placeholder="인덱스를 입력하세요.">
@@ -104,7 +103,7 @@
 					</div>
 					<h5>검색 결과</h5>
 					<div class="row modal-row">
-						<p>타입 : </p> <input class="form-control" id="search_type2">
+						<p>카테고리 : </p> <input class="form-control" id="search_type2">
 					</div>
 					<div class="row modal-row">
 						<p>모션아이디 : </p> <input class="form-control" id="search_motionid2">
@@ -124,12 +123,50 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	
+	<!--추가 모달 창-->
+	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					<h4 class="modal-title">추가하기</h4>
+				</div>
+				<div class="modal-body">
+					<h5>1개 추가 / 여러 개 추가 중 하나를 반드시 선택 후, 생성버튼을 누르시기 바랍니다.</h5>
+					<h5>1개 추가 시 아래 화면에 나오는 결과를 DB에 저장하고싶을 경우, 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
+					<h5>여러 개 추가 시 다운로드된 파일을 재업로드 후, 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
+					<div class="row modal-row">
+						<label class="radio-inline">
+							<input type="radio" name="count" id="add_one">1개 추가
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="count" id="add_several">여러 개 추가
+						</label>
+						<input class="form-control" id="add_type" placeholder="카테고리 입력" >
+						<input class="form-control" id="add_count" placeholder="개수 입력 (반드시 숫자)" >
+						<input type="submit" class="search" id="generate_id" value="생성">
+					</div>
+					<h5>생성 결과</h5>
+					<p id="genresult_type" style="display:none">카테고리 : </p>
+					<p id="genresult_id" style="display:none">모션아이디 : </p>
+					<p id="genresult_several" style="display:none">다운로드된 파일을 확인하시고, DB저장을 원할 경우 재업로드 해주시기 바랍니다.</p>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" id="save_btn" value="DB저장">
+					<button type="button" onclick=" return resetSearch3()" class="btn btn-default" data-dismiss="modal">취소</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/bootstrap.js"></script>
 	<script>
 		var result = null;
 		var i;
+		var current_cate = null;
 		
+		// 삭제 모달 창 리셋
 		var resetSearch1 = function(){
 			$('#search_seq1').val(null);
 			$('#search_type1').text("타입 : ");
@@ -138,6 +175,7 @@
 			$('#search_state1').text("등록상태 : ");
 		}
 		
+		// 수정 모달 창 리셋
 		var resetSearch2 = function(){
 			$('#search_seq2').val(null);
 			$('#search_type2').val(null);
@@ -146,32 +184,79 @@
 			$('#search_state2').val(null);
 		}
 		
-		$(".cate").on('click', function() {
+		// 추가 모달 창 리셋
+		var resetSearch3 = function(){
+			$("#add_type").val(null);
+			$("#add_count").val(null);
+			
+			var radiobox = document.getElementsByName("count");
+			radiobox[0].checked = false;
+			radiobox[1].checked = false; 
+			
+			$("#genresult_several").css('display', 'none');
+			$("#genresult_id").css('display', 'none');
+			$("#genresult_type").css('display', 'none');
+			$("#genresult_type").text('카테고리 : ');
+			$("#genresult_id").text('모션아이디 : ');		
+		}
+		
+		// 모션아이디 랜덤 생성
+		var generateId = function(gentype){
+			if(gentype == "펜") return '11' + (Math.floor(Math.random() * 100000) + 1);
+			else if(gentype == "조이스틱") return '22' + (Math.floor(Math.random() * 100000) + 1);
+		}
+		
+		// 카테고리 드롭박스 클릭 시
+		$("#dropdownMenu1").on('click', function(){
 			$.ajax({
 				url: "php/load_cate.php",
 				type: "POST",
 				async:false,
-				data: {"motion_type": $(this).val()},
 				success: function(data){
 					result = JSON.parse(data);
 				
-					//개수 출력
-					$('#count').text("결과 개수 : " + result.length);
-				
-					//테이블 로딩
-					$('tbody').children().remove();	
-				
+					$("#dropdownMenuResult").children().empty();
+					
 					for(i=0; i<result.length; i++){
-						$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td></tr>');
+						$('#dropdownMenuResult:last').append('<li role="presentation"><input class="cate" type="submit" value="' + result[i][0] +'"></li>');
 					}
+						 
+					$(".cate").on('click', function() {
+						current_cate = $(this).val();
+						$.ajax({
+							url: "php/load_by_cate.php",
+							type: "POST",
+							async:false,
+							data: {"motion_type": $(this).val()},
+							success: function(data){
+								result = JSON.parse(data);
+
+								//개수 출력
+								$('#count').text("결과 개수 : " + result.length);
+
+								//테이블 로딩
+								$('tbody').children().remove();	
+
+								for(i=0; i<result.length; i++){
+									$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td></tr>');
+								}
+							},
+							error: function(data){
+								alert("error by load_by_cate.php");
+							}
+						});
+					}); 
+		
 				},
 				error: function(data){
 					alert("error by load_cate.php");
 				}
 			});
-		}); 
+		});
 		
+		// 인덱스로 검색 시
 		$(".search").on('click', function() {
+			// 삭제 모달 창에서 검색 시
 			if($(this).attr('id') == 'search_dele'){
 				if((document.getElementById("search_seq1").value == null)){
 					alert("인덱스를 입력하세요");
@@ -191,7 +276,7 @@
 								resetSearch1();
 							}
 							else{
-								$('#search_type1').text("타입 : " + result[1]);
+								$('#search_type1').text("카테고리 : " + result[1]);
 								$('#search_motionid1').text("모션아이디 : " + result[2]);
 								$('#search_ver1').text("버전 : " + result[3]);
 								$('#search_state1').text("등록상태 : " + result[4]);
@@ -203,6 +288,8 @@
 					});
 				}
 			}
+			
+			// 수정 모달 창에서 검색 시
 			else if($(this).attr('id') == 'search_modi'){
 				if((document.getElementById("search_seq2").value == null)){
 					alert("인덱스를 입력하세요");		
@@ -236,6 +323,7 @@
 			}
 		}); 
 		
+		// 삭제 버튼 클릭 시
 		$("#delete_btn").on('click', function(){
 			$.ajax({
 				url: "php/delete_by_index.php",
@@ -246,7 +334,7 @@
 					alert("삭제되었습니다");
 					resetSearch1();
 					
-					//모달 창 닫기
+					// 삭제 모달 창 닫기
 					$("body").attr('class', '');
 					$("#DeleteModal").attr('aria-hidden', 'true');
 					$("#DeleteModal").css('display','none');
@@ -258,6 +346,7 @@
 			});
 		});
 		
+		// 수정 버튼 클릭 시
 		$("#modify_btn").on('click', function(){
 			$.ajax({
 				url: "php/modify_by_index.php",
@@ -272,7 +361,7 @@
 					alert("수정되었습니다");
 					resetSearch2();
 					
-					//모달 창 닫기
+					// 수정 모달 창 닫기
 					$("body").attr('class', '');
 					$("#ModifyModal").attr('aria-hidden', 'true');
 					$("#ModifyModal").css('display','none');
@@ -283,6 +372,100 @@
 				}
 			});
 		});
+		
+		// 추가 모달 창에서 라디오 버튼 변동 시
+		$('input:radio').change(function(){
+			if($('input:radio[id="add_one"]').is(':checked')){
+				$('#add_count').css('display', 'none');
+				$("#add_count").val(null);
+			}
+			else if($('input:radio[id="add_several"]').is(':checked')){
+				$('#add_count').css('display', 'inline');
+				$("#add_count").val(null);
+			}
+		});
+		
+		// 추가 모달 창에서 생성 버튼 클릭 시
+		$("#generate_id").on('click', function(){
+			if(!$('input:radio').is(':checked')){
+				alert("1개 추가 / 여러 개 추가 중 하나를 반드시 선택해야 합니다.");
+				if(document.getElementById("add_type").value == null) alert("생성할 카테고리 타입을 입력해야 합니다.");
+				resetSearch3();
+			}
+			else if($('input:radio[id="add_several"]').is(':checked')){
+				if(document.getElementById("add_count").value == null){
+					alert("개수를 입력해야 합니다.");
+					resetSearch3();
+				}
+				else{ //여러 개 생성 시
+					$("#genresult_several").css('display', 'block');
+					
+					var csvString = 'motion_type(카테고리),motion_id(모션아이디)\r\n';
+					for(i=0; i<document.getElementById("add_count").value; i++){
+						csvString += document.getElementById("add_type").value + ',' + generateId(document.getElementById("add_type").value) + '\r\n';
+					}
+
+					//csvString으로 csv파일 만들어서 다운로드
+					//var a = document.createElement('a');
+					//a.herf = 'data:text/csv;utf-8,\uFEFF' + encodeURIComponent(csvString);
+					//a.target = '_blank';
+					//a.download = 'generateID.csv';
+					//a.click();
+					
+					// download stuff
+					var fileName = "generateID.csv";
+					var blob = new Blob([csvString], {
+						"type": "text/csv;charset=utf8;"			
+					});
+					var link = document.createElement("a");
+
+					if(link.download !== undefined) { // feature detection
+						// Browsers that support HTML5 download attribute
+						link.setAttribute("href", window.URL.createObjectURL(blob));
+						link.setAttribute("download", fileName);
+					 }
+					else {
+						// it needs to implement server side export
+						link.setAttribute("href", "http://tnwls0312.dothome.co.kr/export");
+					}
+					link.innerHTML = "다운로드";
+					$("#genresult_several").before(link);
+				}
+			}
+			else{ //1개 생성 시
+				var gen_type = document.getElementById("add_type").value;
+				var gen_id = generateId(gen_type)
+					$("#genresult_type").css('display', 'block');
+					$("#genresult_id").css('display', 'block');
+					$("#genresult_type").text('카테고리 : ' + gen_type);
+					$("#genresult_id").text('모션아이디 : ' + gen_id);
+					
+					$("#save_btn").on('click', function(){
+						$.ajax({
+							url: "php/save_one.php",
+							type: "POST",
+							async:false,
+							data: {	"motion_type" : gen_type,
+											"motion_id" : gen_id},
+							success: function(data){
+								alert("저장되었습니다.");
+								resetSearch3();
+
+								//모달 창 닫기
+								$("body").attr('class', '');
+								$("#AddModal").attr('aria-hidden', 'true');
+								$("#AddModal").css('display','none');
+
+							},
+							error: function(data){
+								alert("error by save_one.php");
+							}
+						});
+					});
+			}
+			
+		});
+		
 	</script>
 	
 </body>

@@ -6,7 +6,4 @@ $index = $_POST['seq'];
 $query = "delete from tb_motionid where seq='$index';";
 $result = $connect->query($query);
 
-$count = mysqli_fetch_row($result);
-echo json_encode($count);
-
 ?>

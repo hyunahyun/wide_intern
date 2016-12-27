@@ -1,7 +1,9 @@
 <?php
 include "connect.php";
 
-$query = "select distinct(motion_type) from tb_motionid;";
+$type = $_POST['motion_type'];
+
+$query = "select * from tb_motionid where motion_type='$type';";
 $result = $connect->query($query);
 
 $n = 0;
