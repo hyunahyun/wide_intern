@@ -33,7 +33,7 @@
 					<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 					</ul>
 				</div>
-				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="추가">
+				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="랜덤 생성">
 			</div>
 			<div class="row">
 				<table class="table table-bordered">
@@ -43,8 +43,9 @@
 							<th>인덱스</th>
 							<th>타입</th>
 							<th>모션아이디</th>
-							<th>버전</th>
-							<th>등록상태</th>
+							<th>param1</th>
+							<th>param2</th>
+							<th id="last_param">param3</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -76,8 +77,9 @@
 					<h5>검색 결과</h5>
 					<p id="search_type1">카테고리 : </p>
 					<p id="search_motionid1">모션아이디 : </p>
-					<p id="search_ver1">버전 : </p>
-					<p id="search_state1">등록상태 : </p>
+					<p id="search_param1_1">파람1 : </p>
+					<p id="search_param1_2">파람2 : </p>
+					<p id="search_param1_3">파람3 : </p>
 				</div>
 				<div class="modal-footer">
 					<input type="submit" class="btn btn-primary" id="delete_btn" value="삭제">	
@@ -124,24 +126,24 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	
-	<!--추가 모달 창-->
+	<!--랜덤생성 모달 창-->
 	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-					<h4 class="modal-title">추가하기</h4>
+					<h4 class="modal-title">생성하기</h4>
 				</div>
 				<div class="modal-body">
-					<h5>1개 추가 / 여러 개 추가 중 하나를 반드시 선택 후, 생성버튼을 누르시기 바랍니다.</h5>
-					<h5>1개 추가 시 아래 화면에 나오는 결과를 DB에 저장하고싶을 경우, 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
-					<h5>여러 개 추가 시 다운로드된 파일을 확인하고 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
+					<h5>1개 / 여러 개 중 하나를 반드시 선택 후, 생성버튼을 누르시기 바랍니다.</h5>
+					<h5>1개 생성 시 아래 화면에 나오는 결과를 DB에 저장하고싶을 경우, 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
+					<h5>여러 개 생성 시 다운로드된 파일을 확인하고 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
 					<div class="row modal-row">
 						<label class="radio-inline">
-							<input type="radio" name="count" id="add_one">1개 추가
+							<input type="radio" name="count" id="add_one">1개 생성
 						</label>
 						<label class="radio-inline">
-							<input type="radio" name="count" id="add_several">여러 개 추가
+							<input type="radio" name="count" id="add_several">여러 개 생성
 						</label>
 						<input class="form-control" id="add_type" placeholder="카테고리 입력 (한글 X)" >
 						<input class="form-control" id="add_count" placeholder="개수 입력 (반드시 숫자)" >
@@ -180,8 +182,9 @@
 			$('#search_seq1').val(null);
 			$('#search_type1').text("타입 : ");
 			$('#search_motionid1').text("모션아이디 : ");
-			$('#search_ver1').text("버전 : ");
-			$('#search_state1').text("등록상태 : ");
+			$('#search_param1_1').text("파람1 : ");
+			$('#search_param1_2').text("파람2 : ");
+			$('#search_param1_3').text("파람3 : ");
 		}
 		
 		// 수정 모달 창 리셋
@@ -193,7 +196,7 @@
 			$('#search_state2').val(null);
 		}
 		
-		// 추가 모달 창 리셋
+		// 랜덤생성 모달 창 리셋
 		var resetSearch3 = function(){
 			$("#add_type").val(null);
 			$("#add_count").val(null);
@@ -234,7 +237,7 @@
 				type: "POST",
 				async:false,
 				success: function(data){
-					result = JSON.parse(data);
+					result = JSON.parse(data);	
 				
 					$("#dropdownMenuResult").children().empty();
 					
@@ -244,11 +247,14 @@
 						 
 					$(".cate").on('click', function() {
 						current_cate = $(this).val();
+						
+						$(".temp_param").remove();
+				
 						$.ajax({
 							url: "php/load_by_cate.php",
 							type: "POST",
 							async:false,
-							data: {"motion_type": $(this).val()},
+							data: {"motion_type": current_cate},
 							success: function(data){
 								result = JSON.parse(data);
 
@@ -256,17 +262,29 @@
 								$('#count').text("결과 개수 : " + result.length);
 
 								//테이블 로딩
-								$('tbody').children().remove();	
-
-								for(i=0; i<result.length; i++){
-									$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td></tr>');
+								$('tbody').children().remove();
+								
+								//카테고리 별 파라미터 출력
+								if(current_cate == "pen"){
+									$("#last_param").after("<th class='temp_param'>pen_param1</th><th class='temp_param'>pen_param2</th><th class='temp_param'>pen_param3</th><th class='temp_param'>pen_param4</th>");
+									for(i=0; i<result.length; i++){
+										$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] + '</td><td>' + result[i][5] + '</td><td>' + result[i][6] + '</td><td>' + result[i][7] + '</td><td>' + result[i][8] + '</td><td>' + result[i][9] + '</td></tr>');
+									}
 								}
+								else if(current_cate == "joystick"){
+									$("#last_param").after("<th class='temp_param'>joystick_param1</th><th class='temp_param'>joystick_param2</th><th class='temp_param'>joystick_param3</th><th class='temp_param'>joystick_param4</th><th class='temp_param'>joystick_param5</th>");
+									
+									for(i=0; i<result.length; i++){
+										$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] + '</td><td>' + result[i][5] + '</td><td>' + result[i][6] + '</td><td>' + result[i][7] + '</td><td>' + result[i][8] + '</td><td>' + result[i][9] + '</td><td>' + result[i][10] + '</td></tr>');
+									}
+								}
+								
 							},
 							error: function(data){
 								alert("error by load_by_cate.php");
 							}
 						});
-					}); 
+					});
 		
 				},
 				error: function(data){
@@ -299,8 +317,9 @@
 							else{
 								$('#search_type1').text("카테고리 : " + result[1]);
 								$('#search_motionid1').text("모션아이디 : " + result[2]);
-								$('#search_ver1').text("버전 : " + result[3]);
-								$('#search_state1').text("등록상태 : " + result[4]);
+								$('#search_param1_1').text("파람1 : " + result[3]);
+								$('#search_param1_2').text("파람2 : " + result[4]);
+								$('#search_param1_3').text("파람3 : " + result[5]);
 							}
 						},
 						error: function(data){
@@ -394,7 +413,7 @@
 			});
 		});
 		
-		// 추가 모달 창에서 라디오 버튼 변동 시
+		// 랜덤생성 모달 창에서 라디오 버튼 변동 시
 		$('input:radio').change(function(){
 			if($('input:radio[id="add_one"]').is(':checked')){
 				$('#add_count').css('display', 'none');
@@ -414,10 +433,10 @@
 			}
 		});
 		
-		// 추가 모달 창에서 생성 버튼 클릭 시
+		// 랜덤생성 모달 창에서 생성 버튼 클릭 시
 		$("#generate_id").on('click', function(){
 			if(!$('input:radio').is(':checked')){
-				alert("1개 추가 / 여러 개 추가 중 하나를 반드시 선택해야 합니다.");
+				alert("1개 / 여러 개 중 하나를 반드시 선택해야 합니다.");
 				if(document.getElementById("add_type").value == null) alert("생성할 카테고리 타입을 입력해야 합니다.");
 				resetSearch3();
 			}

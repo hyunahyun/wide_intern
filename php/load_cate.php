@@ -8,7 +8,6 @@ $n = 0;
 while($count = mysqli_fetch_row($result)){
 	$row[$n++] = $count;
 }
-
 echo json_encode($row);
 
 ?>
