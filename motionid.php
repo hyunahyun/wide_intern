@@ -185,6 +185,8 @@
 			$('#search_param1_1').text("파람1 : ");
 			$('#search_param1_2').text("파람2 : ");
 			$('#search_param1_3').text("파람3 : ");
+			
+			$(".delete_temp_param").remove();
 		}
 		
 		// 수정 모달 창 리셋
@@ -302,11 +304,28 @@
 					resetSearch1();
 				}
 				else{
+					$(".delete_temp_param").remove();
+					var temp_type = null;
+					$.ajax({
+						url: "php/find_cate.php",
+						type: "POST",
+						async:false,
+						data: {"seq": document.getElementById("search_seq1").value},
+						success: function(data){
+							result = JSON.parse(data);
+							temp_type = result[0];
+						},
+						error: function(data){
+							alert("error by find_cate.php");
+						}
+					});
+					
 					$.ajax({
 						url: "php/load_by_index.php",
 						type: "POST",
 						async:false,
-						data: {"seq": document.getElementById("search_seq1").value},
+						data: {	"seq": document.getElementById("search_seq1").value,
+										"motion_type": temp_type},
 						success: function(data){
 							result = JSON.parse(data);
 
@@ -315,11 +334,19 @@
 								resetSearch1();
 							}
 							else{
-								$('#search_type1').text("카테고리 : " + result[1]);
-								$('#search_motionid1').text("모션아이디 : " + result[2]);
-								$('#search_param1_1').text("파람1 : " + result[3]);
-								$('#search_param1_2').text("파람2 : " + result[4]);
-								$('#search_param1_3').text("파람3 : " + result[5]);
+								$('#search_type1').text("카테고리 : " + result[0]);
+								$('#search_motionid1').text("모션아이디 : " + result[1]);
+								$('#search_param1_1').text("파람1 : " + result[2]);
+								$('#search_param1_2').text("파람2 : " + result[3]);
+								$('#search_param1_3').text("파람3 : " + result[4]);
+								
+								//카테고리 별 파라미터 결과 추가 출력
+								if(result[0] == "pen"){
+									$('#search_param1_3').after("<p class='delete_temp_param'>펜 파람1 : " + result[5] + "</p><p class='delete_temp_param'>펜 파람2 : " + result[6] + "</p><p class='delete_temp_param'>펜 파람3 : " + result[7] + "</p><p class='delete_temp_param'>펜 파람4 : " + result[8] + "</p>");
+								}
+								else if(result[0] == "joystick"){
+									$('#search_param1_3').after("<p class='delete_temp_param'>조이스틱 파람1 : " + result[5] + "</p><p class='delete_temp_param'>조이스틱 파람2 : " + result[6] + "</p><p class='delete_temp_param'>조이스틱 파람3 : " + result[7] + "</p><p class='delete_temp_param'>조이스틱 파람4 : " + result[8] + "</p><p class='delete_temp_param'>조이스틱 파람5 : " + result[9] + "</p>");
+								}
 							}
 						},
 						error: function(data){
