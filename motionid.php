@@ -112,10 +112,13 @@
 						<p>모션아이디 : </p> <input class="form-control" id="search_motionid2">
 					</div>
 					<div class="row modal-row">
-						<p>버전 : </p> <input class="form-control" id="search_ver2">				
+						<p>파람1 : </p> <input class="form-control" id="search_param2_1">				
 					</div>
 					<div class="row modal-row">
-						<p>등록상태 : </p> <input class="form-control" id="search_state2">
+						<p>파람2 : </p> <input class="form-control" id="search_param2_2">				
+					</div>
+					<div class="row modal-row" id="search_param2_row">
+						<p>파람3 : </p> <input class="form-control" id="search_param2_3">				
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -194,8 +197,11 @@
 			$('#search_seq2').val(null);
 			$('#search_type2').val(null);
 			$('#search_motionid2').val(null);
-			$('#search_ver2').val(null);
-			$('#search_state2').val(null);
+			$('#search_param2_1').val(null);
+			$('#search_param2_2').val(null);
+			$('#search_param2_3').val(null);
+			
+			$(".modify_temp_param").remove();
 		}
 		
 		// 랜덤생성 모달 창 리셋
@@ -313,46 +319,60 @@
 						data: {"seq": document.getElementById("search_seq1").value},
 						success: function(data){
 							result = JSON.parse(data);
-							temp_type = result[0];
+													
+							if(result == null){
+								alert("해당 인덱스의 결과 값이 없습니다.");
+								resetSearch1();
+							}
+							else{
+								temp_type = result[0];
+							}
 						},
 						error: function(data){
 							alert("error by find_cate.php");
 						}
 					});
 					
-					$.ajax({
-						url: "php/load_by_index.php",
-						type: "POST",
-						async:false,
-						data: {	"seq": document.getElementById("search_seq1").value,
-										"motion_type": temp_type},
-						success: function(data){
-							result = JSON.parse(data);
+					if(temp_type){
+						$.ajax({
+							url: "php/load_by_index.php",
+							type: "POST",
+							async:false,
+							data: {	"seq": document.getElementById("search_seq1").value,
+											"motion_type": temp_type},
+							success: function(data){
+								result = JSON.parse(data);
 
-							if(result == null){
-								alert("해당 인덱스의 결과 값이 없습니다.");
-								resetSearch1();
-							}
-							else{
 								$('#search_type1').text("카테고리 : " + result[0]);
 								$('#search_motionid1').text("모션아이디 : " + result[1]);
 								$('#search_param1_1').text("파람1 : " + result[2]);
 								$('#search_param1_2').text("파람2 : " + result[3]);
 								$('#search_param1_3').text("파람3 : " + result[4]);
-								
+
 								//카테고리 별 파라미터 결과 추가 출력
 								if(result[0] == "pen"){
-									$('#search_param1_3').after("<p class='delete_temp_param'>펜 파람1 : " + result[5] + "</p><p class='delete_temp_param'>펜 파람2 : " + result[6] + "</p><p class='delete_temp_param'>펜 파람3 : " + result[7] + "</p><p class='delete_temp_param'>펜 파람4 : " + result[8] + "</p>");
+									$('#search_param1_3').after(
+										"<p class='delete_temp_param'>펜 파람1 : " + result[5]
+										+ "</p><p class='delete_temp_param'>펜 파람2 : " + result[6]
+										+ "</p><p class='delete_temp_param'>펜 파람3 : " + result[7]
+										+ "</p><p class='delete_temp_param'>펜 파람4 : " + result[8] + "</p>"
+									);
 								}
 								else if(result[0] == "joystick"){
-									$('#search_param1_3').after("<p class='delete_temp_param'>조이스틱 파람1 : " + result[5] + "</p><p class='delete_temp_param'>조이스틱 파람2 : " + result[6] + "</p><p class='delete_temp_param'>조이스틱 파람3 : " + result[7] + "</p><p class='delete_temp_param'>조이스틱 파람4 : " + result[8] + "</p><p class='delete_temp_param'>조이스틱 파람5 : " + result[9] + "</p>");
+									$('#search_param1_3').after(
+										"<p class='delete_temp_param'>조이스틱 파람1 : " + result[5]
+										+ "</p><p class='delete_temp_param'>조이스틱 파람2 : " + result[6]
+										+ "</p><p class='delete_temp_param'>조이스틱 파람3 : " + result[7]
+										+ "</p><p class='delete_temp_param'>조이스틱 파람4 : " + result[8]
+										+ "</p><p class='delete_temp_param'>조이스틱 파람5 : " + result[9] + "</p>"
+									);
 								}
+							},
+							error: function(data){
+								alert("error by load_by_index.php");
 							}
-						},
-						error: function(data){
-							alert("error by load_by_index.php");
-						}
-					});
+						});
+					}
 				}
 			}
 			
@@ -363,30 +383,71 @@
 					resetSearch2();
 				}		
 				else{
+					$(".modify_temp_param").remove();
+					var temp_type = null;
+					
 					$.ajax({
-						url: "php/load_by_index.php",
+						url: "php/find_cate.php",
 						type: "POST",
 						async:false,
 						data: {"seq": document.getElementById("search_seq2").value},
-						success: function(data){						
+						success: function(data){
 							result = JSON.parse(data);
-						
+							
 							if(result == null){
 								alert("해당 인덱스의 결과 값이 없습니다.");
 								resetSearch2();
 							}
 							else{
-								$('#search_type2').val(result[1]);
-								$('#search_motionid2').val(result[2]);
-								$('#search_ver2').val(result[3]);
-								$('#search_state2').val(result[4]);
+								temp_type = result[0];
 							}
 						},
 						error: function(data){
-							alert("error by load_by_index.php");
+							alert("error by find_cate.php");
 						}
 					});
-				}											
+			
+					if(temp_type){
+						$.ajax({
+							url: "php/load_by_index.php",
+							type: "POST",
+							async:false,
+							data: {	"seq": document.getElementById("search_seq2").value,
+											"motion_type": temp_type},
+							success: function(data){
+								result = JSON.parse(data);
+
+								$('#search_type2').val(result[0]);
+								$('#search_motionid2').val(result[1]);
+								$('#search_param2_1').val(result[2]);
+								$('#search_param2_2').val(result[3]);
+								$('#search_param2_3').val(result[4]);
+
+									//카테고리 별 파라미터 결과 추가 출력
+								if(result[0] == "pen"){
+									$('#search_param2_row').after(
+										"<div class='row modal-row modify_temp_param'><p>펜 파람1 : </p> <input class='form-control' id='search_pen_param2_1' value='" + result[5]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>펜 파람2 : </p> <input class='form-control' id='search_pen_param2_2' value='" + result[6]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>펜 파람3 : </p> <input class='form-control' id='search_pen_param2_3' value='" + result[7]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>펜 파람4 : </p> <input class='form-control' id='search_pen_param2_4' value='" + result[8] + "'></div>"
+									);
+								}
+								else if(result[0] == "joystick"){
+									$('#search_param2_row').after(
+										"<div class='row modal-row modify_temp_param'><p>조이스틱 파람1 : </p> <input class='form-control' id='search_joystick_param2_1' value='" + result[5]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람2 : </p> <input class='form-control' id='search_joystick_param2_2' value='" + result[6]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람3 : </p> <input class='form-control' id='search_joystick_param2_3' value='" + result[7]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람4 : </p> <input class='form-control' id='search_joystick_param2_4' value='" + result[8]
+										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람5 : </p> <input class='form-control' id='search_joystick_param2_5' value='" + result[9] + "'></div>"
+									);
+								}
+							},
+							error: function(data){
+								alert("error by load_by_index.php");
+							}
+						});
+					}
+				}								
 			}
 		}); 
 		
@@ -415,29 +476,69 @@
 		
 		// 수정 버튼 클릭 시
 		$("#modify_btn").on('click', function(){
-			$.ajax({
-				url: "php/modify_by_index.php",
-				type: "POST",
-				async:false,
-				data: {	"seq": document.getElementById("search_seq2").value,
-								"motion_type" : document.getElementById("search_type2").value,
-								"motion_id" : document.getElementById("search_motionid2").value,
-								"motion_ver" : document.getElementById("search_ver2").value,
-								"motion_state" : document.getElementById("search_state2").value},
-				success: function(data){
-					alert("수정되었습니다");
-					resetSearch2();
-					
-					// 수정 모달 창 닫기
-					$("body").attr('class', '');
-					$("#ModifyModal").attr('aria-hidden', 'true');
-					$("#ModifyModal").css('display','none');
-				
-				},
-				error: function(data){
-					alert("error by modify_by_index.php");
-				}
-			});
+						
+			// 카테고리 별 수정할 파라미터 분류
+			if(document.getElementById("search_type2").value == "pen"){
+				$.ajax({
+					url: "php/modify_by_index.php",
+					type: "POST",
+					async:false,
+					data: {	"seq": document.getElementById("search_seq2").value,
+									"motion_type" : document.getElementById("search_type2").value,
+									"motion_id" : document.getElementById("search_motionid2").value,
+									"param1" : document.getElementById("search_param2_1").value,
+									"param2" : document.getElementById("search_param2_2").value,
+									"param3" : document.getElementById("search_param2_3").value,
+									"pen_param1" : document.getElementById("search_pen_param2_1").value,
+									"pen_param2" : document.getElementById("search_pen_param2_2").value,
+									"pen_param3" : document.getElementById("search_pen_param2_3").value,
+									"pen_param4" : document.getElementById("search_pen_param2_4").value},
+					success: function(data){
+						alert("수정되었습니다");
+						resetSearch2();
+
+						// 수정 모달 창 닫기
+						$("body").attr('class', '');
+						$("#ModifyModal").attr('aria-hidden', 'true');
+						$("#ModifyModal").css('display','none');
+
+					},
+					error: function(data){
+						alert("error by modify_by_index.php");
+					}
+				});
+			}
+			else if(document.getElementById("search_type2").value == "joystick"){
+				$.ajax({
+					url: "php/modify_by_index.php",
+					type: "POST",
+					async:false,
+					data: {	"seq": document.getElementById("search_seq2").value,
+									"motion_type" : document.getElementById("search_type2").value,
+									"motion_id" : document.getElementById("search_motionid2").value,
+									"param1" : document.getElementById("search_param2_1").value,
+									"param2" : document.getElementById("search_param2_2").value,
+									"param3" : document.getElementById("search_param2_3").value,
+									"joystick_param1" : document.getElementById("search_joystick_param2_1").value,
+									"joystick_param2" : document.getElementById("search_joystick_param2_2").value,
+									"joystick_param3" : document.getElementById("search_joystick_param2_3").value,
+									"joystick_param4" : document.getElementById("search_joystick_param2_4").value,
+									"joystick_param5" : document.getElementById("search_joystick_param2_5").value},
+					success: function(data){
+						alert("수정되었습니다");
+						resetSearch2();
+
+						// 수정 모달 창 닫기
+						$("body").attr('class', '');
+						$("#ModifyModal").attr('aria-hidden', 'true');
+						$("#ModifyModal").css('display','none');
+
+					},
+					error: function(data){
+						alert("error by modify_by_index.php");
+					}
+				});
+			}
 		});
 		
 		// 랜덤생성 모달 창에서 라디오 버튼 변동 시
