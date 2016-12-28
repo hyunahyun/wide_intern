@@ -14,6 +14,7 @@
 		.dropdown-menu {min-width: 100px}
 		.btn {float: right; margin-left: 10px}
 		.cate {background-color: transparent; border: 0px; width: 100%;}
+		thead > tr{background-color: antiquewhite}
 		.modal-row {display: inline}
 		.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
 		.search {background-color: transparent}
@@ -134,7 +135,7 @@
 				<div class="modal-body">
 					<h5>1개 추가 / 여러 개 추가 중 하나를 반드시 선택 후, 생성버튼을 누르시기 바랍니다.</h5>
 					<h5>1개 추가 시 아래 화면에 나오는 결과를 DB에 저장하고싶을 경우, 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
-					<h5>여러 개 추가 시 다운로드된 파일을 재업로드 후, 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
+					<h5>여러 개 추가 시 다운로드된 파일을 확인하고 아래 DB에 저장 버튼을 누르시기 바랍니다.</h5>
 					<div class="row modal-row">
 						<label class="radio-inline">
 							<input type="radio" name="count" id="add_one">1개 추가
@@ -142,17 +143,18 @@
 						<label class="radio-inline">
 							<input type="radio" name="count" id="add_several">여러 개 추가
 						</label>
-						<input class="form-control" id="add_type" placeholder="카테고리 입력" >
+						<input class="form-control" id="add_type" placeholder="카테고리 입력 (한글 X)" >
 						<input class="form-control" id="add_count" placeholder="개수 입력 (반드시 숫자)" >
 						<input type="submit" class="search" id="generate_id" value="생성">
 					</div>
 					<h5>생성 결과</h5>
 					<p id="genresult_type" style="display:none">카테고리 : </p>
 					<p id="genresult_id" style="display:none">모션아이디 : </p>
-					<p id="genresult_several" style="display:none">다운로드된 파일을 확인하시고, DB저장을 원할 경우 재업로드 해주시기 바랍니다.</p>
+					<a id="genresult_download" style="display:none">다운로드</a>
+					<p id="genresult_several" style="display:none">다운로드된 파일을 확인하시고, DB저장을 원할 경우 DB에 저장 버튼을 누르시기 바랍니다.</p>
 				</div>
 				<div class="modal-footer">
-					<input type="submit" class="btn btn-primary" id="save_btn" value="DB저장">
+					<input type="submit" class="btn btn-primary" id="save_btn" value="DB에 저장">
 					<button type="button" onclick=" return resetSearch3()" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div><!-- /.modal-content -->
@@ -165,6 +167,13 @@
 		var result = null;
 		var i;
 		var current_cate = null;
+		var gen_type_one = null;
+		var gen_id_one = null;
+		var gen_type_several = [];
+		var gen_id_several = [];
+		var fileName = "generateID.csv";
+		var tempString = null;
+		var check_save_several = 0;
 		
 		// 삭제 모달 창 리셋
 		var resetSearch1 = function(){
@@ -196,14 +205,26 @@
 			$("#genresult_several").css('display', 'none');
 			$("#genresult_id").css('display', 'none');
 			$("#genresult_type").css('display', 'none');
+			$("#genresult_download").css('display', 'none');
 			$("#genresult_type").text('카테고리 : ');
-			$("#genresult_id").text('모션아이디 : ');		
+			$("#genresult_id").text('모션아이디 : ');			
+		}
+		
+		function leadingZeros(n, digits) {
+			var zero = '';
+			n = n.toString();
+
+			if (n.length < digits) {
+				for (var i = 0; i < digits - n.length; i++)
+					zero += '0';
+			}
+			return zero + n;
 		}
 		
 		// 모션아이디 랜덤 생성
 		var generateId = function(gentype){
-			if(gentype == "펜") return '11' + (Math.floor(Math.random() * 100000) + 1);
-			else if(gentype == "조이스틱") return '22' + (Math.floor(Math.random() * 100000) + 1);
+			if(gentype == "pen") return '11' + leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
+			else if(gentype == "joystick") return '22' + leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
 		}
 		
 		// 카테고리 드롭박스 클릭 시
@@ -378,10 +399,18 @@
 			if($('input:radio[id="add_one"]').is(':checked')){
 				$('#add_count').css('display', 'none');
 				$("#add_count").val(null);
+				
+				$("#genresult_several").css('display', 'none');
+				$("#genresult_download").css('display', 'none');
 			}
 			else if($('input:radio[id="add_several"]').is(':checked')){
 				$('#add_count').css('display', 'inline');
 				$("#add_count").val(null);
+				
+				$("#genresult_type").css('display', 'none');
+				$("#genresult_id").css('display', 'none');
+				$("#genresult_type").text('카테고리 : ');
+				$("#genresult_id").text('모션아이디 : ');
 			}
 		});
 		
@@ -397,28 +426,21 @@
 					alert("개수를 입력해야 합니다.");
 					resetSearch3();
 				}
-				else{ //여러 개 생성 시
+				else{ //여러 개 생성 시				
 					$("#genresult_several").css('display', 'block');
+					$("#genresult_download").css('display', 'block');
 					
-					var csvString = 'motion_type(카테고리),motion_id(모션아이디)\r\n';
+					var csvString = 'motion_type(category),motion_id(motionID)\r\n';
 					for(i=0; i<document.getElementById("add_count").value; i++){
 						csvString += document.getElementById("add_type").value + ',' + generateId(document.getElementById("add_type").value) + '\r\n';
 					}
-
-					//csvString으로 csv파일 만들어서 다운로드
-					//var a = document.createElement('a');
-					//a.herf = 'data:text/csv;utf-8,\uFEFF' + encodeURIComponent(csvString);
-					//a.target = '_blank';
-					//a.download = 'generateID.csv';
-					//a.click();
+					tempString = csvString.substring(43,csvString.length);
 					
 					// download stuff
-					var fileName = "generateID.csv";
-					var blob = new Blob([csvString], {
-						"type": "text/csv;charset=utf8;"			
-					});
-					var link = document.createElement("a");
-
+					var blob = new Blob([csvString], {"type": "text/csv;charset=utf8;"});					
+					
+					var link = document.getElementById("genresult_download");
+					
 					if(link.download !== undefined) { // feature detection
 						// Browsers that support HTML5 download attribute
 						link.setAttribute("href", window.URL.createObjectURL(blob));
@@ -428,42 +450,92 @@
 						// it needs to implement server side export
 						link.setAttribute("href", "http://tnwls0312.dothome.co.kr/export");
 					}
-					link.innerHTML = "다운로드";
-					$("#genresult_several").before(link);
+					
+					alert("생성되었습니다");
 				}
 			}
 			else{ //1개 생성 시
-				var gen_type = document.getElementById("add_type").value;
-				var gen_id = generateId(gen_type)
-					$("#genresult_type").css('display', 'block');
-					$("#genresult_id").css('display', 'block');
-					$("#genresult_type").text('카테고리 : ' + gen_type);
-					$("#genresult_id").text('모션아이디 : ' + gen_id);
-					
-					$("#save_btn").on('click', function(){
-						$.ajax({
-							url: "php/save_one.php",
-							type: "POST",
-							async:false,
-							data: {	"motion_type" : gen_type,
-											"motion_id" : gen_id},
-							success: function(data){
-								alert("저장되었습니다.");
-								resetSearch3();
-
-								//모달 창 닫기
-								$("body").attr('class', '');
-								$("#AddModal").attr('aria-hidden', 'true');
-								$("#AddModal").css('display','none');
-
-							},
-							error: function(data){
-								alert("error by save_one.php");
-							}
-						});
-					});
+				gen_type_one = document.getElementById("add_type").value;
+				gen_id_one = generateId(gen_type_one);
+				
+				$("#genresult_type").css('display', 'block');
+				$("#genresult_id").css('display', 'block');
+				$("#genresult_type").text('카테고리 : ' + gen_type_one);
+				$("#genresult_id").text('모션아이디 : ' + gen_id_one);
+				
+				alert("생성되었습니다");
 			}
-			
+		});
+		
+		$("#save_btn").on('click', function(){
+			if(gen_type_one && gen_id_one){ //1개 저장 시
+				$.ajax({
+					url: "php/save_one.php",
+					type: "POST",
+					async:false,
+					data: {	"motion_type" : gen_type_one,
+									"motion_id" : gen_id_one},
+					success: function(data){
+						alert("저장되었습니다.");
+						resetSearch3();
+
+						//모달 창 닫기
+						$("body").attr('class', '');
+						$("#AddModal").attr('aria-hidden', 'true');
+						$("#AddModal").css('display','none');
+					
+						gen_type_one = null;
+						gen_id_one = null;
+					},
+					error: function(data){
+						alert("error by save_one.php");
+					}
+				});
+			}
+			else{ //여러 개 저장 시
+				tempString = tempString.split('\r\n');
+				for(i=0; i<tempString.length;i++){tempString[i] = tempString[i].split(',');}
+		
+				for(i=0; i<tempString.length-1;i++){
+					gen_type_several[i] = tempString[i][0];
+					gen_id_several[i] = tempString[i][1];
+				}
+				
+				for(i=0; i<gen_type_several.length;i++){
+					$.ajax({
+						url: "php/save_one.php",
+						type: "POST",
+						async:false,
+						data: {	"motion_type" : gen_type_several[i],
+										"motion_id" : gen_id_several[i]},
+						success: function(data){
+							check_save_several += 1;
+						},
+						error: function(data){
+							alert("error by save_one.php");
+						}
+					});
+				}
+				
+				if(check_save_several == gen_type_several.length){
+					alert("저장되었습니다.");
+					resetSearch3();
+
+					//모달 창 닫기
+					$("body").attr('class', '');
+					$("#AddModal").attr('aria-hidden', 'true');
+					$("#AddModal").css('display','none');
+
+					tempString = null;
+					gen_type_several = [];
+					gen_id_several = [];
+					
+					check_save_several = 0;
+				}
+				else{
+					alert("저장 실패");
+				}
+			}
 		});
 		
 	</script>
