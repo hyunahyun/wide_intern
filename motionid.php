@@ -8,16 +8,20 @@
 		
 	<style>
 		h4, caption {text-align: center}
+		.btn .caret {margin-left: 10px}
 		#dropdownMenu1 {margin: 0px}
+		#dropdownMenu2 {margin-right: 20px}
+		#add_count {margin-left: 10px}
 		.container {margin-top: 50px}
 		.dropdown, #count {float: left}
 		.dropdown-menu {min-width: 100px}
 		.btn {float: right; margin-left: 10px}
-		.cate {background-color: transparent; border: 0px; width: 100%;}
+		.cate, .add_cate {background-color: transparent; border: 0px; width: 100%;}
 		thead > tr{background-color: antiquewhite}
 		.modal-row {display: inline}
 		.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
 		.search {background-color: transparent}
+		#make_cate_name, #make_cate_serial, #make_cate_params {width: 100%}
 	</style>
 </head>
 <body>	
@@ -34,18 +38,17 @@
 					</ul>
 				</div>
 				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="랜덤 생성">
+				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#TypeModal" value="카테고리 추가">
 			</div>
 			<div class="row">
 				<table class="table table-bordered">
 					<caption>결과</caption>
 					<thead>
 						<tr>
+							<th><input type="checkbox" name="_selected_all_"></th>
 							<th>인덱스</th>
 							<th>타입</th>
-							<th>모션아이디</th>
-							<th>param1</th>
-							<th>param2</th>
-							<th id="last_param">param3</th>
+							<th id="last_param">모션아이디</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -54,12 +57,12 @@
 			</div>
 			<div class="row">
 				<p id="count"></p>
-				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#DeleteModal" value="삭제">
+				<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
 				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#ModifyModal" value="수정">
 			</div>
 	</div>
 	
-	<!--삭제 모달 창-->
+	<!--삭제 모달 창
 	<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -68,7 +71,7 @@
 					<h4 class="modal-title">삭제하기</h4>
 				</div>
 				<div class="modal-body">
-					<h5>반드시 인덱스로 검색 후, 아래 사항들을 확인하시고 석제버튼 누르시기 바랍니다. (인덱스 수정 X)</h5>
+					<h5>반드시 인덱스로 검색 후, 아래 사항들을 확인하시고 삭제버튼 누르시기 바랍니다. (인덱스 수정 X)</h5>
 					<div class="row modal-row">
 						<p>인덱스 : </p>
 						<input type="text" class="form-control" id="search_seq1" placeholder="인덱스를 입력하세요.">
@@ -85,9 +88,9 @@
 					<input type="submit" class="btn btn-primary" id="delete_btn" value="삭제">	
 					<button type="button" onclick="return resetSearch1()" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+			</div>
+		</div>
+	</div> /.modal -->
 	
 	<!--수정 모달 창-->
 	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -129,6 +132,35 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 	
+	<!-- 카테고리 추가 모달 창-->
+	<div class="modal fade" id="TypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					<h4 class="modal-title">카테고리 추가하기</h4>
+				</div>
+				<div class="modal-body">
+					<h5>ID 구분자는 motionID의 앞의 두 글자로 카테고리를 대표할 숫자입니다. 숫자 두 글자만 입력하세요.</h5>
+					<h5>추가 파라미터 입력 창에는 쌍따옴표(")와 스페이스 필요 없이, 오직 쉼표로 구분합니다.</h5>
+					<div class="row modal-row">
+						<p>카테고리 이름 : </p><input type="text" class="form-control" id="make_cate_name">
+					</div>
+					<div class="row modal-row">
+						<p>ID 구분자 : </p><input class="form-control" id="make_cate_serial">
+					</div>
+					<div class="row modal-row">
+						<p>추가 파라미터 : </p><input class="form-control" id="make_cate_params" placeholder="ex: param1,param2,param3">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" id="make_cate_btn" value="추가">
+					<button type="button" onclick=" return resetSearch4()" class="btn btn-default" data-dismiss="modal">취소</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+		
 	<!--랜덤생성 모달 창-->
 	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -148,7 +180,14 @@
 						<label class="radio-inline">
 							<input type="radio" name="count" id="add_several">여러 개 생성
 						</label>
-						<input class="form-control" id="add_type" placeholder="카테고리 입력 (한글 X)" >
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true">
+								타입 선택
+								<span class="caret"></span>
+							</button>
+							<ul id="dropdownMenuResult2" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+							</ul>
+						</div>
 						<input class="form-control" id="add_count" placeholder="개수 입력 (반드시 숫자)" >
 						<input type="submit" class="search" id="generate_id" value="생성">
 					</div>
@@ -172,6 +211,7 @@
 		var result = null;
 		var i;
 		var current_cate = null;
+		var add_current_cate = null;
 		var gen_type_one = null;
 		var gen_id_one = null;
 		var gen_type_several = [];
@@ -180,7 +220,7 @@
 		var tempString = null;
 		var check_save_several = 0;
 		
-		// 삭제 모달 창 리셋
+		/* 삭제 모달 창 리셋
 		var resetSearch1 = function(){
 			$('#search_seq1').val(null);
 			$('#search_type1').text("타입 : ");
@@ -190,7 +230,7 @@
 			$('#search_param1_3').text("파람3 : ");
 			
 			$(".delete_temp_param").remove();
-		}
+		} */
 		
 		// 수정 모달 창 리셋
 		var resetSearch2 = function(){
@@ -206,7 +246,8 @@
 		
 		// 랜덤생성 모달 창 리셋
 		var resetSearch3 = function(){
-			$("#add_type").val(null);
+			add_current_cate = null;
+			document.getElementById("dropdownMenu2").innerHTML = '타입 선택<span class="caret"></span>';
 			$("#add_count").val(null);
 			
 			var radiobox = document.getElementsByName("count");
@@ -221,6 +262,18 @@
 			$("#genresult_id").text('모션아이디 : ');			
 		}
 		
+		// 카테고리 추가 모달 창 리셋
+		var resetSearch4 = function(){
+			$("#make_cate_name").val(null);
+			$("#make_cate_serial").val(null);
+			$("#make_cate_params").val(null);	
+		}
+		
+		// 체크박스 관리
+		$('input[name=_selected_all_]').on('change', function(){
+			$('input[name=_selected_]').prop('checked', this.checked);
+		});
+				
 		function leadingZeros(n, digits) {
 			var zero = '';
 			n = n.toString();
@@ -234,11 +287,54 @@
 		
 		// 모션아이디 랜덤 생성
 		var generateId = function(gentype){
-			if(gentype == "pen") return '11' + leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
-			else if(gentype == "joystick") return '22' + leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
+			//if(gentype == "pen") return '11' + leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
+			//else if(gentype == "joystick") return '22' + leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
+			var ID = null;
+			var check = 1;
+			
+			// 시리얼 넘버 받아오기
+			$.ajax({
+				url: "php/load_serial.php",
+				type: "POST",
+				async:false,
+				data: {"cate_name": gentype},
+				success: function(data){
+					result = JSON.parse(data);
+					
+					ID = result[0];
+				},
+				error: function(data){
+					alert("error by load_serial.php");
+				}
+			});
+			
+			// 기존에 있는 것인지 체크
+			while(check){
+				var temp = leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
+				$.ajax({
+					url: "php/check_motionid.php",
+					type: "POST",
+					async:false,
+					data: {	"motion_id": ID + temp,
+									"motion_type": gentype},
+					success: function(data){
+						result = JSON.parse(data)
+
+						if(result == null){
+								ID += temp;
+								check = 0;
+						}
+					},
+					error: function(data){
+						alert("error by check_motionid.php");
+					}
+				});
+			}
+			
+			return ID;
 		}
 		
-		// 카테고리 드롭박스 클릭 시
+		// 조회 - 카테고리 드롭박스 클릭 시
 		$("#dropdownMenu1").on('click', function(){
 			$.ajax({
 				url: "php/load_cate.php",
@@ -247,7 +343,7 @@
 				success: function(data){
 					result = JSON.parse(data);	
 				
-					$("#dropdownMenuResult").children().empty();
+					$("#dropdownMenuResult").children().remove();
 					
 					for(i=0; i<result.length; i++){
 						$('#dropdownMenuResult:last').append('<li role="presentation"><input class="cate" type="submit" value="' + result[i][0] +'"></li>');
@@ -255,43 +351,70 @@
 						 
 					$(".cate").on('click', function() {
 						current_cate = $(this).val();
+					
+						document.getElementById("dropdownMenu1").innerHTML = current_cate + '<span class="caret"></span>';
 						
 						$(".temp_param").remove();
-				
+					
+						var parameter = null;
+						var temp = null;
+						// 카테고리 별 파라미터 출력
 						$.ajax({
-							url: "php/load_by_cate.php",
+							url: "php/load_params.php",
 							type: "POST",
 							async:false,
 							data: {"motion_type": current_cate},
 							success: function(data){
-								result = JSON.parse(data);
-
-								//개수 출력
-								$('#count').text("결과 개수 : " + result.length);
-
-								//테이블 로딩
-								$('tbody').children().remove();
+								parameter = JSON.parse(data);
+								temp = parameter[0];
+								parameter = parameter[0].split(',');
 								
-								//카테고리 별 파라미터 출력
-								if(current_cate == "pen"){
-									$("#last_param").after("<th class='temp_param'>pen_param1</th><th class='temp_param'>pen_param2</th><th class='temp_param'>pen_param3</th><th class='temp_param'>pen_param4</th>");
-									for(i=0; i<result.length; i++){
-										$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] + '</td><td>' + result[i][5] + '</td><td>' + result[i][6] + '</td><td>' + result[i][7] + '</td><td>' + result[i][8] + '</td><td>' + result[i][9] + '</td></tr>');
-									}
-								}
-								else if(current_cate == "joystick"){
-									$("#last_param").after("<th class='temp_param'>joystick_param1</th><th class='temp_param'>joystick_param2</th><th class='temp_param'>joystick_param3</th><th class='temp_param'>joystick_param4</th><th class='temp_param'>joystick_param5</th>");
-									
-									for(i=0; i<result.length; i++){
-										$('tbody:last').append('<tr><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] + '</td><td>' + result[i][5] + '</td><td>' + result[i][6] + '</td><td>' + result[i][7] + '</td><td>' + result[i][8] + '</td><td>' + result[i][9] + '</td><td>' + result[i][10] + '</td></tr>');
-									}
-								}
-								
+								for(i=(parameter.length); i>0; i--)
+									$("#last_param").after("<th class='temp_param'>" + parameter[i-1] + "</th>");
 							},
 							error: function(data){
-								alert("error by load_by_cate.php");
+								alert("error by load_params.php");
 							}
 						});
+				
+						$.ajax({
+								url: "php/load_by_cate.php",
+								type: "POST",
+								async:false,
+								data: {	"motion_type": current_cate,
+												"cate_params": temp},
+								success: function(data){
+									result = JSON.parse(data);
+									
+									//테이블 로딩
+									$('tbody').children().remove();
+
+									//개수 출력
+									if(result != null){
+										$('#count').text("총 결과 개수 : " + result.length);
+
+										for(i=0; i<result.length; i++){
+
+											// 공통 부분(seq, motion_type, motion_id)
+											var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
+
+											// 추가 파라미터 부분
+											for(var j=0; j<parameter.length; j++){
+												str += '<td>'+ result[i][j+3] +'</td>';
+											}	
+											str += '</tr>';
+
+
+											$('tbody:last').append(str);
+										}
+									}
+									else $('#count').text("총 결과 개수 : 0");
+								},
+								error: function(data){
+									alert("error by load_by_cate.php");
+								}
+							});
+						
 					});
 		
 				},
@@ -301,7 +424,7 @@
 			});
 		});
 		
-		// 인덱스로 검색 시
+		/* 인덱스로 검색 시
 		$(".search").on('click', function() {
 			// 삭제 모달 창에서 검색 시
 			if($(this).attr('id') == 'search_dele'){
@@ -449,35 +572,39 @@
 					}
 				}								
 			}
-		}); 
+		}); */
 		
 		// 삭제 버튼 클릭 시
 		$("#delete_btn").on('click', function(){
-			$.ajax({
-				url: "php/delete_by_index.php",
-				type: "POST",
-				async:false,
-				data: {"seq": document.getElementById("search_seq1").value},
-				success: function(data){
-					alert("삭제되었습니다");
-					resetSearch1();
-					
-					// 삭제 모달 창 닫기
-					$("body").attr('class', '');
-					$("#DeleteModal").attr('aria-hidden', 'true');
-					$("#DeleteModal").css('display','none');
-				
-				},
-				error: function(data){
-					alert("error by delete_by_index.php");
-				}
-			});
+			var check = 0;
+			for(i=0; i< $('input[name=_selected_]:checked').length; i++){
+				$.ajax({
+						url: "php/delete_by_index.php",
+						type: "POST",
+						async:false,
+						data: {"seq": $('input[name=_selected_]:checked')[i].value},
+						success: function(data){
+							check += 1;
+							//resetSearch1();
+
+							/* 삭제 모달 창 닫기
+							$("body").attr('class', '');
+							$("#DeleteModal").attr('aria-hidden', 'true');
+							$("#DeleteModal").css('display','none'); */
+
+						},
+						error: function(data){
+							alert("error by delete_by_index.php");
+						}
+					});
+			}
+			if(check == $('input[name=_selected_]:checked').length)alert("삭제되었습니다.");
 		});
 		
 		// 수정 버튼 클릭 시
 		$("#modify_btn").on('click', function(){
 						
-			// 카테고리 별 수정할 파라미터 분류
+			// ***** 카테고리 별 수정할 파라미터 분류
 			if(document.getElementById("search_type2").value == "pen"){
 				$.ajax({
 					url: "php/modify_by_index.php",
@@ -560,12 +687,38 @@
 				$("#genresult_id").text('모션아이디 : ');
 			}
 		});
+			
+		// 랜덤생성 - 카테고리 드롭박스 클릭 시
+		$("#dropdownMenu2").on('click', function(){
+			$.ajax({
+				url: "php/load_cate.php",
+				type: "POST",
+				async:false,
+				success: function(data){
+					result = JSON.parse(data);	
+				
+					$("#dropdownMenuResult2").children().remove();
+										
+					for(i=0; i<result.length; i++){
+						$('#dropdownMenuResult2:last').append('<li role="presentation"><input class="add_cate" type="submit" value="' + result[i][0] +'"></li>');
+					}
+						 
+					$(".add_cate").on('click', function() {
+						add_current_cate = $(this).val();
+						document.getElementById("dropdownMenu2").innerHTML = add_current_cate + '<span class="caret"></span>';
+					});
+				},
+				error: function(data){
+					alert("error by load_cate.php");
+				}
+			});
+		});
 		
 		// 랜덤생성 모달 창에서 생성 버튼 클릭 시
 		$("#generate_id").on('click', function(){
 			if(!$('input:radio').is(':checked')){
 				alert("1개 / 여러 개 중 하나를 반드시 선택해야 합니다.");
-				if(document.getElementById("add_type").value == null) alert("생성할 카테고리 타입을 입력해야 합니다.");
+				if(add_current_cate == null) alert("생성할 카테고리 타입을 입력해야 합니다.");
 				resetSearch3();
 			}
 			else if($('input:radio[id="add_several"]').is(':checked')){
@@ -579,7 +732,7 @@
 					
 					var csvString = 'motion_type(category),motion_id(motionID)\r\n';
 					for(i=0; i<document.getElementById("add_count").value; i++){
-						csvString += document.getElementById("add_type").value + ',' + generateId(document.getElementById("add_type").value) + '\r\n';
+						csvString += add_current_cate + ',' + generateId(add_current_cate) + '\r\n';
 					}
 					tempString = csvString.substring(43,csvString.length);
 					
@@ -602,14 +755,14 @@
 				}
 			}
 			else{ //1개 생성 시
-				gen_type_one = document.getElementById("add_type").value;
+				gen_type_one = add_current_cate;
 				gen_id_one = generateId(gen_type_one);
-				
+					
 				$("#genresult_type").css('display', 'block');
 				$("#genresult_id").css('display', 'block');
 				$("#genresult_type").text('카테고리 : ' + gen_type_one);
 				$("#genresult_id").text('모션아이디 : ' + gen_id_one);
-				
+
 				alert("생성되었습니다");
 			}
 		});
@@ -682,6 +835,38 @@
 				else{
 					alert("저장 실패");
 				}
+			}
+		});
+			
+		// (카테고리) 추가 버튼 클릭 시
+		$("#make_cate_btn").on('click', function(){
+			if((document.getElementById("make_cate_name").value == null)
+				|| (document.getElementById("make_cate_serial").value == null)){
+					resetSearch4();
+					alert("카테고리 이름과 ID구분자는 필수 입력해야 합니다.");
+			}
+			else{
+				$.ajax({
+					url: "php/make_cate.php",
+					type: "POST",
+					async:false,
+					data: {	"cate_name": document.getElementById("make_cate_name").value,
+									"cate_serial" : document.getElementById("make_cate_serial").value,
+									"cate_params" : document.getElementById("make_cate_params").value},
+					success: function(data){
+						resetSearch4();
+						alert("추가되었습니다.");
+
+						//추가 모달 창 닫기
+						$("body").attr('class', '');
+						$("#TypeModal").attr('aria-hidden', 'true');
+						$("#TypeModal").css('display','none');
+
+					},
+					error: function(data){
+						alert("error by make_cate.php");
+					}
+				});	
 			}
 		});
 		

@@ -1,7 +1,7 @@
 <?php
 include "connect.php";
 
-$query = "select distinct(motion_type) from tb_motionid;";
+$query = "select cate_name from tb_category;";
 $result = $connect->query($query);
 
 $n = 0;
