@@ -6,7 +6,7 @@ $type = $_POST['motion_type'];
 $params = $_POST['cate_params'];
 $page = $_POST['page'];
 
-$start_num = ($page - 1) * 10 - 1;
+$start_num = ($page - 1) * 10;
 
 //카테고리 별 파라미터 검색
 $query = "select seq, motion_type, motion_id";

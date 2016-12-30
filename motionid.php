@@ -56,7 +56,7 @@
 				</table>
 			</div>
 			<div class="row">
-				<p id="count"></p>
+				<p id="count">총 결과 개수 :</p>
 				<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
 				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#ModifyModal" value="수정">
 			</div>
@@ -67,7 +67,7 @@
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-					<li id="page1" class="active"><a href="#" class="page">1</a></li>
+					<li id="first_page" class="active"><a href="#" class="page">1</a></li>
 					<li id="after">
 						<a href="#" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
@@ -223,6 +223,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/bootstrap.js"></script>
 	<script>
+		var page_criteria = 10;
 		var result = null;
 		var i;
 		var current_cate = null;
@@ -236,6 +237,9 @@
 		var check_save_several = 0;
 		var total_page = 1;
 		var current_cate_param = null;
+		var page_arr = [];
+		var current_first_page_num = 1;
+		var parameter_num = null;
 		
 		/* 삭제 모달 창 리셋
 		var resetSearch1 = function(){
@@ -351,6 +355,53 @@
 			return ID;
 		}
 		
+		var loadByCate = function(page_num){
+			$.ajax({
+				url: "php/load_by_cate.php",
+				type: "POST",
+				async:false,
+				data: {	"motion_type": current_cate,
+								"cate_params": current_cate_param,
+								"page": page_num},
+				success: function(data){
+					result = JSON.parse(data);
+
+					//테이블 로딩
+					$('tbody').children().remove();
+
+					//개수 출력
+					if(result != null){
+						for(i=0; i<result.length; i++){
+
+						// 공통 부분(seq, motion_type, motion_id)
+						var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
+
+						// 추가 파라미터 부분
+						for(var j=0; j<parameter_num.length; j++){
+							str += '<td>'+ result[i][j+3] +'</td>';
+						}	 
+						str += '</tr>';
+
+						$('tbody:last').append(str);
+						}
+					}
+				},
+				error: function(data){
+					alert("error by load_by_cate.php");
+				}
+			});	
+		}
+		
+		//페이지 버튼 누르면		
+		var pageClicked = function(){
+			$(".page").on('click', function(){
+				$(this).parent().siblings().removeClass("active");
+				$(this).parent().addClass("active");
+
+				loadByCate($(this).html());
+			});
+		}
+		
 		// 조회 - 카테고리 드롭박스 클릭 시
 		$("#dropdownMenu1").on('click', function(){
 			$.ajax({
@@ -370,15 +421,17 @@
 						total_page = 1;
 						current_cate = $(this).val();
 						current_cate_param = null;
+						current_first_page_num = 1;
+						page_arr = [];
 				
 						$(".page").parent().remove();
-						$("#prev").after('<li id="page1" class="active"><a href="#" class="page">1</a></li>');
+						$("#prev").after('<li id="first_page" class="active"><a href="#" class="page">1</a></li>');
 					
 						document.getElementById("dropdownMenu1").innerHTML = current_cate + '<span class="caret"></span>';
 						
 						$(".temp_param").remove();
 					
-						var parameter = null;
+						parameter_num = null;
 				
 						// 카테고리 별 파라미터 출력
 						$.ajax({
@@ -387,12 +440,12 @@
 							async:false,
 							data: {"motion_type": current_cate},
 							success: function(data){
-								parameter = JSON.parse(data);
-								current_cate_param = parameter[0];
-								parameter = current_cate_param.split(',');
+								parameter_num = JSON.parse(data);
+								current_cate_param = parameter_num[0];
+								parameter_num = current_cate_param.split(',');
 								
-								for(i=(parameter.length); i>0; i--)
-									$("#last_param").after("<th class='temp_param'>" + parameter[i-1] + "</th>");
+								for(i=(parameter_num.length); i>0; i--)
+									$("#last_param").after("<th class='temp_param'>" + parameter_num[i-1] + "</th>");
 							},
 							error: function(data){
 								alert("error by load_params.php");
@@ -413,106 +466,79 @@
 									$('#count').text("총 결과 개수 : " + result[0]);
 									
 									// 10개씩 paging
-									if((result[0] % 10) == 0) total_page = Math.floor(result[0] / 10);
-									else total_page = Math.floor(result[0] / 10) + 1; 
+									if((result[0] % page_criteria) == 0) total_page = Math.floor(result[0] / page_criteria);
+									else total_page = Math.floor(result[0] / page_criteria) + 1; 
 									
-									for(i=total_page; i > 1; i--){
-										$("#page1").after('<li><a href="#" class="page">' + i + '</a></li>');
+									var j=0;
+									for(i=1; i <= total_page; i++){
+										if((j % page_criteria) == 0) page_arr[j++] = '<li id="first_page" class="active"><a href="#" class="page">' + i + '</a></li>';
+										else page_arr[j++] = '<li><a href="#" class="page">' + i + '</a></li>';
+									}
+									
+									if(total_page <= page_criteria){
+										for(i=total_page-1; i >= current_first_page_num; i--){
+											$("#first_page").after(page_arr[i]);
+										}
+									}
+									else{
+										for(i=page_criteria-1; i >= current_first_page_num; i--){
+											$("#first_page").after(page_arr[i]);
+										}
 									}
 								}
 								else $('#count').text("총 결과 개수 : 0");
-							
-							
-								
-							
 							},
 							error: function(data){
 								alert("error by load_page.php");
 							}
 						});
+						
+						loadByCate(1);
 		
-						$.ajax({
-							url: "php/load_by_cate.php",
-							type: "POST",
-							async:false,
-							data: {	"motion_type": current_cate,
-											"cate_params": current_cate_param,
-											"page": "1"},
-							success: function(data){
-								result = JSON.parse(data);
-									
-								//테이블 로딩
-								$('tbody').children().remove();
-
-								//개수 출력
-								if(result != null){
-									for(i=0; i<result.length; i++){
-
-										// 공통 부분(seq, motion_type, motion_id)
-										var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
-
-										// 추가 파라미터 부분
-										for(var j=0; j<parameter.length; j++){
-											str += '<td>'+ result[i][j+3] +'</td>';
-										}	 
-										str += '</tr>';
-
-										$('tbody:last').append(str);
-									}
-								}
-							},
-							error: function(data){
-								alert("error by load_by_cate.php");
-							}
-						});
-		
-						//페이지 버튼 누르면
-						$(".page").on('click', function(){
-							$(this).parent().siblings().removeClass("active");
-							$(this).parent().addClass("active");
-							
-							$.ajax({
-							url: "php/load_by_cate.php",
-							type: "POST",
-							async:false,
-							data: {	"motion_type": current_cate,
-											"cate_params": current_cate_param,
-											"page": $(this).html()},
-							success: function(data){
-								result = JSON.parse(data);
-									
-								//테이블 로딩
-								$('tbody').children().remove();
-
-								//개수 출력
-								if(result != null){
-									for(i=0; i<result.length; i++){
-
-										// 공통 부분(seq, motion_type, motion_id)
-										var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
-
-										// 추가 파라미터 부분
-										for(var j=0; j<parameter.length; j++){
-											str += '<td>'+ result[i][j+3] +'</td>';
-										}	 
-										str += '</tr>';
-
-										$('tbody:last').append(str);
-									}
-								}
-							},
-							error: function(data){
-								alert("error by load_by_cate.php");
-							}
-						});	
-					});
-		
+						pageClicked();
 					});
 				},
 				error: function(data){
 					alert("error by load_cate.php");
 				}
 			});
+		});
+		
+		// 이전 버튼 클릭 시
+		$("#prev").on('click', function(){
+			if(current_first_page_num - page_criteria >= 1){
+
+				current_first_page_num = current_first_page_num - 10;
+
+				$(".page").parent().remove();
+
+				$("#prev").after(page_arr[current_first_page_num-1]);
+				for(i=(current_first_page_num-1 + page_criteria-1); i >= current_first_page_num; i--){
+					$("#first_page").after(page_arr[i]);
+				}
+
+				loadByCate(current_first_page_num);
+
+				pageClicked();
+			}
+		});
+
+		// 다음 버튼 클릭 시
+		$("#after").on('click', function(){
+			if(current_first_page_num + page_criteria <= total_page){
+				current_first_page_num = current_first_page_num + 10;
+
+				$(".page").parent().remove();
+
+				$("#prev").after(page_arr[current_first_page_num-1]);
+				for(i=(current_first_page_num-1 + page_criteria-1); i >= current_first_page_num; i--){
+					$("#first_page").after(page_arr[i]);
+				}
+
+				loadByCate(current_first_page_num);
+
+				pageClicked();
+			}
 		});
 		
 		/* 인덱스로 검색 시
