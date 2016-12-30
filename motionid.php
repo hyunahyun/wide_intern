@@ -358,6 +358,7 @@
 					
 						var parameter = null;
 						var temp = null;
+				
 						// 카테고리 별 파라미터 출력
 						$.ajax({
 							url: "php/load_params.php",
@@ -367,7 +368,7 @@
 							success: function(data){
 								parameter = JSON.parse(data);
 								temp = parameter[0];
-								parameter = parameter[0].split(',');
+								parameter = temp.split(',');
 								
 								for(i=(parameter.length); i>0; i--)
 									$("#last_param").after("<th class='temp_param'>" + parameter[i-1] + "</th>");
@@ -378,45 +379,42 @@
 						});
 				
 						$.ajax({
-								url: "php/load_by_cate.php",
-								type: "POST",
-								async:false,
-								data: {	"motion_type": current_cate,
-												"cate_params": temp},
-								success: function(data){
-									result = JSON.parse(data);
+							url: "php/load_by_cate.php",
+							type: "POST",
+							async:false,
+							data: {	"motion_type": current_cate,
+											"cate_params": temp},
+							success: function(data){
+								result = JSON.parse(data);
 									
-									//테이블 로딩
-									$('tbody').children().remove();
+								//테이블 로딩
+								$('tbody').children().remove();
 
-									//개수 출력
-									if(result != null){
-										$('#count').text("총 결과 개수 : " + result.length);
+								//개수 출력
+								if(result != null){
+									$('#count').text("총 결과 개수 : " + result.length);
 
-										for(i=0; i<result.length; i++){
+									for(i=0; i<result.length; i++){
 
-											// 공통 부분(seq, motion_type, motion_id)
-											var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
+										// 공통 부분(seq, motion_type, motion_id)
+										var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
 
-											// 추가 파라미터 부분
-											for(var j=0; j<parameter.length; j++){
-												str += '<td>'+ result[i][j+3] +'</td>';
-											}	
-											str += '</tr>';
+										// 추가 파라미터 부분
+										for(var j=0; j<parameter.length; j++){
+											str += '<td>'+ result[i][j+3] +'</td>';
+										}	 
+										str += '</tr>';
 
-
-											$('tbody:last').append(str);
-										}
+										$('tbody:last').append(str);
 									}
-									else $('#count').text("총 결과 개수 : 0");
-								},
-								error: function(data){
-									alert("error by load_by_cate.php");
 								}
-							});
-						
+								else $('#count').text("총 결과 개수 : 0");
+							},
+							error: function(data){
+								alert("error by load_by_cate.php");
+							}
+						});
 					});
-		
 				},
 				error: function(data){
 					alert("error by load_cate.php");
