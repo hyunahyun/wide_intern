@@ -589,32 +589,35 @@
 			}
 		});
 		
-		// 수정 모달 창에서 수정 버튼 클릭 시 - 처리해야함
+		// 수정 모달 창에서 수정 버튼 클릭 시
 		$("#modify_btn_Modal").on('click', function(){
-						
-			// ***** 카테고리 별 수정할 파라미터 분류
+			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
+				var paramValue = "";
+				for(i=0; i<parameter_num.length; i++){
+					var tempValue = parameter_num[i] + "_" + index;
+					paramValue += ($('#' + tempValue).val() + ",");
+				}
+				
 				$.ajax({
 					url: "php/modify_by_index.php",
 					type: "POST",
 					async:false,
-					data: {	"seq": $('input[name=_selected_]:checked')[0].value
-									
-									},
-					success: function(data){
-						alert("수정되었습니다");
-						resetSearch2();
-
-						// 수정 모달 창 닫기
-						$("body").attr('class', '');
-						$("#ModifyModal").attr('aria-hidden', 'true');
-						$("#ModifyModal").css('display','none');
-
-					},
+					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
+									"cate_params": current_cate_param, 
+									"param_value": paramValue},
 					error: function(data){
 						alert("error by modify_by_index.php");
 					}
 				});
-												
+			}	
+			
+			alert("수정되었습니다");
+			resetSearch2();
+
+			// 수정 모달 창 닫기
+			$("body").attr('class', '');
+			$("#ModifyModal").attr('aria-hidden', 'true');
+			$("#ModifyModal").css('display','none');												
 		});
 		
 		// 랜덤생성 모달 창에서 라디오 버튼 변동 시
