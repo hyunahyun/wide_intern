@@ -22,6 +22,8 @@
 		.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
 		.search {background-color: transparent}
 		#make_cate_name, #make_cate_serial, #make_cate_params {width: 100%}
+		.carousel-control.left, .carousel-control.right {background-image: none;}
+		.item {text-align: center}
 	</style>
 </head>
 <body>	
@@ -58,7 +60,7 @@
 			<div class="row">
 				<p id="count">총 결과 개수 :</p>
 				<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
-				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#ModifyModal" value="수정">
+				<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
 			</div>
 			<nav style="text-align:center">
 				<ul class="pagination">
@@ -77,36 +79,6 @@
 			</nav>
 	</div>
 	
-	<!--삭제 모달 창
-	<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-					<h4 class="modal-title">삭제하기</h4>
-				</div>
-				<div class="modal-body">
-					<h5>반드시 인덱스로 검색 후, 아래 사항들을 확인하시고 삭제버튼 누르시기 바랍니다. (인덱스 수정 X)</h5>
-					<div class="row modal-row">
-						<p>인덱스 : </p>
-						<input type="text" class="form-control" id="search_seq1" placeholder="인덱스를 입력하세요.">
-						<input type="submit" class="search" id="search_dele" value="검색">
-					</div>
-					<h5>검색 결과</h5>
-					<p id="search_type1">카테고리 : </p>
-					<p id="search_motionid1">모션아이디 : </p>
-					<p id="search_param1_1">파람1 : </p>
-					<p id="search_param1_2">파람2 : </p>
-					<p id="search_param1_3">파람3 : </p>
-				</div>
-				<div class="modal-footer">
-					<input type="submit" class="btn btn-primary" id="delete_btn" value="삭제">	
-					<button type="button" onclick="return resetSearch1()" class="btn btn-default" data-dismiss="modal">취소</button>
-				</div>
-			</div>
-		</div>
-	</div> /.modal -->
-	
 	<!--수정 모달 창-->
 	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -115,32 +87,25 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
 					<h4 class="modal-title">수정하기</h4>
 				</div>
-				<div class="modal-body">
-					<h5>반드시 인덱스로 검색 후, 아래 사항들을 수정하시고 수정버튼 누르시기 바랍니다. (인덱스 수정 X)</h5>
-					<div class="row modal-row">
-						<p>인덱스 : </p>
-						<input type="text" class="form-control" id="search_seq2" placeholder="인덱스를 입력하세요.">
-						<input type="submit" class="search" id="search_modi" value="검색">
+				<div id="myCarousel" class="modal-body carousel slide" data-ride="carousel">
+					<div class="carousel-inner" role="listbox">
+						<div class="item active">
+							<p id="modify_index0">인덱스 : </p>
+							<p id="modify_type0">카테고리 : </p>
+							<p id="modify_id0">모션아이디 : </p>
+						</div>
 					</div>
-					<h5>검색 결과</h5>
-					<div class="row modal-row">
-						<p>카테고리 : </p> <input class="form-control" id="search_type2">
-					</div>
-					<div class="row modal-row">
-						<p>모션아이디 : </p> <input class="form-control" id="search_motionid2">
-					</div>
-					<div class="row modal-row">
-						<p>파람1 : </p> <input class="form-control" id="search_param2_1">				
-					</div>
-					<div class="row modal-row">
-						<p>파람2 : </p> <input class="form-control" id="search_param2_2">				
-					</div>
-					<div class="row modal-row" id="search_param2_row">
-						<p>파람3 : </p> <input class="form-control" id="search_param2_3">				
-					</div>
+					<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
 				</div>
 				<div class="modal-footer">
-					<input type="submit" class="btn btn-primary" id="modify_btn" value="수정">
+					<input type="submit" class="btn btn-primary" id="modify_btn_Modal" value="수정">
 					<button type="button" onclick=" return resetSearch2()" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div><!-- /.modal-content -->
@@ -241,28 +206,13 @@
 		var current_first_page_num = 1;
 		var parameter_num = null;
 		
-		/* 삭제 모달 창 리셋
-		var resetSearch1 = function(){
-			$('#search_seq1').val(null);
-			$('#search_type1').text("타입 : ");
-			$('#search_motionid1').text("모션아이디 : ");
-			$('#search_param1_1').text("파람1 : ");
-			$('#search_param1_2').text("파람2 : ");
-			$('#search_param1_3').text("파람3 : ");
-			
-			$(".delete_temp_param").remove();
-		} */
+		$(".carousel").carousel({ interval:false });
 		
 		// 수정 모달 창 리셋
-		var resetSearch2 = function(){
-			$('#search_seq2').val(null);
-			$('#search_type2').val(null);
-			$('#search_motionid2').val(null);
-			$('#search_param2_1').val(null);
-			$('#search_param2_2').val(null);
-			$('#search_param2_3').val(null);
+		var resetSearch2 = function(num){
+			$(".item").remove();
 			
-			$(".modify_temp_param").remove();
+			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><p id="modify_type0">카테고리 : </p><p id="modify_id0">모션아이디 : </p></div>');
 		}
 		
 		// 랜덤생성 모달 창 리셋
@@ -541,202 +491,115 @@
 			}
 		});
 		
-		/* 인덱스로 검색 시
-		$(".search").on('click', function() {
-			// 삭제 모달 창에서 검색 시
-			if($(this).attr('id') == 'search_dele'){
-				if((document.getElementById("search_seq1").value == null)){
-					alert("인덱스를 입력하세요");
-					resetSearch1();
-				}
-				else{
-					$(".delete_temp_param").remove();
-					var temp_type = null;
-					$.ajax({
-						url: "php/find_cate.php",
-						type: "POST",
-						async:false,
-						data: {"seq": document.getElementById("search_seq1").value},
-						success: function(data){
-							result = JSON.parse(data);
-													
-							if(result == null){
-								alert("해당 인덱스의 결과 값이 없습니다.");
-								resetSearch1();
-							}
-							else{
-								temp_type = result[0];
-							}
-						},
-						error: function(data){
-							alert("error by find_cate.php");
-						}
-					});
-					
-					if(temp_type){
-						$.ajax({
-							url: "php/load_by_index.php",
-							type: "POST",
-							async:false,
-							data: {	"seq": document.getElementById("search_seq1").value,
-											"motion_type": temp_type},
-							success: function(data){
-								result = JSON.parse(data);
-
-								$('#search_type1').text("카테고리 : " + result[0]);
-								$('#search_motionid1').text("모션아이디 : " + result[1]);
-								$('#search_param1_1').text("파람1 : " + result[2]);
-								$('#search_param1_2').text("파람2 : " + result[3]);
-								$('#search_param1_3').text("파람3 : " + result[4]);
-
-								//카테고리 별 파라미터 결과 추가 출력
-								if(result[0] == "pen"){
-									$('#search_param1_3').after(
-										"<p class='delete_temp_param'>펜 파람1 : " + result[5]
-										+ "</p><p class='delete_temp_param'>펜 파람2 : " + result[6]
-										+ "</p><p class='delete_temp_param'>펜 파람3 : " + result[7]
-										+ "</p><p class='delete_temp_param'>펜 파람4 : " + result[8] + "</p>"
-									);
-								}
-								else if(result[0] == "joystick"){
-									$('#search_param1_3').after(
-										"<p class='delete_temp_param'>조이스틱 파람1 : " + result[5]
-										+ "</p><p class='delete_temp_param'>조이스틱 파람2 : " + result[6]
-										+ "</p><p class='delete_temp_param'>조이스틱 파람3 : " + result[7]
-										+ "</p><p class='delete_temp_param'>조이스틱 파람4 : " + result[8]
-										+ "</p><p class='delete_temp_param'>조이스틱 파람5 : " + result[9] + "</p>"
-									);
-								}
-							},
-							error: function(data){
-								alert("error by load_by_index.php");
-							}
-						});
-					}
-				}
-			}
-			
-			// 수정 모달 창에서 검색 시
-			else if($(this).attr('id') == 'search_modi'){
-				if((document.getElementById("search_seq2").value == null)){
-					alert("인덱스를 입력하세요");		
-					resetSearch2();
-				}		
-				else{
-					$(".modify_temp_param").remove();
-					var temp_type = null;
-					
-					$.ajax({
-						url: "php/find_cate.php",
-						type: "POST",
-						async:false,
-						data: {"seq": document.getElementById("search_seq2").value},
-						success: function(data){
-							result = JSON.parse(data);
-							
-							if(result == null){
-								alert("해당 인덱스의 결과 값이 없습니다.");
-								resetSearch2();
-							}
-							else{
-								temp_type = result[0];
-							}
-						},
-						error: function(data){
-							alert("error by find_cate.php");
-						}
-					});
-			
-					if(temp_type){
-						$.ajax({
-							url: "php/load_by_index.php",
-							type: "POST",
-							async:false,
-							data: {	"seq": document.getElementById("search_seq2").value,
-											"motion_type": temp_type},
-							success: function(data){
-								result = JSON.parse(data);
-
-								$('#search_type2').val(result[0]);
-								$('#search_motionid2').val(result[1]);
-								$('#search_param2_1').val(result[2]);
-								$('#search_param2_2').val(result[3]);
-								$('#search_param2_3').val(result[4]);
-
-									//카테고리 별 파라미터 결과 추가 출력
-								if(result[0] == "pen"){
-									$('#search_param2_row').after(
-										"<div class='row modal-row modify_temp_param'><p>펜 파람1 : </p> <input class='form-control' id='search_pen_param2_1' value='" + result[5]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>펜 파람2 : </p> <input class='form-control' id='search_pen_param2_2' value='" + result[6]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>펜 파람3 : </p> <input class='form-control' id='search_pen_param2_3' value='" + result[7]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>펜 파람4 : </p> <input class='form-control' id='search_pen_param2_4' value='" + result[8] + "'></div>"
-									);
-								}
-								else if(result[0] == "joystick"){
-									$('#search_param2_row').after(
-										"<div class='row modal-row modify_temp_param'><p>조이스틱 파람1 : </p> <input class='form-control' id='search_joystick_param2_1' value='" + result[5]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람2 : </p> <input class='form-control' id='search_joystick_param2_2' value='" + result[6]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람3 : </p> <input class='form-control' id='search_joystick_param2_3' value='" + result[7]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람4 : </p> <input class='form-control' id='search_joystick_param2_4' value='" + result[8]
-										+ "'></div><div class='row modal-row modify_temp_param'><p>조이스틱 파람5 : </p> <input class='form-control' id='search_joystick_param2_5' value='" + result[9] + "'></div>"
-									);
-								}
-							},
-							error: function(data){
-								alert("error by load_by_index.php");
-							}
-						});
-					}
-				}								
-			}
-		}); */
-		
 		// 삭제 버튼 클릭 시
 		$("#delete_btn").on('click', function(){
-			var check = 0;
-			for(i=0; i< $('input[name=_selected_]:checked').length; i++){
+			if($('input[name=_selected_]:checked').length != 0){
+				var check = 0;
+				for(i=0; i< $('input[name=_selected_]:checked').length; i++){
+					$.ajax({
+							url: "php/delete_by_index.php",
+							type: "POST",
+							async:false,
+							data: {"seq": $('input[name=_selected_]:checked')[i].value},
+							success: function(data){
+								check += 1;
+								//resetSearch1();
+
+								/* 삭제 모달 창 닫기
+								$("body").attr('class', '');
+								$("#DeleteModal").attr('aria-hidden', 'true');
+								$("#DeleteModal").css('display','none'); */
+
+							},
+							error: function(data){
+								alert("error by delete_by_index.php");
+							}
+						});
+				}
+				if(check == $('input[name=_selected_]:checked').length) alert("삭제되었습니다.");
+			}
+			else alert("삭제할 데이터의 체크박스를 클릭해야 합니다.");
+		});
+		
+		//메인 화면에서 수정 버튼 클릭 시 여러 개인거 캐러셀로 처리
+		$("#modify_btn").on('click', function(){
+			if($('input[name=_selected_]:checked').length != 0){
+				
+				// 카테고리 별 파라미터 출력
 				$.ajax({
-						url: "php/delete_by_index.php",
+					url: "php/load_params.php",
+					type: "POST",
+					async:false,
+					data: {"motion_type": $('input[name=_selected_]:checked')[0].parentNode.nextSibling.nextSibling.innerHTML},
+					success: function(data){
+						parameter_num = JSON.parse(data);
+						current_cate_param = parameter_num[0];
+						parameter_num = current_cate_param.split(',');
+					},
+					error: function(data){
+						alert("error by load_params.php");
+					}
+				});
+			
+				// 수정할 정보 로딩
+				for(var index=0; index < $('input[name=_selected_]:checked').length ; index++){
+					if(index != 0){
+						$(".carousel-inner").children().last().after('<div class="item"><p id="modify_index' + index
+																												 + '">인덱스 : </p><p id="modify_type' + index
+																												 + '">카테고리 : </p><p id="modify_id' + index
+																												 +'">모션아이디 : </p></div>');
+					}
+					
+					$.ajax({
+						url: "php/load_by_index.php",
 						type: "POST",
 						async:false,
-						data: {"seq": $('input[name=_selected_]:checked')[i].value},
+						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
+										"cate_params": current_cate_param},
 						success: function(data){
-							check += 1;
-							//resetSearch1();
+							result = JSON.parse(data);
 
-							/* 삭제 모달 창 닫기
-							$("body").attr('class', '');
-							$("#DeleteModal").attr('aria-hidden', 'true');
-							$("#DeleteModal").css('display','none'); */
+							$('#modify_index' + index).text("인덱스 : " + result[0]);
+							$('#modify_type' + index).text("카테고리 : " + result[1]);
+							$('#modify_id' + index).text("모션아이디 : " + result[2]);
+
+							for(i=(parameter_num.length); i>0; i--)
+								$("#modify_id" + index).after('<div class="row modal-row modify_temp_param"><p>' + parameter_num[i-1]
+																			 + ' : </p> <input class="form-control" id="' + parameter_num[i-1] +'_' + index + '"></div>');
+
+							for(i=3; i<(parameter_num.length+3); i++)
+								$('#' + parameter_num[i-3] + '_' + index).val(result[i]);
 
 						},
 						error: function(data){
-							alert("error by delete_by_index.php");
+							alert("error by load_by_index.php");
 						}
 					});
+					
+				}
 			}
-			if(check == $('input[name=_selected_]:checked').length)alert("삭제되었습니다.");
+			else{
+				alert("수정할 데이터의 체크박스를 클릭해야 합니다.");
+				
+				//리프레쉬
+				//수정 모달 창 닫기
+				$("body").attr('class', '');
+				$("#ModifyModal").attr('aria-hidden', 'true');
+				$("#ModifyModal").css('display','none');
+			}
 		});
 		
-		// 수정 버튼 클릭 시
-		$("#modify_btn").on('click', function(){
+		// 수정 모달 창에서 수정 버튼 클릭 시 - 처리해야함
+		$("#modify_btn_Modal").on('click', function(){
 						
 			// ***** 카테고리 별 수정할 파라미터 분류
-			if(document.getElementById("search_type2").value == "pen"){
 				$.ajax({
 					url: "php/modify_by_index.php",
 					type: "POST",
 					async:false,
-					data: {	"seq": document.getElementById("search_seq2").value,
-									"motion_type" : document.getElementById("search_type2").value,
-									"motion_id" : document.getElementById("search_motionid2").value,
-									"param1" : document.getElementById("search_param2_1").value,
-									"param2" : document.getElementById("search_param2_2").value,
-									"param3" : document.getElementById("search_param2_3").value,
-									"pen_param1" : document.getElementById("search_pen_param2_1").value,
-									"pen_param2" : document.getElementById("search_pen_param2_2").value,
-									"pen_param3" : document.getElementById("search_pen_param2_3").value,
-									"pen_param4" : document.getElementById("search_pen_param2_4").value},
+					data: {	"seq": $('input[name=_selected_]:checked')[0].value
+									
+									},
 					success: function(data){
 						alert("수정되었습니다");
 						resetSearch2();
@@ -751,38 +614,7 @@
 						alert("error by modify_by_index.php");
 					}
 				});
-			}
-			else if(document.getElementById("search_type2").value == "joystick"){
-				$.ajax({
-					url: "php/modify_by_index.php",
-					type: "POST",
-					async:false,
-					data: {	"seq": document.getElementById("search_seq2").value,
-									"motion_type" : document.getElementById("search_type2").value,
-									"motion_id" : document.getElementById("search_motionid2").value,
-									"param1" : document.getElementById("search_param2_1").value,
-									"param2" : document.getElementById("search_param2_2").value,
-									"param3" : document.getElementById("search_param2_3").value,
-									"joystick_param1" : document.getElementById("search_joystick_param2_1").value,
-									"joystick_param2" : document.getElementById("search_joystick_param2_2").value,
-									"joystick_param3" : document.getElementById("search_joystick_param2_3").value,
-									"joystick_param4" : document.getElementById("search_joystick_param2_4").value,
-									"joystick_param5" : document.getElementById("search_joystick_param2_5").value},
-					success: function(data){
-						alert("수정되었습니다");
-						resetSearch2();
-
-						// 수정 모달 창 닫기
-						$("body").attr('class', '');
-						$("#ModifyModal").attr('aria-hidden', 'true');
-						$("#ModifyModal").css('display','none');
-
-					},
-					error: function(data){
-						alert("error by modify_by_index.php");
-					}
-				});
-			}
+												
 		});
 		
 		// 랜덤생성 모달 창에서 라디오 버튼 변동 시
