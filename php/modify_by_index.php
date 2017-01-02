@@ -28,19 +28,6 @@ if(!strcmp($table,"tb_motionid")){
 else if(!strcmp($table,"tb_category")){
 	$value_arr = split(";",$values);
 	
-	//tb_motionid column 수정 - 카테고리 파라미터
-	$query = "select cate_params from tb_category where seq='$index';";
-	$result = $connect->query($query);
-	$row = mysqli_fetch_row($result);
-	
-	$old_param = split(",", $row[0]);
-	$new_param = split(",", $value_arr[2]);
-	
-	for($i=0; $i < sizeof($old_param); $i++){
-		$query = "ALTER TABLE tb_motionid CHANGE $old_param[$i] $new_param[$i] varchar(255);";
-		$connect->query($query);
-	}
-	
 	//카테고리 데이터 존재 여부 체크
 	$query = "select seq from tb_motionid where motion_type = (select cate_name from tb_category where seq = '$index');";
 	$result = $connect->query($query);

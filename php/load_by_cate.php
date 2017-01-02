@@ -25,7 +25,7 @@ else $query .= " limit $start_num,10;";
 
 $result = $connect->query($query);
 
-if($result == null) echo 0;
+if($result == null) echo "0";
 else{
 	$n = 0;
 	while($count = mysqli_fetch_row($result)){

@@ -21,7 +21,6 @@
 		.modal-row {display: inline}
 		.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
 		.search {background-color: transparent}
-		#make_cate_name, #make_cate_serial, #make_cate_params {width: 100%}
 		.carousel-control.left, .carousel-control.right {background-image: none;}
 		.item {text-align: center}
 	</style>
@@ -281,7 +280,7 @@
 					//테이블 리셋
 					$('tbody').children().remove();
 				
-					if(data != 0){
+					if(data != "0"){
 						result = JSON.parse(data);
 
 						//결과 출력

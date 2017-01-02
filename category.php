@@ -3,35 +3,38 @@
 	<meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Manage Category Page</title>
+  <title>Manage Category/Parameter Page</title>
   <link rel='stylesheet' href='css/bootstrap.min.css'>
 		
 	<style>
 		h4, caption {text-align: center}
-		.btn .caret {margin-left: 10px}
-		#dropdownMenu1 {margin: 0px}
-		#dropdownMenu2 {margin-right: 20px}
+		.btn {margin-left: 10px}
 		#add_count {margin-left: 10px}
 		.container {margin-top: 50px}
-		.dropdown, #count {float: left}
-		.dropdown-menu {min-width: 100px}
+		#count {float: left}
 		.btn {float: right; margin-left: 10px}
 		.cate, .add_cate {background-color: transparent; border: 0px; width: 100%;}
 		thead > tr{background-color: antiquewhite}
 		.modal-row {display: inline}
 		.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
-		.search {background-color: transparent}
-		#make_cate_name, #make_cate_serial, #make_cate_params {width: 100%}
+		#make_cate_name, #make_cate_serial {width: 100%}
 		.carousel-control.left, .carousel-control.right {background-image: none;}
 		.item {text-align: center}
+		#param_list > label, #modify_param_list > label {border-radius: 5px; margin: 2px}
 	</style>
 </head>
 <body>	
 	
 	<div class="container">
-		<h4>카테고리 관리 화면</h4>
+		<h4>카테고리/파라미터 관리 화면</h4>
 			<div class="row">
-				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#TypeModal" value="카테고리 추가">
+				<div style="float:left">
+					<h4 style="text-align:left; display:inline">파라미터 - </h4>
+					<input class="btn btn-default" type="button" value="삭제">
+					<input class="btn btn-default" type="button" value="수정">
+					<input class="btn btn-default" type="button" value="추가">
+				</div>
+				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#TypeModal" id="make_btn" value="카테고리 추가">
 			</div>
 			<div class="row">
 				<table class="table table-bordered">
@@ -42,7 +45,7 @@
 							<th>인덱스</th>
 							<th>카테고리 이름</th>
 							<th>카테고리 고유키</th>
-							<th>사용 파라미터</th>
+							<th>필요 파라미터</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -91,7 +94,9 @@
 								<p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0">
 							</div>
 							<div class="row modal-row modify_temp_param">
-								<p>사용 파라미터</p><input class="form-control" id="modify_params0" style="width:100%; margin-top:10px">
+								<p style="display:block">필요 파라미터</p>
+								<div class="btn-group" id="modify_param_list0" data-toggle="buttons">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -122,7 +127,6 @@
 				</div>
 				<div class="modal-body">
 					<h5>ID 구분자는 motionID의 앞의 두 글자로 카테고리를 대표할 숫자입니다. 숫자 두 글자만 입력하세요.</h5>
-					<h5>추가 파라미터 입력 창에는 쌍따옴표(")와 스페이스 필요 없이, 오직 쉼표로 구분합니다.</h5>
 					<div class="row modal-row">
 						<p>카테고리 이름 : </p><input type="text" class="form-control" id="make_cate_name">
 					</div>
@@ -130,7 +134,9 @@
 						<p>ID 구분자 : </p><input class="form-control" id="make_cate_serial">
 					</div>
 					<div class="row modal-row">
-						<p>추가 파라미터 : </p><input class="form-control" id="make_cate_params" placeholder="ex: param1,param2,param3">
+						<p style="display:block">필요 파라미터</p>
+						<div class="btn-group" id="param_list" data-toggle="buttons">
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -148,14 +154,6 @@
 		var page_criteria = 10;
 		var result = null;
 		var i;
-		var add_current_cate = null;
-		var gen_type_one = null;
-		var gen_id_one = null;
-		var gen_type_several = [];
-		var gen_id_several = [];
-		var fileName = "generateID.csv";
-		var tempString = null;
-		var check_save_several = 0;
 		var total_page = 1;
 		var page_arr = [];
 		var current_first_page_num = 1;
@@ -167,7 +165,7 @@
 		var resetSearch2 = function(num){
 			$(".item").remove();
 			
-			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name0"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0"></div><div class="row modal-row modify_temp_param"><p>사용 파라미터</p><input class="form-control" id="modify_params0" style="width:100%; margin-top:10px"></div></div>');
+			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name0"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0"></div><div class="row modal-row modify_temp_param"><p style="display:block">필요 파라미터</p><div class="btn-group" id="modify_param_list0" data-toggle="buttons"></div></div></div>');
 		}
 		
 				
@@ -175,7 +173,7 @@
 		var resetSearch4 = function(){
 			$("#make_cate_name").val(null);
 			$("#make_cate_serial").val(null);
-			$("#make_cate_params").val(null);	
+			$("#param_list").children().remove();
 		}
 		
 		// 체크박스 관리
@@ -340,16 +338,33 @@
 		$("#modify_btn").on('click', function(){
 			if($('input[name=_selected_]:checked').length != 0){
 			
-			
 				// 수정할 정보 로딩
 				for(var index=0; index < $('input[name=_selected_]:checked').length ; index++){
+					
 					if(index != 0){
 						$(".carousel-inner").children().last().after('<div class="item"><p id="modify_index' + index
 																												 + '">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name' + index
 																												 + '"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial' + index 
-																												 + '"></div><div class="row modal-row modify_temp_param"><p>사용 파라미터</p><input class="form-control" id="modify_params' + index 
-																												 + '" style="width:100%;margin-top:10px"></div></div>');
+																												 + '"></div><div class="row modal-row modify_temp_param"><p style="display:block">필요 파라미터</p><div class="btn-group" id="modify_param_list' + index
+																												 + '" data-toggle="buttons"></div></div></div>');
 					}
+					
+					$.ajax({
+						url: "php/load_paramlist.php",
+						async:false,
+						success: function(data){
+							result = JSON.parse(data); 
+
+							for(i=3; i<result.length; i++){
+								$("#modify_param_list" + index).append('<label class="btn btn-primary"><input type="checkbox" autocomplete="off" value="' + result[i][0]+ '">' + result[i][0] + '</label>');
+							}
+								 
+							parameter_num = result.length - 3;
+						},
+						error: function(data){
+							alert("error by load_paramlist.php");
+						}
+					});	
 					
 					$.ajax({
 						url: "php/load_by_index.php",
@@ -363,8 +378,13 @@
 							$('#modify_index' + index).text("인덱스 : " + result[0]);
 							$('#modify_name' + index).val(result[1]);
 							$('#modify_serial' + index).val(result[2]);
-							$('#modify_params' + index).val(result[3]);
+							var param = result[3].split(',');
 
+							for(i=0; i<parameter_num; i++){
+								if(param.indexOf($("#modify_param_list" + index + " > label")[i].childNodes[0].value) != -1){
+									$("#modify_param_list" + index + " > label")[i].className = "btn btn-primary active";
+								}
+							}
 						},
 						error: function(data){
 							alert("error by load_by_index.php");
@@ -376,7 +396,7 @@
 			else{
 				alert("수정할 데이터의 체크박스를 클릭해야 합니다.");
 				
-				//리프레쉬
+				resetSearch2();
 				//수정 모달 창 닫기
 				$("body").attr('class', '');
 				$("#ModifyModal").attr('aria-hidden', 'true');
@@ -387,10 +407,16 @@
 		// 수정 모달 창에서 수정 버튼 클릭 시
 		$("#modify_btn_Modal").on('click', function(){
 			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
+				var str = "";
+				for(var i=0; i<$("#modify_param_list" + index + " > .active").length; i++){
+					str += $("#modify_param_list" + index + " > .active")[i].childNodes[0].value + ",";
+				}
+				str = str.substring(0,str.length-1);
+				
 				var paramValue = "";
 				paramValue += ($('#modify_name' + index).val() + ";");
 				paramValue += ($('#modify_serial' + index).val() + ";");
-				paramValue += ($('#modify_params' + index).val() + ";");
+				paramValue += str;
 				
 				$.ajax({
 					url: "php/modify_by_index.php",
@@ -416,8 +442,26 @@
 			}												
 		});
 		
+		//메인 화면에서 카테고리 추가 버튼 클릭 시
+		$("#make_btn").on('click', function(){
+			$.ajax({
+					url: "php/load_paramlist.php",
+					async:false,
+					success: function(data){
+						result = JSON.parse(data); 
+				
+						for(i=3; i<result.length; i++){
+							$("#param_list").append('<label class="btn btn-primary"><input type="checkbox" autocomplete="off" value="' +
+																				result[i][0]+ '">' + result[i][0] + '</label>');
+						}
+					},
+					error: function(data){
+						alert("error by load_paramlist.php");
+					}
+				});	
+		});
 		
-		// 카테고리 추가 버튼 클릭 시
+		// 카테고리 추가 모달 창에서 카테고리 추가 버튼 클릭 시
 		$("#make_cate_btn").on('click', function(){
 			if((document.getElementById("make_cate_name").value == null)
 				|| (document.getElementById("make_cate_serial").value == null)){
@@ -425,22 +469,38 @@
 					alert("카테고리 이름과 ID구분자는 필수 입력해야 합니다.");
 			}
 			else{
+				var str = "";
+				for(var i=0; i<$("#param_list > .active").length; i++){
+					str += $("#param_list > .active")[i].childNodes[0].value + ",";
+				}
+				str = str.substring(0,str.length-1);
+
 				$.ajax({
 					url: "php/make_cate.php",
 					type: "POST",
 					async:false,
 					data: {	"cate_name": document.getElementById("make_cate_name").value,
 									"cate_serial" : document.getElementById("make_cate_serial").value,
-									"cate_params" : document.getElementById("make_cate_params").value},
+									"cate_params" : str},
 					success: function(data){
-						resetSearch4();
-						alert("추가되었습니다.");
+						if(data != "0"){
+							resetSearch4();
+							alert("추가되었습니다.");
 
-						//추가 모달 창 닫기
-						$("body").attr('class', '');
-						$("#TypeModal").attr('aria-hidden', 'true');
-						$("#TypeModal").css('display','none');
-
+							//추가 모달 창 닫기
+							$("body").attr('class', '');
+							$("#TypeModal").attr('aria-hidden', 'true');
+							$("#TypeModal").css('display','none');
+						}
+						else{
+							resetSearch4();
+							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
+							
+							//추가 모달 창 닫기
+							$("body").attr('class', '');
+							$("#TypeModal").attr('aria-hidden', 'true');
+							$("#TypeModal").css('display','none');
+						}
 					},
 					error: function(data){
 						alert("error by make_cate.php");
