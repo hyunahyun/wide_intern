@@ -25,10 +25,13 @@ else $query .= " limit $start_num,10;";
 
 $result = $connect->query($query);
 
-$n = 0;
-while($count = mysqli_fetch_row($result)){
-	$row[$n++] = $count;
+if($result == null) echo 0;
+else{
+	$n = 0;
+	while($count = mysqli_fetch_row($result)){
+		$row[$n++] = $count;
+	}
+	echo json_encode($row);
 }
-echo json_encode($row);
 
 ?>

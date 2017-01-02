@@ -33,14 +33,13 @@
 			<div class="row">
 				<div class="dropdown">
 					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-						타입 선택
+						카테고리 선택
 						<span class="caret"></span>
 					</button>
 					<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 					</ul>
 				</div>
-				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="랜덤 생성">
-				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#TypeModal" value="카테고리 추가">
+				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="모션아이디 생성">
 			</div>
 			<div class="row">
 				<table class="table table-bordered">
@@ -49,7 +48,7 @@
 						<tr>
 							<th><input type="checkbox" name="_selected_all_"></th>
 							<th>인덱스</th>
-							<th>타입</th>
+							<th>카테고리</th>
 							<th id="last_param">모션아이디</th>
 						</tr>
 					</thead>
@@ -111,35 +110,6 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-	
-	<!-- 카테고리 추가 모달 창-->
-	<div class="modal fade" id="TypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-					<h4 class="modal-title">카테고리 추가하기</h4>
-				</div>
-				<div class="modal-body">
-					<h5>ID 구분자는 motionID의 앞의 두 글자로 카테고리를 대표할 숫자입니다. 숫자 두 글자만 입력하세요.</h5>
-					<h5>추가 파라미터 입력 창에는 쌍따옴표(")와 스페이스 필요 없이, 오직 쉼표로 구분합니다.</h5>
-					<div class="row modal-row">
-						<p>카테고리 이름 : </p><input type="text" class="form-control" id="make_cate_name">
-					</div>
-					<div class="row modal-row">
-						<p>ID 구분자 : </p><input class="form-control" id="make_cate_serial">
-					</div>
-					<div class="row modal-row">
-						<p>추가 파라미터 : </p><input class="form-control" id="make_cate_params" placeholder="ex: param1,param2,param3">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="submit" class="btn btn-primary" id="make_cate_btn" value="추가">
-					<button type="button" onclick=" return resetSearch4()" class="btn btn-default" data-dismiss="modal">취소</button>
-				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
 		
 	<!--랜덤생성 모달 창-->
 	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -162,7 +132,7 @@
 						</label>
 						<div class="dropdown">
 							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true">
-								타입 선택
+								카테고리 선택
 								<span class="caret"></span>
 							</button>
 							<ul id="dropdownMenuResult2" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
@@ -218,7 +188,7 @@
 		// 랜덤생성 모달 창 리셋
 		var resetSearch3 = function(){
 			add_current_cate = null;
-			document.getElementById("dropdownMenu2").innerHTML = '타입 선택<span class="caret"></span>';
+			document.getElementById("dropdownMenu2").innerHTML = '카테고리 선택<span class="caret"></span>';
 			$("#add_count").val(null);
 			
 			var radiobox = document.getElementsByName("count");
@@ -233,12 +203,6 @@
 			$("#genresult_id").text('모션아이디 : ');			
 		}
 				
-		// 카테고리 추가 모달 창 리셋
-		var resetSearch4 = function(){
-			$("#make_cate_name").val(null);
-			$("#make_cate_serial").val(null);
-			$("#make_cate_params").val(null);	
-		}
 		
 		// 체크박스 관리
 		$('input[name=_selected_all_]').on('change', function(){
@@ -314,25 +278,27 @@
 								"cate_params": current_cate_param,
 								"page": page_num},
 				success: function(data){
-					result = JSON.parse(data);
-
-					//테이블 로딩
+					//테이블 리셋
 					$('tbody').children().remove();
+				
+					if(data != 0){
+						result = JSON.parse(data);
 
-					//개수 출력
-					if(result != null){
-						for(i=0; i<result.length; i++){
+						//결과 출력
+						if(result != null){
+							for(i=0; i<result.length; i++){
 
-						// 공통 부분(seq, motion_type, motion_id)
-						var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
+							// 공통 부분(seq, motion_type, motion_id)
+							var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
 
-						// 추가 파라미터 부분
-						for(var j=0; j<parameter_num.length; j++){
-							str += '<td>'+ result[i][j+3] +'</td>';
-						}	 
-						str += '</tr>';
+							// 추가 파라미터 부분
+							for(var j=0; j<parameter_num.length; j++){
+								str += '<td>'+ result[i][j+3] +'</td>';
+							}	 
+							str += '</tr>';
 
-						$('tbody:last').append(str);
+							$('tbody:last').append(str);
+							}
 						}
 					}
 				},
@@ -500,16 +466,10 @@
 							url: "php/delete_by_index.php",
 							type: "POST",
 							async:false,
-							data: {"seq": $('input[name=_selected_]:checked')[i].value},
+							data: {	"seq": $('input[name=_selected_]:checked')[i].value,
+											"table": "tb_motionid"},
 							success: function(data){
 								check += 1;
-								//resetSearch1();
-
-								/* 삭제 모달 창 닫기
-								$("body").attr('class', '');
-								$("#DeleteModal").attr('aria-hidden', 'true');
-								$("#DeleteModal").css('display','none'); */
-
 							},
 							error: function(data){
 								alert("error by delete_by_index.php");
@@ -521,7 +481,7 @@
 			else alert("삭제할 데이터의 체크박스를 클릭해야 합니다.");
 		});
 		
-		//메인 화면에서 수정 버튼 클릭 시 여러 개인거 캐러셀로 처리
+		//메인 화면에서 수정 버튼 클릭 시 
 		$("#modify_btn").on('click', function(){
 			if($('input[name=_selected_]:checked').length != 0){
 				
@@ -555,7 +515,8 @@
 						type: "POST",
 						async:false,
 						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
-										"cate_params": current_cate_param},
+										"cate_params": current_cate_param,
+										"table": "tb_motionid"},
 						success: function(data){
 							result = JSON.parse(data);
 
@@ -581,7 +542,8 @@
 			else{
 				alert("수정할 데이터의 체크박스를 클릭해야 합니다.");
 				
-				//리프레쉬
+				resetSearch2();
+		
 				//수정 모달 창 닫기
 				$("body").attr('class', '');
 				$("#ModifyModal").attr('aria-hidden', 'true');
@@ -604,20 +566,23 @@
 					async:false,
 					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
 									"cate_params": current_cate_param, 
-									"param_value": paramValue},
+									"param_value": paramValue,
+									"table": "tb_motionid"},
+					success: function(data){
+							alert("수정되었습니다");
+							resetSearch2();
+
+							// 수정 모달 창 닫기
+							$("body").attr('class', '');
+							$("#ModifyModal").attr('aria-hidden', 'true');
+							$("#ModifyModal").css('display','none');	
+
+						},		
 					error: function(data){
 						alert("error by modify_by_index.php");
 					}
 				});
-			}	
-			
-			alert("수정되었습니다");
-			resetSearch2();
-
-			// 수정 모달 창 닫기
-			$("body").attr('class', '');
-			$("#ModifyModal").attr('aria-hidden', 'true');
-			$("#ModifyModal").css('display','none');												
+			}											
 		});
 		
 		// 랜덤생성 모달 창에서 라디오 버튼 변동 시
@@ -670,7 +635,7 @@
 		$("#generate_id").on('click', function(){
 			if(!$('input:radio').is(':checked')){
 				alert("1개 / 여러 개 중 하나를 반드시 선택해야 합니다.");
-				if(add_current_cate == null) alert("생성할 카테고리 타입을 입력해야 합니다.");
+				if(add_current_cate == null) alert("생성할 카테고리를 선택해야 합니다.");
 				resetSearch3();
 			}
 			else if($('input:radio[id="add_several"]').is(':checked')){
@@ -790,38 +755,6 @@
 			}
 		});
 			
-		// (카테고리) 추가 버튼 클릭 시
-		$("#make_cate_btn").on('click', function(){
-			if((document.getElementById("make_cate_name").value == null)
-				|| (document.getElementById("make_cate_serial").value == null)){
-					resetSearch4();
-					alert("카테고리 이름과 ID구분자는 필수 입력해야 합니다.");
-			}
-			else{
-				$.ajax({
-					url: "php/make_cate.php",
-					type: "POST",
-					async:false,
-					data: {	"cate_name": document.getElementById("make_cate_name").value,
-									"cate_serial" : document.getElementById("make_cate_serial").value,
-									"cate_params" : document.getElementById("make_cate_params").value},
-					success: function(data){
-						resetSearch4();
-						alert("추가되었습니다.");
-
-						//추가 모달 창 닫기
-						$("body").attr('class', '');
-						$("#TypeModal").attr('aria-hidden', 'true');
-						$("#TypeModal").css('display','none');
-
-					},
-					error: function(data){
-						alert("error by make_cate.php");
-					}
-				});	
-			}
-		});
-		
 	</script>
 	
 </body>
