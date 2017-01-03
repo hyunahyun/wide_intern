@@ -86,8 +86,12 @@
 				</div>
 				<div class="modal-body">
 					<h5>현재 파라미터 목록(seq, motion_id, motion_type을 제외)을 다운로드 하시고,<br>수정 후에 재 업로드해주시기 바랍니다.</h5>
-					<h5>파일의 index는 컬럼의 순서임을 참고하시기 바랍니다. (수정 X)</h5>
-					<h5>수정 시, 엑셀 데이터 이름(index/param_name)은 수정하지마시기 바랍니다.</h5>
+					<h5>엑셀 데이터 이름(index/param_name)은 수정하지마시기 바랍니다.</h5>
+					<h5>파일의 index는 컬럼의 순서임을 참고하시기 바랍니다. (수정 X)<br>이를 기준으로 파라미터를 추가,수정,삭제합니다.</h5>
+					<br>
+					<h5>추가 - 마지막 인덱스+1 하여 index/param_name을 입력.</h5>
+					<h5>수정 - 해당 인덱스의 컬럼의 param_name에 수정할 컬럼 이름을 입력.</h5>
+					<h5>삭제 - 해당 인덱스의 컬럼을 삭제하고싶은 경우, 해당 param_name칸을 비움. (index 삭제 X)</h5>
 					<a id="genresult_download" style="display:none">다운로드</a>
 					<div class="form-group">
 						<label class="control-label">파일 업로드</label>
@@ -187,7 +191,7 @@
 		var page_arr = [];
 		var current_first_page_num = 1;
 		var parameter_num = null;
-		var asdf = null;
+		var oldParam = "";
 		
 		$(".carousel").carousel({ interval:false });
 		
@@ -549,44 +553,61 @@
 			$(".btn-file").children()[1].style.display = 'none';
 			
 			$.ajax({
-					url: "php/load_paramlist.php",
-					async:false,
-					success: function(data){
-						result = JSON.parse(data); 
-				
-						var csvString = 'index,param_name\r\n';
-						for(i=3; i<result.length; i++){
-							csvString += (i-2) + ',' + result[i][0] + '\r\n';
-						}
-						var tempString = csvString.substring(18,csvString.length);
+				url: "php/load_paramlist.php",
+				async:false,
+				success: function(data){
+					result = JSON.parse(data); 
 
-						// download stuff
-						var blob = new Blob([csvString], {"type": "text/csv;charset=utf8;"});					
-
-						var link = document.getElementById("genresult_download");
-
-						if(link.download !== undefined) { // feature detection
-							// Browsers that support HTML5 download attribute
-							link.setAttribute("href", window.URL.createObjectURL(blob));
-							link.setAttribute("download", "manageParam.csv");
-						 }
-						else {
-							// it needs to implement server side export
-							link.setAttribute("href", "http://tnwls0312.dothome.co.kr/export");
-						}
-			
-						$("#genresult_download").css('display', 'block');
-					},
-					error: function(data){
-						alert("error by load_paramlist.php");
+					var csvString = 'index,param_name\r\n';
+					for(i=3; i<result.length; i++){
+						csvString += (i-2) + ',' + result[i][0] + '\r\n';
 					}
-				});	
+					oldParam = csvString.substring(18,csvString.length);
+
+					// download stuff
+					var blob = new Blob([csvString], {"type": "text/csv;charset=utf8;"});					
+
+					var link = document.getElementById("genresult_download");
+
+					if(link.download !== undefined) { // feature detection
+						// Browsers that support HTML5 download attribute
+						link.setAttribute("href", window.URL.createObjectURL(blob));
+						link.setAttribute("download", "manageParam.csv");
+					 }
+					else {
+						// it needs to implement server side export
+						link.setAttribute("href", "http://tnwls0312.dothome.co.kr/export");
+					}
+
+					$("#genresult_download").css('display', 'block');
+				},
+				error: function(data){
+					alert("error by load_paramlist.php");
+				}
+			});	
 		});
 		
 		$("#param_save_btn").on('click',function(){
-			var asf ="";
-			asf = $(".file-preview-text")[0].innerHTML;
-			console.log(asf);
+			var newParam = $(".file-preview-text")[0].innerHTML;
+			 
+			$.ajax({
+				url: "php/update_params.php",
+				async:false,
+				data: {	"old_params": oldParam,
+								"new_params": newParam},
+				success: function(data){
+					alert("등록되었습니다.");
+				  resetSearch4();
+				
+					//관리 모달 창 닫기
+					$("body").attr('class', '');
+					$("#ParamModal").attr('aria-hidden', 'true');
+					$("#ParamModal").css('display','none');
+				},
+				error: function(data){
+					alert("error by update_params.php");
+				}
+			});
 		});
 		
 	</script>

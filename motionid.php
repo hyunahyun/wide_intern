@@ -709,7 +709,7 @@
 			}
 			else{ //여러 개 저장 시
 				tempString = tempString.split('\r\n');
-				for(i=0; i<tempString.length;i++){tempString[i] = tempString[i].split(',');}
+				for(i=0; i<tempString.length;i++) tempString[i] = tempString[i].split(',');
 		
 				for(i=0; i<tempString.length-1;i++){
 					gen_type_several[i] = tempString[i][0];
