@@ -166,7 +166,6 @@
 		var gen_id_one = null;
 		var gen_type_several = [];
 		var gen_id_several = [];
-		var fileName = "generateID.csv";
 		var tempString = null;
 		var check_save_several = 0;
 		var total_page = 1;
@@ -660,7 +659,7 @@
 					if(link.download !== undefined) { // feature detection
 						// Browsers that support HTML5 download attribute
 						link.setAttribute("href", window.URL.createObjectURL(blob));
-						link.setAttribute("download", fileName);
+						link.setAttribute("download", "generateID.csv");
 					 }
 					else {
 						// it needs to implement server side export

@@ -21,6 +21,11 @@
 		.carousel-control.left, .carousel-control.right {background-image: none;}
 		.item {text-align: center}
 		#param_list > label, #modify_param_list > label {border-radius: 5px; margin: 2px}
+		.form-group {margin-top: 20px; border-top: 1px solid;padding-top: 10px;}
+		.file-input .file-input-new{margin-top: -20px;}
+		.file-preview, .form-control.file-caption.kv-fileinput-caption, .fileinput-remove-button, .fileinput-cancel-button, .fileinput-upload-button{display: none;}
+		.file-caption-main{width: 100%;}
+		.btn.btn-primary.btn-file{float: left;width: 100%;border-radius: 5px;}
 	</style>
 </head>
 <body>	
@@ -29,10 +34,7 @@
 		<h4>카테고리/파라미터 관리 화면</h4>
 			<div class="row">
 				<div style="float:left">
-					<h4 style="text-align:left; display:inline">파라미터 - </h4>
-					<input class="btn btn-default" type="button" value="삭제">
-					<input class="btn btn-default" type="button" value="수정">
-					<input class="btn btn-default" type="button" value="추가">
+					<input class="btn btn-default" type="button" data-toggle="modal" data-target="#ParamModal" id="param_btn" value="파라미터 관리">
 				</div>
 				<input class="btn btn-default" type="button" data-toggle="modal" data-target="#TypeModal" id="make_btn" value="카테고리 추가">
 			</div>
@@ -73,6 +75,32 @@
 				</ul>
 			</nav>
 	</div>
+	
+	<!--파라미터 관리 모달 창-->
+	<div class="modal fade" id="ParamModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					<h4 class="modal-title">파라미터 관리하기</h4>
+				</div>
+				<div class="modal-body">
+					<h5>현재 파라미터 목록(seq, motion_id, motion_type을 제외)을 다운로드 하시고,<br>수정 후에 재 업로드해주시기 바랍니다.</h5>
+					<h5>파일의 index는 컬럼의 순서임을 참고하시기 바랍니다. (수정 X)</h5>
+					<h5>수정 시, 엑셀 데이터 이름(index/param_name)은 수정하지마시기 바랍니다.</h5>
+					<a id="genresult_download" style="display:none">다운로드</a>
+					<div class="form-group">
+						<label class="control-label">파일 업로드</label>
+						<input id="input-1" type="file" class="file">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" id="param_save_btn" value="DB에 등록">
+					<button type="button" onclick=" return resetSearch5()" class="btn btn-default" data-dismiss="modal">취소</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 	
 	<!--수정 모달 창-->
 	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -149,7 +177,8 @@
 		
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="js/bootstrap.js"></script>
+  <script src="js/bootstrap.js"></script>	
+	<script src="js/fileinput.min.js"></script>
 	<script>
 		var page_criteria = 10;
 		var result = null;
@@ -158,6 +187,7 @@
 		var page_arr = [];
 		var current_first_page_num = 1;
 		var parameter_num = null;
+		var asdf = null;
 		
 		$(".carousel").carousel({ interval:false });
 		
@@ -174,6 +204,11 @@
 			$("#make_cate_name").val(null);
 			$("#make_cate_serial").val(null);
 			$("#param_list").children().remove();
+		}
+		
+		// 파라미터 관리 모달 창 리셋
+		var resetSearch5 = function(){
+			$("#genresult_download").css('display', 'none');
 		}
 		
 		// 체크박스 관리
@@ -507,6 +542,51 @@
 					}
 				});	
 			}
+		});
+		
+		$("#param_btn").on('click', function(){
+			$(".btn-file").children()[0].style.display = 'none';
+			$(".btn-file").children()[1].style.display = 'none';
+			
+			$.ajax({
+					url: "php/load_paramlist.php",
+					async:false,
+					success: function(data){
+						result = JSON.parse(data); 
+				
+						var csvString = 'index,param_name\r\n';
+						for(i=3; i<result.length; i++){
+							csvString += (i-2) + ',' + result[i][0] + '\r\n';
+						}
+						var tempString = csvString.substring(18,csvString.length);
+
+						// download stuff
+						var blob = new Blob([csvString], {"type": "text/csv;charset=utf8;"});					
+
+						var link = document.getElementById("genresult_download");
+
+						if(link.download !== undefined) { // feature detection
+							// Browsers that support HTML5 download attribute
+							link.setAttribute("href", window.URL.createObjectURL(blob));
+							link.setAttribute("download", "manageParam.csv");
+						 }
+						else {
+							// it needs to implement server side export
+							link.setAttribute("href", "http://tnwls0312.dothome.co.kr/export");
+						}
+			
+						$("#genresult_download").css('display', 'block');
+					},
+					error: function(data){
+						alert("error by load_paramlist.php");
+					}
+				});	
+		});
+		
+		$("#param_save_btn").on('click',function(){
+			var asf ="";
+			asf = $(".file-preview-text")[0].innerHTML;
+			console.log(asf);
 		});
 		
 	</script>
