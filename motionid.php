@@ -268,6 +268,7 @@
 		}
 		
 		var loadByCate = function(page_num){
+			
 			$.ajax({
 				url: "php/load_by_cate.php",
 				type: "POST",
@@ -281,21 +282,24 @@
 				
 					if(data != "0"){
 						result = JSON.parse(data);
-
+						
 						//결과 출력
 						if(result != null){
 							for(i=0; i<result.length; i++){
+								// 공통 부분(seq, motion_type, motion_id)
+								var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
 
-							// 공통 부분(seq, motion_type, motion_id)
-							var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
+								// 추가 파라미터 부분
+								if(parameter_num != 0){
+									for(var j=0; j<parameter_num.length; j++){
+										str += '<td>'+ result[i][j+3] +'</td>';
+									}	 
+								}
+								
+								str += '</tr>';
 
-							// 추가 파라미터 부분
-							for(var j=0; j<parameter_num.length; j++){
-								str += '<td>'+ result[i][j+3] +'</td>';
-							}	 
-							str += '</tr>';
-
-							$('tbody:last').append(str);
+								$('tbody:last').append(str);
+							
 							}
 						}
 					}
@@ -355,11 +359,14 @@
 							data: {"motion_type": current_cate},
 							success: function(data){
 								parameter_num = JSON.parse(data);
-								current_cate_param = parameter_num[0];
-								parameter_num = current_cate_param.split(',');
-								
-								for(i=(parameter_num.length); i>0; i--)
-									$("#last_param").after("<th class='temp_param'>" + parameter_num[i-1] + "</th>");
+								if(parameter_num != ""){
+									current_cate_param = parameter_num[0];
+									parameter_num = current_cate_param.split(',');
+
+									for(i=(parameter_num.length); i>0; i--)
+										$("#last_param").after("<th class='temp_param'>" + parameter_num[i-1] + "</th>");
+								}
+								else parameter_num = 0;
 							},
 							error: function(data){
 								alert("error by load_params.php");

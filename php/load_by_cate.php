@@ -12,10 +12,12 @@ $start_num = ($page - 1) * 10;
 $query = "select seq, motion_type, motion_id";
 
 //카테고리 별 파라미터 추출
-$arr = split(",",$params);
-for($i=0;$i< sizeof($arr);$i++){
-	$temp = ", $arr[$i]";
-	$query .= $temp;
+if($params != null){
+	$arr = split(",",$params);
+	for($i=0;$i< sizeof($arr);$i++){
+		$temp = ", $arr[$i]";
+		$query .= $temp;
+	}
 }
 
 $query .= " from tb_motionid where motion_type='$type' order by seq asc";

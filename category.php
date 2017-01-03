@@ -86,8 +86,7 @@
 				</div>
 				<div class="modal-body">
 					<h5>현재 파라미터 목록(seq, motion_id, motion_type을 제외)을 다운로드 하시고,<br>수정 후에 재 업로드해주시기 바랍니다.</h5>
-					<h5>엑셀 데이터 이름(index/param_name)은 수정하지마시기 바랍니다.</h5>
-					<h5>파일의 index는 컬럼의 순서임을 참고하시기 바랍니다. (수정 X)<br>이를 기준으로 파라미터를 추가,수정,삭제합니다.</h5>
+					<h5>엑셀 데이터 이름(index/param_name)과 index 넘버는 수정하지 마시기 바랍니다.</h5>
 					<br>
 					<h5>추가 - 마지막 인덱스+1 하여 index/param_name을 입력.</h5>
 					<h5>수정 - 해당 인덱스의 컬럼의 param_name에 수정할 컬럼 이름을 입력.</h5>
@@ -214,6 +213,8 @@
 		var resetSearch5 = function(){
 			$("#genresult_download").css('display', 'none');
 		}
+		
+		
 		
 		// 체크박스 관리
 		$('input[name=_selected_all_]').on('change', function(){
@@ -589,13 +590,16 @@
 		
 		$("#param_save_btn").on('click',function(){
 			var newParam = $(".file-preview-text")[0].innerHTML;
-			 
+			newParam = newParam.substring(17,newParam.length);
+
 			$.ajax({
 				url: "php/update_params.php",
+				type: "POST",
 				async:false,
 				data: {	"old_params": oldParam,
 								"new_params": newParam},
 				success: function(data){
+					console.log(data);
 					alert("등록되었습니다.");
 				  resetSearch4();
 				
