@@ -558,13 +558,14 @@
 		
 		// 수정 모달 창에서 수정 버튼 클릭 시
 		$("#modify_btn_Modal").on('click', function(){
+			var check = 0;
 			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
 				var paramValue = "";
 				for(i=0; i<parameter_num.length; i++){
 					var tempValue = parameter_num[i] + "_" + index;
 					paramValue += ($('#' + tempValue).val() + ",");
 				}
-				
+								
 				$.ajax({
 					url: "php/modify_by_index.php",
 					type: "POST",
@@ -574,20 +575,24 @@
 									"param_value": paramValue,
 									"table": "tb_motionid"},
 					success: function(data){
-							alert("수정되었습니다");
-							resetSearch2();
-
-							// 수정 모달 창 닫기
-							$("body").attr('class', '');
-							$("#ModifyModal").attr('aria-hidden', 'true');
-							$("#ModifyModal").css('display','none');	
-
+								check += 1; 
 						},		
 					error: function(data){
 						alert("error by modify_by_index.php");
 					}
 				});
+			}	
+			
+			if(check == $('input[name=_selected_]:checked').length)	{
+				alert("수정되었습니다");
+				resetSearch2();
+
+				// 수정 모달 창 닫기
+				$("body").attr('class', '');
+				$("#ModifyModal").attr('aria-hidden', 'true');
+				$("#ModifyModal").css('display','none');
 			}											
+															
 		});
 		
 		// 랜덤생성 모달 창에서 라디오 버튼 변동 시
@@ -708,6 +713,7 @@
 					
 						gen_type_one = null;
 						gen_id_one = null;
+					
 					},
 					error: function(data){
 						alert("error by save_one.php");
