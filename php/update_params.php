@@ -13,7 +13,7 @@ $temp2 = split("\n",$newString);
 for($i=0;$i< sizeof($temp2);$i++){
 	$newArr[$i] = split(",",$temp2[$i]);
 }
-
+ 
 if(sizeof($newArr) != sizeof($oldArr)){ // 추가된 파라미터가 있을 경우 추가
 	for($i=sizeof($oldArr); $i < sizeof($newArr); $i++){
 		$add_param = $newArr[$i][1];

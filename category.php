@@ -446,6 +446,7 @@
 		
 		// 수정 모달 창에서 수정 버튼 클릭 시
 		$("#modify_btn_Modal").on('click', function(){
+			var check = 0;
 			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
 				var str = "";
 				for(var i=0; i<$("#modify_param_list" + index + " > .active").length; i++){
@@ -457,7 +458,7 @@
 				paramValue += ($('#modify_name' + index).val() + ";");
 				paramValue += ($('#modify_serial' + index).val() + ";");
 				paramValue += str;
-				
+				  
 				$.ajax({
 					url: "php/modify_by_index.php",
 					type: "POST",
@@ -465,20 +466,23 @@
 					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
 									"param_value": paramValue,
 									"table": "tb_category"},
-					success: function(data){
-						alert("수정되었습니다");
-						resetSearch2();
-
-						// 수정 모달 창 닫기
-						$("body").attr('class', '');
-						$("#ModifyModal").attr('aria-hidden', 'true');
-						$("#ModifyModal").css('display','none');	
-
+					success: function(data){	
+						check += 1;
 					},		 
 					error: function(data){
 						alert("error by modify_by_index.php");
 					}
 				});
+			}	
+			
+			if(check == $('input[name=_selected_]:checked').length){
+				alert("수정되었습니다"); 
+				resetSearch2();
+
+				// 수정 모달 창 닫기
+				$("body").attr('class', '');
+				$("#ModifyModal").attr('aria-hidden', 'true');
+				$("#ModifyModal").css('display','none');
 			}												
 		});
 		
@@ -599,7 +603,6 @@
 				data: {	"old_params": oldParam,
 								"new_params": newParam},
 				success: function(data){
-					console.log(data);
 					alert("등록되었습니다.");
 				  resetSearch4();
 				
