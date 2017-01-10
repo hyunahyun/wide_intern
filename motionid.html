@@ -5,32 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manage Motion ID Page</title>
   <link rel='stylesheet' href='css/bootstrap.min.css'>
-		
-	<style>
-		h4, caption {text-align: center}
-		.btn .caret {margin-left: 10px}
-		#dropdownMenu1 {margin: 0px}
-		#dropdownMenu2 {margin-right: 20px}
-		#add_count {margin-left: 10px}
-		.container {margin-top: 50px}
-		.dropdown, #count {float: left}
-		.dropdown-menu {min-width: 100px}
-		.btn {float: right; margin-left: 10px}
-		.cate, .add_cate {background-color: transparent; border: 0px; width: 100%;}
-		thead > tr{background-color: antiquewhite}
-		.modal-row {display: inline}
-		.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
-		.search {background-color: transparent}
-		.carousel-control.left, .carousel-control.right {background-image: none;}
-		.item {text-align: center}
-	</style>
+	<link rel='stylesheet' href='css/main.css'>
 </head>
 <body>	
+
+	<ul class="nav nav-tabs" style="margin:10px">
+		<li role="presentation" class="active"><a href="#">Motionid</a></li>
+    <li role="presentation"><a href="category.html">Category/Parameter</a></li>
+  </ul>
+
 	
 	<div class="container">
 		<h4>모션아이디 관리 화면</h4>
-			<div class="row">
-				<div class="dropdown">
+		<div class="row">
+			<div class="dropdown">
 					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 						카테고리 선택
 						<span class="caret"></span>
@@ -177,7 +165,7 @@
 		$(".carousel").carousel({ interval:false });
 		
 		// 수정 모달 창 리셋
-		var resetSearch2 = function(num){
+		var resetSearch2 = function(){
 			$(".item").remove();
 			
 			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><p id="modify_type0">카테고리 : </p><p id="modify_id0">모션아이디 : </p></div>');
@@ -481,7 +469,10 @@
 							}
 						});
 				}
-				if(check == $('input[name=_selected_]:checked').length) alert("삭제되었습니다.");
+				if(check == $('input[name=_selected_]:checked').length){
+					alert("삭제되었습니다.");
+					window.location.reload(true);
+				}
 			}
 			else alert("삭제할 데이터의 체크박스를 클릭해야 합니다.");
 		});
@@ -585,12 +576,7 @@
 			
 			if(check == $('input[name=_selected_]:checked').length)	{
 				alert("수정되었습니다");
-				resetSearch2();
-
-				// 수정 모달 창 닫기
-				$("body").attr('class', '');
-				$("#ModifyModal").attr('aria-hidden', 'true');
-				$("#ModifyModal").css('display','none');
+				window.location.reload(true);
 			}											
 															
 		});
@@ -671,7 +657,7 @@
 					if(link.download !== undefined) { // feature detection
 						// Browsers that support HTML5 download attribute
 						link.setAttribute("href", window.URL.createObjectURL(blob));
-						link.setAttribute("download", "generateID.csv");
+						link.setAttribute("download", "generateID_" + add_current_cate + ".csv");
 					 }
 					else {
 						// it needs to implement server side export
@@ -704,16 +690,7 @@
 									"motion_id" : gen_id_one},
 					success: function(data){
 						alert("저장되었습니다.");
-						resetSearch3();
-
-						//모달 창 닫기
-						$("body").attr('class', '');
-						$("#AddModal").attr('aria-hidden', 'true');
-						$("#AddModal").css('display','none');
-					
-						gen_type_one = null;
-						gen_id_one = null;
-					
+						window.location.reload(true);
 					},
 					error: function(data){
 						alert("error by save_one.php");
@@ -747,18 +724,7 @@
 				
 				if(check_save_several == gen_type_several.length){
 					alert("저장되었습니다.");
-					resetSearch3();
-
-					//모달 창 닫기
-					$("body").attr('class', '');
-					$("#AddModal").attr('aria-hidden', 'true');
-					$("#AddModal").css('display','none');
-
-					tempString = null;
-					gen_type_several = [];
-					gen_id_several = [];
-					
-					check_save_several = 0;
+					window.location.reload(true);
 				}
 				else{
 					alert("저장 실패");

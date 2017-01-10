@@ -1,0 +1,29 @@
+
+h4,caption {text-align: center}
+.btn .caret {margin-left: 10px}
+#dropdownMenu1 {margin: 0px}
+#dropdownMenu2 {margin-right: 20px}
+#add_count {margin-left: 10px}
+.container {margin-top: 50px}
+.dropdown, #count {float: left}
+.dropdown-menu {min-width: 100px}
+.btn {float: right; margin-left: 10px}
+.cate, .add_cate {background-color: transparent; border: 0px; width: 100%;}
+thead > tr{background-color: antiquewhite}
+.modal-row {display: inline}
+.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
+#make_cate_name, #make_cate_serial {width: 100%}
+.search {background-color: transparent}
+.carousel-control.left, .carousel-control.right {background-image: none;}
+.item {text-align: center}
+#Pparam_list {margin-top: 10px}
+#Pparam_list > label, #param_list > label, #modify_param_list > label {border-radius: 5px; margin: 2px}
+#Pparam_list > .btn.btn-primary {background-color: #337ab7;border-color: #2e6da4;}
+#Pparam_list > label > input {border: 0px;background-color: transparent;color: white;}
+.form-group {margin-top: 20px; border-top: 1px solid;padding-top: 10px;}
+.file-input .file-input-new{margin-top: -20px;}
+.file-preview, .form-control.file-caption.kv-fileinput-caption, .fileinput-remove-button, .fileinput-cancel-button, .fileinput-upload-button{display: none;}
+.file-caption-main{width: 100%;}
+.btn.btn-primary.btn-file{float: left;width: 100%;border-radius: 5px;}
+.glyphicon {margin-left: 10px; z-index: 100}
+

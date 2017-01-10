@@ -1,9 +1,9 @@
 <?php header("Content-Type: text/html; charset=UTF-8");
 
 $mysql_host = 'localhost';
-$mysql_user = 'tnwls0312';
-$mysql_password = 'tn3125977';
-$mysql_db = 'tnwls0312';
+$mysql_user = 'root';
+$mysql_password = 'oQk8yiultO4Q';
+$mysql_db = 'intern';
 
 $connect = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_db);
 
