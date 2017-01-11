@@ -27,7 +27,7 @@
 					<li><a href="#">모델</a></li>
 					<li><a href="#">모델즈</a></li>
 				</ul>
-			</div>
+			</div> 
 		</div>
    </nav>
 	
@@ -205,7 +205,6 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/bootstrap.js"></script>	
-	<!--<script src="js/fileinput.min.js"></script>-->
 	<script>
 		var page_criteria = 10;
 		var result = null;
@@ -218,70 +217,6 @@
 		var origin_param = [];
 
 		$(".carousel").carousel({ interval:false });
-		
-		// 수정 모달 창 리셋
-		function resetSearch2(num){
-			$(".item").remove();
-			
-			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name0"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0"></div><div class="row modal-row modify_temp_param"><p style="width:auto;display:block">필요 파라미터</p><div class="btn-group" id="modify_param_list0" data-toggle="buttons"></div></div></div>');
-		}
-		
-				
-		// 카테고리 추가 모달 창 리셋
-		function resetSearch4(){
-			$("#make_cate_name").val(null);
-			$("#make_cate_serial").val(null);
-			$("#param_list").children().remove();
-		}
-		
-		// 파라미터 관리 모달 창 리셋
-		function resetSearch5(){
-			$("#Pparam_list").children().remove();
-		}
-		
-		
-		
-		// 체크박스 관리
-		$('input[name=_selected_all_]').on('change', function(){
-			$('input[name=_selected_]').prop('checked', this.checked);
-		});
-		
-		function loadCate(page_num){
-			$.ajax({
-				url: "php/load_cate2.php",
-				type: "POST",
-				async:false,
-				data: {"page": page_num},
-				success: function(data){
-					result = JSON.parse(data);
-
-					//테이블 로딩
-					$('tbody').children().remove();
-
-					//개수 출력
-					if(result != null){
-						for(i=0; i<result.length; i++){
-
-						// 공통 부분(seq, cate_name, cate_serial, cate_params)
-						$('tbody:last').append('<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td></tr>');
-						}
-					}
-				},
-				error: function(data){
-					alert("error by load_cate2.php");
-				}
-			});	
-		}
-		
-		//페이지 버튼 누르면		
-		function pageClicked(){
-			$(".page").on('click', function(){
-				$(this).parent().siblings().removeClass("active");
-				$(this).parent().addClass("active");
-
-				loadCate($(this).html());
-			});
-		}
 		
 		// 페이지 로딩 시
 		window.onload = function(){
@@ -355,6 +290,81 @@
 				pageClicked();
 			}
 		});
+		
+		// 수정 모달 창 리셋
+		function resetSearch2(num){
+			$(".item").remove();
+			
+			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name0"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0"></div><div class="row modal-row modify_temp_param"><p style="width:auto;display:block">필요 파라미터</p><div class="btn-group" id="modify_param_list0" data-toggle="buttons"></div></div></div>');
+		}
+		
+				
+		// 카테고리 추가 모달 창 리셋
+		function resetSearch4(){
+			$("#make_cate_name").val(null);
+			$("#make_cate_serial").val(null);
+			$("#param_list").children().remove();
+		}
+		
+		// 파라미터 관리 모달 창 리셋
+		function resetSearch5(){
+			$("#Pparam_list").children().remove();
+		}
+		
+		// 체크박스 관리
+		$('input[name=_selected_all_]').on('change', function(){
+			$('input[name=_selected_]').prop('checked', this.checked);
+		});
+		
+		function loadCate(page_num){
+			$.ajax({
+				url: "php/load_cate2.php",
+				type: "POST",
+				async:false,
+				data: {"page": page_num},
+				success: function(data){
+					result = JSON.parse(data);
+
+					//테이블 로딩
+					$('tbody').children().remove();
+
+					//개수 출력
+					if(result != null){
+						for(i=0; i<result.length; i++){
+
+						// 공통 부분(seq, cate_name, cate_serial, cate_params)
+						$('tbody:last').append('<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td></tr>');
+						}
+					}
+				},
+				error: function(data){
+					alert("error by load_cate2.php");
+				}
+			});	
+		}
+		
+		//페이지 버튼 누르면		
+		function pageClicked(){
+			$(".page").on('click', function(){
+				$(this).parent().siblings().removeClass("active");
+				$(this).parent().addClass("active");
+
+				loadCate($(this).html());
+			});
+		}
+		
+		function onKeyDown(){
+			if(event.keyCode == 13){
+				if(event.target.value.length < 1){
+					alert("파라미터 이름을 쓰셔야 합니다.");
+				}
+				else{
+					event.target.style.color = 'white';
+					event.target.type = 'button';
+					event.target.style.backgroundColor = 'transparent';
+				}
+			}
+		} 
 
 		// 다음 버튼 클릭 시
 		$("#after").on('click', function(){
@@ -456,6 +466,21 @@
 						},
 						error: function(data){
 							alert("error by load_by_index.php");
+						}
+					});
+			
+					$.ajax({
+						url: "php/check_category.php",
+						type: "POST",
+						async:false,
+						data: {	"seq": $('input[name=_selected_]:checked')[index].value},
+						success: function(data){
+							if(data == "1"){
+								$("#modify_serial" + index).attr("disabled",true);
+							}
+						},
+						error: function(data){
+							alert("error by check_category.php");
 						}
 					});
 					
@@ -705,105 +730,6 @@
 				}
 			});	
 		});
-		
-		function onKeyDown(){
-			if(event.keyCode == 13){
-				if(event.target.value.length < 1){
-					alert("파라미터 이름을 쓰셔야 합니다.");
-				}
-				else{
-					event.target.style.color = 'white';
-					event.target.type = 'button';
-					event.target.style.backgroundColor = 'transparent';
-				}
-			}
-		} 
-
-
-
-		//파일로 파라미터 관리하는 방법	
-		// 파라미터 관리 클릭 시
-		/*$("#param_btn").on('click', function(){
-			$.ajax({
-				url: "php/load_paramlist.php",
-				async:false,
-				success: function(data){
-					result = JSON.parse(data);
-	
-					for(i=3; i<result.length; i++){
-						$("#Pparam_list").append('<label class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span><input type="checkbox" autocomplete="off" value="' +
-				                              result[i][0]+ '">' + result[i][0] + '</label>');
-					}
-				},
-				error: function(data){
-					alert("error by load_paramlist.php");
-		    }
-		 	});
-		});
-*/
-
-		// 파라미터 관리 클릭 시
-		/*
-		$("#param_btn").on('click', function(){
-			$(".btn-file").children()[0].style.display = 'none';
-			$(".btn-file").children()[1].style.display = 'none';
-			
-			$.ajax({
-				url: "php/load_paramlist.php",
-				async:false,
-				success: function(data){
-					result = JSON.parse(data); 
-
-					var csvString = 'index,param_name\r\n';
-					for(i=3; i<result.length; i++){
-						csvString += (i-2) + ',' + result[i][0] + '\r\n';
-					}
-					oldParam = csvString.substring(18,csvString.length);
-
-					// download stuff
-					var blob = new Blob([csvString], {"type": "text/csv;charset=utf8;"});					
-
-					var link = document.getElementById("genresult_download");
-
-					if(link.download !== undefined) { // feature detection
-						// Browsers that support HTML5 download attribute
-						link.setAttribute("href", window.URL.createObjectURL(blob));
-						link.setAttribute("download", "manageParam.csv");
-					 }
-					else {
-						// it needs to implement server side export
-						link.setAttribute("href", "http://tnwls0312.dothome.co.kr/export");
-					}
-
-					$("#genresult_download").css('display', 'block');
-				},
-				error: function(data){
-					alert("error by load_paramlist.php");
-				}
-			});	
-		});
-		
-		// 파라미터 관리 창에서 DB등록 클릭 시
-		$("#param_save_btn").on('click',function(){
-			var newParam = $(".file-preview-text")[0].innerHTML;
-			newParam = newParam.substring(17,newParam.length);
-
-			$.ajax({
-				url: "php/update_params_file.php",
-				type: "POST",
-				async:false,
-				data: {	"old_params": oldParam,
-								"new_params": newParam},
-				success: function(data){
-					alert("등록되었습니다.");
-					window.location.reload(true);
-				},
-				error: function(data){
-					alert("error by update_params_file.php");
-				}
-			});
-		});
-		*/
 		
 	</script>
 	
