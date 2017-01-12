@@ -22,6 +22,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
+					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 					<li><a href="motionid.html">모션아이디</a></li>
 					<li class="active"><a href="#">카테고리/파라미터</a></li>
 					<li><a href="#">모델</a></li>
@@ -34,6 +35,7 @@
 	<div class="col-sm-2 sidenav hidden-xs" style="background-color:#eee; height:100%;">
 		<h4>메뉴</h4>
 		<ul class="nav nav-pills nav-stacked">
+			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 			<li><a href="motionid.html">모션아이디</a></li>
 			<li class="active"><a href="#">카테고리/파라미터</a></li>
 			<li><a href="#">너꺼</a></li>
@@ -57,8 +59,8 @@
 							<tr>
 								<th><input type="checkbox" name="_selected_all_"></th>
 								<th>인덱스</th>
-								<th>카테고리 이름</th>
-								<th>카테고리 고유키</th>
+								<th>이름</th>
+								<th>고유키</th>
 								<th>필요 파라미터</th>
 							</tr>
 						</thead>
@@ -137,7 +139,6 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
 					<h4 class="modal-title">수정하기</h4>
 				</div>
-				<h5 style="padding:15px">데이터가 있는 카테고리의 경우, 고유키 수정은 무시됩니다.</h5>
 				<div id="myCarousel" class="modal-body carousel slide" data-ride="carousel">
 					<div class="carousel-inner" role="listbox">
 						<div class="item active">
@@ -203,7 +204,7 @@
 	</div><!-- /.modal -->
 		
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/bootstrap.js"></script>	
 	<script>
 		var page_criteria = 10;
