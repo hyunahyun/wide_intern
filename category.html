@@ -23,21 +23,21 @@
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-					<li><a href="motionid.html">모션아이디</a></li>
 					<li class="active"><a href="#">카테고리/파라미터</a></li>
+					<li><a href="motionid.html">모션아이디</a></li>
 					<li><a href="#">모델</a></li>
 					<li><a href="#">모델즈</a></li>
 				</ul>
 			</div> 
 		</div>
    </nav>
-	
+	 
 	<div class="col-sm-2 sidenav hidden-xs" style="background-color:#eee; height:100%;">
 		<h4>메뉴</h4>
 		<ul class="nav nav-pills nav-stacked">
 			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-			<li><a href="motionid.html">모션아이디</a></li>
 			<li class="active"><a href="#">카테고리/파라미터</a></li>
+			<li><a href="motionid.html">모션아이디</a></li>
 			<li><a href="#">너꺼</a></li>
 			<li><a href="#">너꺼2</a></li>
 		</ul>
@@ -223,7 +223,7 @@
 		window.onload = function(){
 			$.ajax({
 				url: "php/load_cate.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				success: function(data){
 					result = JSON.parse(data);	
@@ -320,7 +320,7 @@
 		function loadCate(page_num){
 			$.ajax({
 				url: "php/load_cate2.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				data: {"page": page_num},
 				success: function(data){
@@ -392,7 +392,7 @@
 				for(i=0; i< $('input[name=_selected_]:checked').length; i++){
 					$.ajax({
 							url: "php/delete_by_index.php",
-							type: "POST",
+							type: "GET",
 							async:false,
 							data: {	"seq": $('input[name=_selected_]:checked')[i].value,
 											"table": "tb_category",
@@ -447,7 +447,7 @@
 					
 					$.ajax({
 						url: "php/load_by_index.php",
-						type: "POST",
+						type: "GET",
 						async:false,
 						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
 										"table": "tb_category"},
@@ -472,7 +472,7 @@
 			
 					$.ajax({
 						url: "php/check_category.php",
-						type: "POST",
+						type: "GET",
 						async:false,
 						data: {	"seq": $('input[name=_selected_]:checked')[index].value},
 						success: function(data){
@@ -515,7 +515,7 @@
 				  
 				$.ajax({
 					url: "php/modify_by_index.php",
-					type: "POST",
+					type: "GET",
 					async:false,
 					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
 									"param_value": paramValue,
@@ -570,13 +570,13 @@
 
 				$.ajax({
 					url: "php/make_cate.php",
-					type: "POST",
+					type: "GET",
 					async:false,
 					data: {	"cate_name": document.getElementById("make_cate_name").value,
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : str},
 					success: function(data){
-						if(data != "0"){
+						if(data != 0){
 							alert("추가되었습니다.");
 							window.location.reload(true);
 						}
@@ -704,7 +704,7 @@
 								
 								$.ajax({
 									url: "php/update_params_button.php",
-									type: "POST",
+									type: "GET",
 									async:false,
 									data: {	"state": state,
 													"old_params": oldPparam,

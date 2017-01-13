@@ -23,8 +23,8 @@
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-					<li class="active"><a href="#">모션아이디</a></li>
 					<li><a href="category.html">카테고리/파라미터</a></li>
+					<li class="active"><a href="#">모션아이디</a></li>
 					<li><a href="#">모델</a></li>
 					<li><a href="#">모델즈</a></li>
 				</ul>
@@ -36,8 +36,8 @@
 		<h4>메뉴</h4>
 		<ul class="nav nav-pills nav-stacked">
 			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-			<li class="active"><a href="#">모션아이디</a></li>
 			<li><a href="category.html">카테고리/파라미터</a></li>
+			<li class="active"><a href="#">모션아이디</a></li>
 			<li><a href="#">모델</a></li>
 			<li><a href="#">모델즈</a></li>
 		</ul>
@@ -251,7 +251,7 @@
 			// 시리얼 넘버 받아오기
 			$.ajax({
 				url: "php/load_serial.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				data: {"cate_name": gentype},
 				success: function(data){
@@ -269,7 +269,7 @@
 				var temp = leadingZeros((Math.floor(Math.random() * 1000000) + 1), 6);
 				$.ajax({
 					url: "php/check_motionid.php",
-					type: "POST",
+					type: "GET",
 					async:false,
 					data: {	"motion_id": ID + temp,
 									"motion_type": gentype},
@@ -294,7 +294,7 @@
 			
 			$.ajax({
 				url: "php/load_by_cate.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				data: {	"motion_type": current_cate,
 								"cate_params": current_cate_param,
@@ -362,7 +362,7 @@
 			// 카테고리 별 파라미터 출력
 			$.ajax({
 				url: "php/load_params.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				data: {"motion_type": current_cate},
 				success: function(data){
@@ -384,7 +384,7 @@
 			// 페이지 로딩
 			$.ajax({
 				url: "php/load_page.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				data: {	"motion_type": current_cate},
 				success: function(data){
@@ -431,7 +431,7 @@
 		$("#dropdownMenu1").on('click', function(){
 			$.ajax({
 				url: "php/load_cate.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				success: function(data){
 					result = JSON.parse(data);	
@@ -446,7 +446,6 @@
 						 
 					$(".cate").on('click', function() {
 						cateClicked($(this));
-						console.log($(this));
 					});
 				},
 				error: function(data){
@@ -499,7 +498,7 @@
 				for(i=0; i< $('input[name=_selected_]:checked').length; i++){
 					$.ajax({
 							url: "php/delete_by_index.php",
-							type: "POST",
+							type: "GET",
 							async:false,
 							data: {	"seq": $('input[name=_selected_]:checked')[i].value,
 											"table": "tb_motionid"},
@@ -526,7 +525,7 @@
 				// 카테고리 별 파라미터 출력
 				$.ajax({
 					url: "php/load_params.php",
-					type: "POST",
+					type: "GET",
 					async:false,
 					data: {"motion_type": $('input[name=_selected_]:checked')[0].parentNode.nextSibling.nextSibling.innerHTML},
 					success: function(data){
@@ -550,7 +549,7 @@
 					
 					$.ajax({
 						url: "php/load_by_index.php",
-						type: "POST",
+						type: "GET",
 						async:false,
 						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
 										"cate_params": current_cate_param,
@@ -596,7 +595,7 @@
 								
 				$.ajax({
 					url: "php/modify_by_index.php",
-					type: "POST",
+					type: "GET",
 					async:false,
 					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
 									"cate_params": current_cate_param, 
@@ -643,7 +642,7 @@
 		$("#dropdownMenu2").on('click', function(){
 			$.ajax({
 				url: "php/load_cate.php",
-				type: "POST",
+				type: "GET",
 				async:false,
 				success: function(data){
 					result = JSON.parse(data);	
@@ -722,13 +721,14 @@
 			if(gen_type_one && gen_id_one){ //1개 저장 시
 				$.ajax({
 					url: "php/save_one.php",
-					type: "POST",
+					type: "GET",
 					async:false,
 					data: {	"motion_type" : gen_type_one,
 									"motion_id" : gen_id_one},
 					success: function(data){
 						alert("저장되었습니다.");
 						resetSearch3();
+						current_cate = gen_type_one;
 						cateClicked($("input[value=" + current_cate + "]"));
 					},
 					error: function(data){
@@ -748,7 +748,7 @@
 				for(i=0; i<gen_type_several.length;i++){
 					$.ajax({
 						url: "php/save_one.php",
-						type: "POST",
+						type: "GET",
 						async:false,
 						data: {	"motion_type" : gen_type_several[i],  
 										"motion_id" : gen_id_several[i]},
@@ -764,6 +764,7 @@
 				if(check_save_several == gen_type_several.length){
 					alert("저장되었습니다.");
 					resetSearch3();
+					current_cate = gen_type_several[0];
 					cateClicked($("input[value=" + current_cate + "]"));
 				}
 				else{

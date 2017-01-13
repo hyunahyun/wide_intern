@@ -1,10 +1,10 @@
 <?php
 
-include "connect.php";
+include_once "connect.php";
 
-$type = $_POST['motion_type'];
-$params = $_POST['cate_params'];
-$page = $_POST['page'];
+$type = $_GET['motion_type'];
+$params = $_GET['cate_params'];
+$page = $_GET['page'];
 
 $start_num = ($page - 1) * 10;
 
@@ -25,7 +25,7 @@ $query .= " from tb_motionid where motion_type='$type' order by seq asc";
 if(!strcmp($page, "1")) $query .= " limit 0,10;";
 else $query .= " limit $start_num,10;";
 
-$result = $connect->query($query);
+if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 if($result == null) echo "0";
 else{
@@ -35,5 +35,6 @@ else{
 	}
 	echo json_encode($row);
 }
+
 
 ?>

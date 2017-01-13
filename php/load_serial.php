@@ -1,10 +1,10 @@
 <?php
-include "connect.php";
+include_once "connect.php";
 
-$category = $_POST['cate_name'];
+$category = $_GET['cate_name'];
 
 $query = "select cate_serial from tb_category where cate_name='$category';";
-$result = $connect->query($query);
+if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 $count = mysqli_fetch_row($result);
 echo json_encode($count);

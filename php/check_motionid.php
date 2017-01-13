@@ -1,11 +1,11 @@
 <?php
-include "connect.php";
+include_once "connect.php";
 
-$id = $_POST['motion_id'];
-$type = $_POST['motion_type'];
+$id = $_GET['motion_id'];
+$type = $_GET['motion_type'];
 
 $query = "select seq from tb_motionid where motion_type='$type' and motion_id='$id';";
-$result = $connect->query($query);
+if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 $count = mysqli_fetch_row($result);
 echo json_encode($count);

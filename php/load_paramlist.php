@@ -1,8 +1,8 @@
 <?php
-include "connect.php";
+include_once "connect.php";
 
 $query = "show full columns from tb_motionid;";
-$result = $connect->query($query);
+if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 $n = 0;
 while($count = mysqli_fetch_row($result)){

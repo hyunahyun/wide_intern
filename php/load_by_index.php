@@ -1,9 +1,9 @@
 <?php
-include "connect.php";
+include_once "connect.php";
 
-$index = $_POST['seq'];
-$params = $_POST['cate_params'];
-$table = $_POST['table'];
+$index = $_GET['seq'];
+$params = $_GET['cate_params'];
+$table = $_GET['table'];
 
 
 if(!strcmp($table, "tb_motionid")){
@@ -24,7 +24,7 @@ else if(!strcmp($table, "tb_category")){
 	$query = "select seq, cate_name, cate_serial, cate_params from tb_category where seq='$index';";
 }
 
-$result = $connect->query($query);
+if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 $count = mysqli_fetch_row($result);
 echo json_encode($count);

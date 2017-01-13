@@ -1,8 +1,8 @@
 <?php
 
-include "connect.php";
+include_once "connect.php";
 
-$page = $_POST['page'];
+$page = $_GET['page'];
 
 $start_num = ($page - 1) * 10;
 
@@ -11,7 +11,7 @@ $query = "select seq, cate_name, cate_serial, cate_params from tb_category order
 if(!strcmp($page, "1")) $query .= " limit 0,10;";
 else $query .= " limit $start_num,10;";
 
-$result = $connect->query($query);
+if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 $n = 0;
 while($count = mysqli_fetch_row($result)){
