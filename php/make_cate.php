@@ -27,7 +27,7 @@ if(!$row){ // 겹치지 않을 경우
 
 	if(!$connect->query($query)) throw new Exception($connect->error); 
 }
-else echo 0;
+else if($row) echo 0;
 
  
 ?>

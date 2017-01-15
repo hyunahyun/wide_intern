@@ -349,6 +349,8 @@
 			current_cate_param = null;
 			current_first_page_num = 1;
 			page_arr = [];
+			
+			$('input[name=_selected_all_]').prop('checked', false);
 
 			$(".page").parent().remove();
 			$("#prev").after('<li id="first_page" class="active"><a href="#" class="page">1</a></li>');
@@ -519,10 +521,9 @@
 		});
 		
 		//메인 화면에서 수정 버튼 클릭 시 
-		$("#modify_btn").on('click', function(){
+		$("#modify_btn").on('click', function(event){
 			if($('input[name=_selected_]:checked').length != 0){
-				
-				// 카테고리 별 파라미터 출력
+				// 카테고리 별 파라미터 출력 
 				$.ajax({
 					url: "php/load_params.php",
 					type: "GET",
@@ -532,53 +533,62 @@
 						parameter_num = JSON.parse(data);
 						current_cate_param = parameter_num[0];
 						parameter_num = current_cate_param.split(',');
+					
+						if(parameter_num[0] == ""){
+							alert("수정할 데이터(추가 파라미터)가 없습니다.\n인덱스, 카테고리, 모션아이디는 수정할 수 없습니다.");
+							event.stopImmediatePropagation();
+							resetSearch2();
+						}
+					
 					},
 					error: function(data){
 						alert("error by load_params.php");
 					}
 				});
 			
+			
 				// 수정할 정보 로딩
-				for(var index=0; index < $('input[name=_selected_]:checked').length ; index++){
-					if(index != 0){
-						$(".carousel-inner").children().last().after('<div class="item"><p id="modify_index' + index
-																												 + '">인덱스 : </p><p id="modify_type' + index
-																												 + '">카테고리 : </p><p id="modify_id' + index
-																												 +'">모션아이디 : </p></div>');
+				if(parameter_num[0] != ""){
+					for(var index=0; index < $('input[name=_selected_]:checked').length ; index++){					
+						if(index != 0){
+							$(".carousel-inner").children().last().after('<div class="item"><p id="modify_index' + index
+																													 + '">인덱스 : </p><p id="modify_type' + index
+																													 + '">카테고리 : </p><p id="modify_id' + index
+																													 +'">모션아이디 : </p></div>');
+						} 
+
+						$.ajax({
+							url: "php/load_by_index.php",
+							type: "GET",
+							async:false,
+							data: {	"seq": $('input[name=_selected_]:checked')[index].value,
+											"cate_params": current_cate_param,
+											"table": "tb_motionid"},
+							success: function(data){
+								result = JSON.parse(data);
+
+								$('#modify_index' + index).text("인덱스 : " + result[0]);
+								$('#modify_type' + index).text("카테고리 : " + result[1]);
+								$('#modify_id' + index).text("모션아이디 : " + result[2]);
+
+								for(i=(parameter_num.length); i>0; i--)
+									$("#modify_id" + index).after('<div class="row modal-row modify_temp_param"><p>' + parameter_num[i-1]
+																				 + ' : </p> <input class="form-control" id="' + parameter_num[i-1] +'_' + index + '"></div>');
+
+								for(i=3; i<(parameter_num.length+3); i++)
+									$('#' + parameter_num[i-3] + '_' + index).val(result[i]);
+
+							},
+							error: function(data){
+								alert("error by load_by_index.php");
+							}
+						});
 					}
-					
-					$.ajax({
-						url: "php/load_by_index.php",
-						type: "GET",
-						async:false,
-						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
-										"cate_params": current_cate_param,
-										"table": "tb_motionid"},
-						success: function(data){
-							result = JSON.parse(data);
-
-							$('#modify_index' + index).text("인덱스 : " + result[0]);
-							$('#modify_type' + index).text("카테고리 : " + result[1]);
-							$('#modify_id' + index).text("모션아이디 : " + result[2]);
-
-							for(i=(parameter_num.length); i>0; i--)
-								$("#modify_id" + index).after('<div class="row modal-row modify_temp_param"><p>' + parameter_num[i-1]
-																			 + ' : </p> <input class="form-control" id="' + parameter_num[i-1] +'_' + index + '"></div>');
-
-							for(i=3; i<(parameter_num.length+3); i++)
-								$('#' + parameter_num[i-3] + '_' + index).val(result[i]);
-
-						},
-						error: function(data){
-							alert("error by load_by_index.php");
-						}
-					});
-					
 				}
 			}
 			else{
 				alert("수정할 데이터의 체크박스를 클릭해야 합니다.");
-				
+				event.stopImmediatePropagation();
 				resetSearch2();
 			}
 		});
