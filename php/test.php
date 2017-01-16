@@ -5,7 +5,7 @@ include_once "connect.php";
 // 출력 함수
 function printing($string){
 	echo $string;
-	echo str_pad("", 2000);
+	echo str_pad("", 4096);
 	ob_flush();
 	flush();
 	echo "<script language='javascript'>$('body').scrollTop($(document).height());</script>";
@@ -29,11 +29,9 @@ function testing($php, $get ,$success_msg, $error_msg){
 		printing("<p style='color:tomato'>Error : ".$error_msg."<br>".$e->getMessage()."<p>");
 	}
 }
-//
 
-testing("load_cate.php", array('seq'=>'1'), "오예에에ㅔ", "에..?");
 
-testing("delete_by_index.php", array('seq'=>'2', 'table'=>'tb_motionid') ,"오예에에ㅔ", "에..?");
+// 예시 : testing("delete_by_index.php", array('seq'=>'2', 'table'=>'tb_motionid') ,"성공 시 문구", "실패 시 문구");
 
 //
 // category/parameter 화면 테스팅
