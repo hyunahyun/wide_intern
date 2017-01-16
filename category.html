@@ -92,8 +92,9 @@
 				</nav>
 		</div>
 	</div>
+	
 	<!--파라미터 관리 모달 창-->
-	<div class="modal fade" id="ParamModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="ParamModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -134,7 +135,7 @@
 	</div><!-- /.modal -->
 	
 	<!--수정 모달 창-->
-	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -176,7 +177,7 @@
 	</div><!-- /.modal -->
 	
 	<!-- 카테고리 추가 모달 창-->
-	<div class="modal fade" id="TypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="TypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -300,9 +301,7 @@
 			
 			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name0"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0"></div><div class="row modal-row modify_temp_param"><p style="width:auto;display:block">필요 파라미터</p><div class="btn-group" id="modify_param_list0" data-toggle="buttons"></div></div></div>');
 			
-			$("body").attr('class', '');
-			$("#ModifyModal").attr('aria-hidden', 'true');
-			$("#ModifyModal").css('display','none');
+			$("#ModifyModal").modal('hide');
 		}
 		
 				
@@ -312,18 +311,14 @@
 			$("#make_cate_serial").val(null);
 			$("#param_list").children().remove();
 			
-			$("body").attr('class', '');
-			$("#TypeModal").attr('aria-hidden', 'true');
-			$("#TypeModal").css('display','none');
+			$("#TypeModal").modal('hide');
 		}
 		
 		// 파라미터 관리 모달 창 리셋
 		function resetSearch5(){
 			$("#Pparam_list").children().remove();
 			
-			$("body").attr('class', '');
-			$("#ParamModal").attr('aria-hidden', 'true');
-			$("#ParamModal").css('display','none');
+			$("#ParamModal").modal('hide');
 		}
 		
 		// 체크박스 관리

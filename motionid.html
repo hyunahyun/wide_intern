@@ -96,8 +96,9 @@
 				</nav>
 		</div>
 	</div>
+	
 	<!--수정 모달 창-->
-	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="ModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -130,7 +131,7 @@
 	</div><!-- /.modal -->
 		
 	<!--랜덤생성 모달 창-->
-	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -201,9 +202,7 @@
 			
 			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><p id="modify_type0">카테고리 : </p><p id="modify_id0">모션아이디 : </p></div>');
 			
-			$("body").attr('class', '');
-			$("#ModifyModal").attr('aria-hidden', 'true');
-			$("#ModifyModal").css('display','none');
+			$("#ModifyModal").modal('hide');
 		}
 		
 		// 랜덤생성 모달 창 리셋
@@ -223,9 +222,7 @@
 			$("#genresult_type").text('카테고리 : ');
 			$("#genresult_id").text('모션아이디 : ');
 			
-			$("body").attr('class', '');
-			$("#AddModal").attr('aria-hidden', 'true');
-			$("#AddModal").css('display','none');
+			$("#AddModal").modal('hide');
 		}
 				
 		
