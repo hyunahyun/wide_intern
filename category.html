@@ -25,7 +25,7 @@
 					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 					<li class="active"><a href="#">카테고리/파라미터</a></li>
 					<li><a href="motionid.html">모션아이디</a></li>
-					<li><a href="#">모델 측정 리스트</a></li>
+					<li><a href="">모델 측정 리스트</a></li>
 					<li><a href="#">모델 그룹 설정</a></li>
 					<li><a href="#">로그 관리</a></li>
 				</ul>
@@ -554,9 +554,8 @@
 		
 		// 카테고리 추가 모달 창에서 카테고리 추가 버튼 클릭 시
 		$("#make_cate_btn").on('click', function(){
-			if((document.getElementById("make_cate_name").value == null)
-				|| (document.getElementById("make_cate_serial").value == null)){
-					resetSearch4();
+			if((document.getElementById("make_cate_name").value == "")
+				|| (document.getElementById("make_cate_serial").value == "")){
 					alert("카테고리 이름과 ID구분자는 필수 입력해야 합니다.");
 			}
 			else{
@@ -574,9 +573,9 @@
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : str},
 					success: function(data){
-						console.log(data);
-						if(data == "0"){ 
+						if(data.length > 0){  
 							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
+							resetSearch4();
 						}
 						else{
 							alert("추가되었습니다.");
