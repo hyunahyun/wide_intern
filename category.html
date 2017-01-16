@@ -299,6 +299,10 @@
 			$(".item").remove();
 			
 			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><div class="row modal-row modify_temp_param"><p>카테고리 이름 : </p><input class="form-control" id="modify_name0"></div><div class="row modal-row modify_temp_param"><p>카테고리 고유키 : </p><input class="form-control" id="modify_serial0"></div><div class="row modal-row modify_temp_param"><p style="width:auto;display:block">필요 파라미터</p><div class="btn-group" id="modify_param_list0" data-toggle="buttons"></div></div></div>');
+			
+			$("body").attr('class', '');
+			$("#ModifyModal").attr('aria-hidden', 'true');
+			$("#ModifyModal").css('display','none');
 		}
 		
 				
@@ -307,11 +311,19 @@
 			$("#make_cate_name").val(null);
 			$("#make_cate_serial").val(null);
 			$("#param_list").children().remove();
+			
+			$("body").attr('class', '');
+			$("#TypeModal").attr('aria-hidden', 'true');
+			$("#TypeModal").css('display','none');
 		}
 		
 		// 파라미터 관리 모달 창 리셋
 		function resetSearch5(){
 			$("#Pparam_list").children().remove();
+			
+			$("body").attr('class', '');
+			$("#ParamModal").attr('aria-hidden', 'true');
+			$("#ParamModal").css('display','none');
 		}
 		
 		// 체크박스 관리
@@ -573,9 +585,10 @@
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : str},
 					success: function(data){
-						if(data.length > 0){  
+					console.log(data);
+					console.log(data.length);
+						if(data.length > 1){  
 							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
-							resetSearch4();
 						}
 						else{
 							alert("추가되었습니다.");
