@@ -25,8 +25,9 @@
 					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 					<li class="active"><a href="#">카테고리/파라미터</a></li>
 					<li><a href="motionid.html">모션아이디</a></li>
-					<li><a href="#">모델</a></li>
-					<li><a href="#">모델즈</a></li>
+					<li><a href="#">모델 측정 리스트</a></li>
+					<li><a href="#">모델 그룹 설정</a></li>
+					<li><a href="#">로그 관리</a></li>
 				</ul>
 			</div> 
 		</div>
@@ -38,8 +39,9 @@
 			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 			<li class="active"><a href="#">카테고리/파라미터</a></li>
 			<li><a href="motionid.html">모션아이디</a></li>
-			<li><a href="#">너꺼</a></li>
-			<li><a href="#">너꺼2</a></li>
+			<li><a href="#">모델 측정 리스트</a></li>
+			<li><a href="#">모델 그룹 설정</a></li>
+			<li><a href="#">로그 관리</a></li>
 		</ul>
 	</div>
 
@@ -489,12 +491,8 @@
 			}
 			else{
 				alert("수정할 데이터의 체크박스를 클릭해야 합니다.");
-				
+				event.stopImmediatePropagation();
 				resetSearch2();
-				//수정 모달 창 닫기
-				$("body").attr('class', '');
-				$("#ModifyModal").attr('aria-hidden', 'true');
-				$("#ModifyModal").css('display','none');
 			}
 		});
 		
@@ -576,18 +574,13 @@
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : str},
 					success: function(data){
-						if(data != 0){
-							alert("추가되었습니다.");
-							window.location.reload(true);
+						console.log(data);
+						if(data == "0"){ 
+							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
 						}
 						else{
-							resetSearch4();
-							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
-							
-							//추가 모달 창 닫기
-							$("body").attr('class', '');
-							$("#TypeModal").attr('aria-hidden', 'true');
-							$("#TypeModal").css('display','none');
+							alert("추가되었습니다.");
+							window.location.reload(true);
 						}
 					},
 					error: function(data){
