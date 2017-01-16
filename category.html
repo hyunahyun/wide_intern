@@ -584,9 +584,7 @@
 					data: {	"cate_name": document.getElementById("make_cate_name").value,
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : str},
-					success: function(data){
-					console.log(data);
-					console.log(data.length);
+					success: function(data){ 
 						if(data.length > 1){  
 							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
 						}

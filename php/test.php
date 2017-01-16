@@ -40,7 +40,7 @@ testing("delete_by_index.php", array('seq'=>'2', 'table'=>'tb_motionid') ,"오�
 printing("<p style='color:black; font-weight:bold'>카테고리/파라미터 관리 화면 테스팅 시작<p>");
 		
 //load_cate, load_cate2
-
+ 
 //파라미터 관리
 //load_paramlist, update_param_button
 
