@@ -25,9 +25,9 @@
 					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 					<li class="active"><a href="#">카테고리/파라미터</a></li>
 					<li><a href="motionid.html">모션아이디</a></li>
-					<li><a href="">모델 측정 리스트</a></li>
-					<li><a href="#">모델 그룹 설정</a></li>
-					<li><a href="#">로그 관리</a></li>
+					<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
+					<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
+					<li><a href="../models/logList.html">로그 관리</a></li>
 				</ul>
 			</div> 
 		</div>
@@ -39,9 +39,9 @@
 			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
 			<li class="active"><a href="#">카테고리/파라미터</a></li>
 			<li><a href="motionid.html">모션아이디</a></li>
-			<li><a href="#">모델 측정 리스트</a></li>
-			<li><a href="#">모델 그룹 설정</a></li>
-			<li><a href="#">로그 관리</a></li>
+			<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
+			<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
+			<li><a href="../models/logList.html">로그 관리</a></li>
 		</ul>
 	</div>
 
@@ -584,7 +584,7 @@
 					data: {	"cate_name": document.getElementById("make_cate_name").value,
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : str},
-					success: function(data){ 
+					success: function(data){
 						if(data.length > 1){  
 							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
 						}
