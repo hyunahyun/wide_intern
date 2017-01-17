@@ -13,6 +13,7 @@ h4 {text-align: center}
 thead > tr{background-color: antiquewhite}
 .modal-row {display: inline}
 .modal-row > p {width: 25%; display: inline-block; margin-bottom: 10px;}
+.btn-group {margin-bottom: 10px}
 .modal-row > .form-control {width: 50%; display: inline-block; margin-bottom: 10px}
 #make_cate_name, #make_cate_serial {width: 100%}
 .search {background-color: transparent}

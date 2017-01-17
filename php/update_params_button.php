@@ -77,7 +77,7 @@ else{
 		}
 
 		//tb_motionid에도 수정
-		$query = "alter table tb_category change $oldParam $newParam varchar(255);";
+		$query = "alter table tb_category change $oldParam $newParam varchar(255) DEFAULT '';";
 		if(!$connect->query($query)) throw new Exception($connect->error);
 	}
 }

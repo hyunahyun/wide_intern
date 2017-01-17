@@ -1,9 +1,10 @@
 <?php
 include_once "connect.php";
 
-$type = $_GET['motion_type'];
+$index = $_GET['seq'];
+$param = $_GET['param'];
 
-$query = "select cate_params from tb_category where cate_name='$type';";
+$query = "select $param from tb_category where seq='$index';";
 if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
 $count = mysqli_fetch_row($result);
