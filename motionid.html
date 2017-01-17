@@ -9,91 +9,83 @@
 </head>
 <body>	
 	
-	<nav class="navbar navbar-inverse visible-xs">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<h3 style="color: white; margin: 3%;">메뉴</h3>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav">
-					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-					<li><a href="category.html">카테고리/파라미터</a></li>
-					<li class="active"><a href="#">모션아이디</a></li>
-					<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
-					<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
-					<li><a href="../models/logList.html">로그 관리</a></li>
-				</ul>
-			</div>
-		</div>
-   </nav>
-	
-	<div class="col-sm-2 sidenav hidden-xs" style="background-color:#eee; height:100%;">
-		<h4>메뉴</h4>
-		<ul class="nav nav-pills nav-stacked">
-			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-			<li><a href="category.html">카테고리/파라미터</a></li>
-			<li class="active"><a href="#">모션아이디</a></li>
-			<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
-			<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
-			<li><a href="../models/logList.html">로그 관리</a></li>
-		</ul>
-	</div>
-	
-  <div class="col-sm-10">
-		<div class="container" style="width:100%">
-			<h4>모션아이디 관리 화면</h4>
-			<div class="row">
-				<div class="dropdown">
-						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-							카테고리 선택
-							<span class="caret"></span>
-						</button>
-						<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+	<div class="container-fluid">
+		<div class="row content">
+			<div class="col-sm-2 sidenav hidden-xs">
+				<h2 class="myside-title">WideMin</h2>
+				<ul class="nav nav-pills nav-stacked">
+						<li class="myside-menu">Motions</li>
+						<li class="myside-content active"><a class="myside-content-text" href="motionid.html">&gt; 모션 아이디 리스트</a></li>
+						<li class="myside-content"><a class="myside-content-text" href="category.html">&gt; 모션 카테고리 설정</a></li>
+						<li class="myside-menu">Models</li>
+						<li class="myside-content"><a class="myside-content-text" href="../models/modelList.html">&gt; 모델 측정 리스트</a></li>
+						<li class="myside-content"><a class="myside-content-text" href="../models/modelGroup.html">&gt; 모델 카테고리 설정</a></li>
+				</ul><br>
+			</div><br>
+			
+  		<div class="col-sm-10"> 
+				<div class="myHeader">
+					<h2 class="myHeader-title">모션 아이디 리스트</h2>
+					<p class="myHeader-content">
+							아래 테이블은 각 모션아이디에 대한 데이터를 보여줍니다.
+					</p>
+				</div>
+				<div class="row">
+					<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+								카테고리 선택
+								<span class="caret"></span>
+							</button>
+							<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							</ul>
+						</div>
+						<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="모션아이디 생성">
+					</div>
+					<div class="row">
+						<table class="table table-bordered myTable">
+							<thead>
+								<tr>
+									<th><input type="checkbox" name="_selected_all_"></th>
+									<th>카테고리</th>
+									<th>모션아이디</th>
+									<th>이메일</th>
+									<th>사용자1</th>
+									<th>디바이스1</th>
+									<th>업데이트 날짜1</th>
+									<th>사용자2</th>
+									<th>디바이스2</th>
+									<th>업데이트 날짜2</th>
+									<th>사용자3</th>
+									<th>디바이스3</th>
+									<th>업데이트 날짜3</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<div class="row">
+						<p id="count">총 결과 개수 :</p>
+						<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
+						<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
+					</div>
+					<div class="text-center">
+						<ul class="pagination">
+							<li id="prev">
+								<a href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li id="first_page" class="active"><a href="#" class="page">1</a></li>
+							<li id="after">
+								<a href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
 						</ul>
 					</div>
-					<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="모션아이디 생성">
-				</div>
-				<div class="row">
-					<table class="table table-bordered">
-						<caption>결과</caption>
-						<thead>
-							<tr>
-								<th><input type="checkbox" name="_selected_all_"></th>
-								<th>인덱스</th>
-								<th>카테고리</th>
-								<th id="last_param">모션아이디</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-				<div class="row">
-					<p id="count">총 결과 개수 :</p>
-					<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
-					<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
-				</div>
-				<nav style="text-align:center">
-					<ul class="pagination">
-						<li id="prev">
-							<a href="#" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-						<li id="first_page" class="active"><a href="#" class="page">1</a></li>
-						<li id="after">
-							<a href="#" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
+			</div>
+			
 		</div>
 	</div>
 	
@@ -108,7 +100,6 @@
 				<div id="myCarousel" class="modal-body carousel slide" data-ride="carousel">
 					<div class="carousel-inner" role="listbox">
 						<div class="item active">
-							<p id="modify_index0">인덱스 : </p>
 							<p id="modify_type0">카테고리 : </p>
 							<p id="modify_id0">모션아이디 : </p>
 						</div>
@@ -189,18 +180,37 @@
 		var tempString = null;
 		var check_save_several = 0;
 		var total_page = 1;
-		var current_cate_param = null;
 		var page_arr = [];
 		var current_first_page_num = 1;
-		var parameter_num = null;
+		var check_firstLoad = "all_load"
+		var head_arr = [];
 		
 		$(".carousel").carousel({ interval:false });
 		
+		window.onload = function(){
+			$.ajax({
+				url: "php/load_paramlist.php",
+				async:false,
+				data: {"table": "tb_motionid"},
+				success: function(data){
+					result = JSON.parse(data); 
+					head_arr = result;
+				},
+				error: function(data){
+					alert("error by load_paramlist.php");
+				}
+			});	
+			
+			firstPageLoading(0);
+			loadByCate(1);
+			pageClicked();
+		};
+		
 		// 수정 모달 창 리셋
 		function resetSearch2(){
-			$(".item").remove();
+			$(".item").remove();	
 			
-			$(".carousel-inner").append('<div class="item active"><p id="modify_index0">인덱스 : </p><p id="modify_type0">카테고리 : </p><p id="modify_id0">모션아이디 : </p></div>');
+			$(".carousel-inner").append('<div class="item active"><p id="modify_type0">카테고리 : </p><p id="modify_id0">모션아이디 : </p></div>');
 			
 			$("#ModifyModal").modal('hide');
 		}
@@ -296,7 +306,7 @@
 				type: "GET",
 				async:false,
 				data: {	"motion_type": current_cate,
-								"cate_params": current_cate_param,
+								"check": check_firstLoad,
 								"page": page_num},
 				success: function(data){
 					//테이블 리셋
@@ -309,19 +319,9 @@
 						if(result != null){
 							for(i=0; i<result.length; i++){
 								// 공통 부분(seq, motion_type, motion_id)
-								var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td>';
-
-								// 추가 파라미터 부분
-								if(parameter_num != 0){
-									for(var j=0; j<parameter_num.length; j++){
-										str += '<td>'+ result[i][j+3] +'</td>';
-									}	 
-								}
-								
-								str += '</tr>';
+								var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td><td>'+ result[i][5] +'</td><td>'+ result[i][6] +'</td><td>'+ result[i][7] +'</td><td>'+ result[i][8] +'</td><td>'+ result[i][9] +'</td><td>'+ result[i][10] +'</td><td>'+ result[i][11] +'</td><td>'+ result[i][12] +'</td></tr>';
 
 								$('tbody:last').append(str);
-							
 							}
 						}
 					}
@@ -342,10 +342,8 @@
 			});
 		}
 		
-		function cateClicked(category){
+		function firstPageLoading(category){
 			total_page = 1;
-			current_cate = category.val();
-			current_cate_param = null;
 			current_first_page_num = 1;
 			page_arr = [];
 			
@@ -354,40 +352,18 @@
 			$(".page").parent().remove();
 			$("#prev").after('<li id="first_page" class="active"><a href="#" class="page">1</a></li>');
 
-			document.getElementById("dropdownMenu1").innerHTML = current_cate + '<span class="caret"></span>';
-
-			$(".temp_param").remove();
-
-			parameter_num = null;
-
-			// 카테고리 별 파라미터 출력
-			$.ajax({
-				url: "php/load_params.php",
-				type: "GET",
-				async:false,
-				data: {"motion_type": current_cate},
-				success: function(data){
-					parameter_num = JSON.parse(data);
-					if(parameter_num != ""){
-						current_cate_param = parameter_num[0];
-						parameter_num = current_cate_param.split(',');
-
-						for(i=(parameter_num.length); i>0; i--)
-							$("#last_param").after("<th class='temp_param'>" + parameter_num[i-1] + "</th>");
-					}
-					else parameter_num = 0;
-				},
-				error: function(data){
-					alert("error by load_params.php");
-				}
-			});
+			if(category != 0){
+				current_cate = category.val();
+				document.getElementById("dropdownMenu1").innerHTML = current_cate + '<span class="caret"></span>';
+			}
 
 			// 페이지 로딩
 			$.ajax({
 				url: "php/load_page.php",
 				type: "GET",
 				async:false,
-				data: {	"motion_type": current_cate},
+				data: {	"motion_type": current_cate,
+								"check":check_firstLoad},
 				success: function(data){
 					result = JSON.parse(data);
 
@@ -422,6 +398,11 @@
 					alert("error by load_page.php");
 				}
 			});
+		}
+		
+		function cateClicked(category){
+			check_firstLoad = 0;
+			firstPageLoading(category);
 
 			loadByCate(1);
 
@@ -522,68 +503,50 @@
 		//메인 화면에서 수정 버튼 클릭 시 
 		$("#modify_btn").on('click', function(event){
 			if($('input[name=_selected_]:checked').length != 0){
-				// 카테고리 별 파라미터 출력 
-				$.ajax({
-					url: "php/load_params.php",
-					type: "GET",
-					async:false,
-					data: {"motion_type": $('input[name=_selected_]:checked')[0].parentNode.nextSibling.nextSibling.innerHTML},
-					success: function(data){
-						parameter_num = JSON.parse(data);
-						current_cate_param = parameter_num[0];
-						parameter_num = current_cate_param.split(',');
-					
-						if(parameter_num[0] == ""){
-							alert("수정할 데이터(추가 파라미터)가 없습니다.\n인덱스, 카테고리, 모션아이디는 수정할 수 없습니다.");
-							event.stopImmediatePropagation();
-							resetSearch2();
-						}
-					
-					},
-					error: function(data){
-						alert("error by load_params.php");
-					}
-				});
-			
-			
 				// 수정할 정보 로딩
-				if(parameter_num[0] != ""){
-					for(var index=0; index < $('input[name=_selected_]:checked').length ; index++){					
-						if(index != 0){
-							$(".carousel-inner").children().last().after('<div class="item"><p id="modify_index' + index
-																													 + '">인덱스 : </p><p id="modify_type' + index
-																													 + '">카테고리 : </p><p id="modify_id' + index
-																													 +'">모션아이디 : </p></div>');
-						} 
-
-						$.ajax({
-							url: "php/load_by_index.php",
-							type: "GET",
-							async:false,
-							data: {	"seq": $('input[name=_selected_]:checked')[index].value,
-											"cate_params": current_cate_param,
-											"table": "tb_motionid"},
-							success: function(data){
-								result = JSON.parse(data);
-
-								$('#modify_index' + index).text("인덱스 : " + result[0]);
-								$('#modify_type' + index).text("카테고리 : " + result[1]);
-								$('#modify_id' + index).text("모션아이디 : " + result[2]);
-
-								for(i=(parameter_num.length); i>0; i--)
-									$("#modify_id" + index).after('<div class="row modal-row modify_temp_param"><p>' + parameter_num[i-1]
-																				 + ' : </p> <input class="form-control" id="' + parameter_num[i-1] +'_' + index + '"></div>');
-
-								for(i=3; i<(parameter_num.length+3); i++)
-									$('#' + parameter_num[i-3] + '_' + index).val(result[i]);
-
-							},
-							error: function(data){
-								alert("error by load_by_index.php");
-							}
-						});
+				for(var index=0; index < $('input[name=_selected_]:checked').length ; index++){	
+					if(index != 0){
+						$(".carousel-inner").children().last().after('<div class="item"><p id="modify_type' + index
+																												 + '">카테고리 : </p><p id="modify_id' + index
+																												 +'">모션아이디 : </p></div>');
 					}
+					
+					$.ajax({
+						url: "php/load_by_index.php",
+						type: "GET",
+						async:false,
+						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
+										"table": "tb_motionid"},
+						success: function(data){
+							result = JSON.parse(data);
+
+							$('#modify_type' + index).text("카테고리 : " + result[1]);
+							$('#modify_id' + index).text("모션아이디 : " + result[2]);
+						
+							var head_name = [];
+							var a = 0;
+							$('thead > tr > th').each(function(){
+								head_name[a++] = $(this).text();
+							})
+ 
+							for(i=(result.length - 1); i>2; i--){
+								var string = '<div class="row modal-row modify_param"><p>' + head_name[i] + ' : </p><input class="form-control"';
+								if((i%3 == 0) && (i != 3)) string += ' type="date"';
+								string += ' id="' + head_arr[i][0] +'_' + index + '"></div>';
+								
+								$("#modify_id" + index).after(string);
+							}
+
+							for(i=3; i<result.length; i++)
+								$('#' + head_arr[i][0] + '_' + index).val(result[i]);
+ 
+						},
+						error: function(data){
+							alert("error by load_by_index.php");
+						}
+					});
 				}
+				
 			}
 			else{
 				alert("수정할 데이터의 체크박스를 클릭해야 합니다.");
@@ -595,22 +558,28 @@
 		// 수정 모달 창에서 수정 버튼 클릭 시
 		$("#modify_btn_Modal").on('click', function(){
 			var check = 0;
+			var param_arr = "";
+			for(i=3; i<13; i++){
+				if (i == 12) param_arr += head_arr[i][0];
+				else param_arr += head_arr[i][0] + ",";
+			}
+					
 			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
 				var paramValue = "";
-				for(i=0; i<parameter_num.length; i++){
-					var tempValue = parameter_num[i] + "_" + index;
+				for(i=3; i<13; i++){
+					var tempValue = head_arr[i][0] + "_" + index;
 					paramValue += ($('#' + tempValue).val() + ",");
 				}
-								
 				$.ajax({
 					url: "php/modify_by_index.php",
 					type: "GET",
 					async:false,
 					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
-									"cate_params": current_cate_param, 
+									"cate_params": param_arr, 
 									"param_value": paramValue,
 									"table": "tb_motionid"},
 					success: function(data){
+								console.log(data);
 								check += 1; 
 						},		
 					error: function(data){
@@ -622,8 +591,9 @@
 			if(check == $('input[name=_selected_]:checked').length)	{
 				alert("수정되었습니다");
 				resetSearch2();
-				cateClicked($("input[value=" + current_cate + "]"));
-			}											
+				if (current_cate == null) window.location.reload(true);
+				else cateClicked($("input[value=" + current_cate + "]"));
+			}								
 															
 		});
 		
