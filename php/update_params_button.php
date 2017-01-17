@@ -7,7 +7,7 @@ $newParam = $_GET['new_params'];
 
 //추가
 if($state == 3){
-	$query = "alter table tb_motionid add $newParam varchar(255) DEFAULT '';";
+	$query = "alter table tb_category add $newParam varchar(255) DEFAULT '';";
 	if(!$connect->query($query)) throw new Exception($connect->error);
 }
 else{
@@ -47,7 +47,7 @@ else{
 		}
 																																																																							
 		//tb_motionid에도 삭제
-		$query = "alter table tb_motionid drop column $oldParam;";
+		$query = "alter table tb_category drop column $oldParam;";
 		if(!$connect->query($query)) throw new Exception($connect->error);
 	}
 
@@ -77,7 +77,7 @@ else{
 		}
 
 		//tb_motionid에도 수정
-		$query = "alter table tb_motionid change $oldParam $newParam varchar(255);";
+		$query = "alter table tb_category change $oldParam $newParam varchar(255);";
 		if(!$connect->query($query)) throw new Exception($connect->error);
 	}
 }

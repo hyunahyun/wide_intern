@@ -24,6 +24,7 @@ if(!strcmp($table,"tb_motionid")){
 	}
 
 	$query .= " where seq= '$index';";
+	
 }
 else if(!strcmp($table,"tb_category")){
 	$value_arr = split(";",$values);

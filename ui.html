@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+
+        html,
+        body,
+        .container-fluid 
+        {
+            height: 100%;
+        }
+
+        .row.content {
+            height: 100%;
+        }
+        /* Set gray background color and 100% height */
+
+        .sidenav {
+            background-color: #2A3F54;
+            height: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        .navbar {
+            background-color: #2A3F54;
+        }
+
+        .myside-title {
+            font-size: 320%;
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bolder;
+            border-bottom: solid;
+            border-bottom-width: thin;
+            border-bottom-style: ridge;
+            color: #fffff0;
+            margin: 20px;
+            margin-left: 10px;
+        }
+
+        .myside-menu {
+            font-size: 170%;
+            color: white;
+            border-left: solid;
+            border-left-color: #0ff09f;
+            padding-left: 10px;
+            margin-left: 4px;
+            margin-top: 10px;
+        }
+
+        .myside-content.active > .myside-content-text {
+            font-size: 110%;
+            font-weight: 900;
+            color: #303370;
+            margin: 5px;
+            margin-right: 0px;
+            background-color: #ffffff;
+        }
+
+        .myside-content.active > .myside-content-text:hover{
+            font-size: 110%;
+            font-weight: bold;
+            color: #002ff0;
+            margin: 5px;
+            margin-right: 0px;
+            background-color: #ffffff;
+        }
+
+        .myside-content.active > .myside-content-text:focus{
+            font-size: 110%;
+            font-weight: 900;
+            color: #303373;
+            margin: 5px;
+            margin-right: 0px;
+            background-color: #ffffff;
+        }
+
+        .myside-content-text {
+            font-size: 100%;
+            color: #0ff09f;
+            margin: 5px;
+        }
+
+        .myHeader-title {
+            font-weight: bold;
+            border-bottom: solid;
+            border-bottom-color: #000000;
+            border-bottom-width: thin;
+            padding: 10px;
+        }
+
+        .myHeader-content {
+            font-size: 110%;
+            color: #2A3F54;
+            margin: 12px;
+        }
+
+        .myTable > thead > tr {
+            background-color: #2A3F54;
+            height: 50px;
+            font-size: 115%;
+            color: #ffffff;
+        }
+
+        .myTable > tbody > tr {
+            background-color: #f8ffff;
+            font-size: 107%;
+        }
+
+        .pagination > li.active > a, .pagination > li.active > a:hover, .pagination > li.active > a:focus{
+            background-color: #2A3F54;
+        }
+
+        /* On small screens, set height to 'auto' for the grid */
+
+        @media screen and (max-width: 767px) {
+            .row.content {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse visible-xs">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+                <a class="navbar-brand" href="#">WideMin</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Dashboard</a></li>
+                    <li><a href="#">Age</a></li>
+                    <li><a href="#">Gender</a></li>
+                    <li><a href="#">Geo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-2 sidenav hidden-xs">
+                <h2 class="myside-title">WideMin</h2>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="myside-menu">Motions</li>
+                    <li class="myside-content active"><a class="myside-content-text" href="#section1">&gt; 모션 아이디 리스트</a></li>
+                    <li class="myside-content"><a class="myside-content-text" href="#section2">&gt; 모션 카테고리 설정</a></li>
+                    <li class="myside-menu">Models</li>
+                    <li class="myside-content"><a class="myside-content-text" href="#section1">&gt; 모델 측정 리스트</a></li>
+                    <li class="myside-content"><a class="myside-content-text" href="#section2">&gt; 모델 카테고리 설정</a></li>
+                </ul><br>
+            </div>
+            <br>
+
+            <div class="col-sm-10 myContainer">
+                <div class="myHeader">
+                    <h2 class="myHeader-title">ModelList</h2>
+                    <p class="myHeader-content">
+                        아래 테이블은 각 기기에 대한 자기장 센서, 조이스틱 센서, VR 센서의 위치를 보여줍니다.
+                    </p>
+                    <p class="myHeader-content">
+                        x , y 형식을 따르고 있습니다. 단위는 <strong>mm</strong> 입니다.
+                    </p>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered myTable">
+                        <thead>
+                            <tr>
+                                <th>test1</th>
+                                <th>test2</th>
+                                <th>test3</th>
+                                <th>test4</th>
+                                <th>test5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>hi1</td>
+                                <td>hi2</td>
+                                <td>hi3</td>
+                                <td>hi4</td>
+                                <td>hi5</td>
+                            </tr>
+                            <tr>
+                                <td>hi1</td>
+                                <td>hi2</td>
+                                <td>hi3</td>
+                                <td>hi4</td>
+                                <td>hi5</td>
+                            </tr>
+                            <tr>
+                                <td>hi1</td>
+                                <td>hi2</td>
+                                <td>hi3</td>
+                                <td>hi4</td>
+                                <td>hi5</td>
+                            </tr>
+                            <tr>
+                                <td>hi1</td>
+                                <td>hi2</td>
+                                <td>hi3</td>
+                                <td>hi4</td>
+                                <td>hi5</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center">
+                    <ul class="pagination">
+                        <li class="page-item disabled" id="s_modelList_li_previous">
+                            <a class="page-link" href="javascript:void(0)" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a href="javascript:void(0)">1</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)" aria-label="Next" id="s_modelList_li_next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!— jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) —>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!— 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 —>
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

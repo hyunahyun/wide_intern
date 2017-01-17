@@ -11,11 +11,11 @@ h4,caption {text-align: center}
 .cate, .add_cate {background-color: transparent; border: 0px; width: 100%;}
 thead > tr{background-color: antiquewhite}
 .modal-row {display: inline}
-.modal-row > p, .modal-row > .form-control {width: 30%; display: inline; margin-bottom: 10px}
+.modal-row > p, .modal-row > .form-control {width: 50%; display: inline; margin-bottom: 10px}
 #make_cate_name, #make_cate_serial {width: 100%}
 .search {background-color: transparent}
 .carousel-control.left, .carousel-control.right {background-image: none;}
-.item {text-align: center}
+.item {text-align: left;margin: 0px 0 0 25%;}
 #Pparam_list {margin-top: 10px}
 #Pparam_list > label, #param_list > label, #modify_param_list > label {border-radius: 5px; margin: 2px}
 #Pparam_list > .btn.btn-primary {background-color: #337ab7;border-color: #2e6da4;}

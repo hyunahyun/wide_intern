@@ -3,24 +3,14 @@
 include_once "connect.php";
 
 $type = $_GET['motion_type'];
-$params = $_GET['cate_params'];
 $page = $_GET['page'];
+$check = $_GET['check'];
 
 $start_num = ($page - 1) * 10;
 
-//카테고리 별 파라미터 검색
-$query = "select seq, motion_type, motion_id";
+if(!strcmp($check, "all_load")) $query = "select * from tb_motionid order by seq asc";
+else $query = "select * from tb_motionid where motion_type='$type' order by seq asc";
 
-//카테고리 별 파라미터 추출
-if($params != null){
-	$arr = split(",",$params);
-	for($i=0;$i< sizeof($arr);$i++){
-		$temp = ", $arr[$i]";
-		$query .= $temp;
-	}
-}
-
-$query .= " from tb_motionid where motion_type='$type' order by seq asc";
 
 if(!strcmp($page, "1")) $query .= " limit 0,10;";
 else $query .= " limit $start_num,10;";
@@ -35,6 +25,5 @@ else{
 	}
 	echo json_encode($row);
 }
-
 
 ?>
