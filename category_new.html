@@ -8,46 +8,28 @@
 	<link rel='stylesheet' href='css/main.css'>
 </head>
 <body>	
-	
-	<nav class="navbar navbar-inverse visible-xs">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<h3 style="color: white; margin: 3%;">메뉴</h3>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav">
-					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-					<li class="active"><a href="#">카테고리/파라미터</a></li>
-					<li><a href="motionid.html">모션아이디</a></li>
-					<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
-					<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
-					<li><a href="../models/logList.html">로그 관리</a></li>
-				</ul>
-			</div> 
-		</div>
-   </nav>
 	 
-	<div class="col-sm-2 sidenav hidden-xs" style="background-color:#eee; height:100%;">
-		<h4>메뉴</h4>
-		<ul class="nav nav-pills nav-stacked">
-			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-			<li class="active"><a href="#">카테고리/파라미터</a></li>
-			<li><a href="motionid.html">모션아이디</a></li>
-			<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
-			<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
-			<li><a href="../models/logList.html">로그 관리</a></li>
-		</ul>
-	</div>
+	<div class="container-fluid">
+		<div class="row content">
+			<div class="col-sm-2 sidenav hidden-xs">
+				<h2 class="myside-title">WideMin</h2>
+				<ul class="nav nav-pills nav-stacked">
+						<li class="myside-menu">Motions</li>
+						<li class="myside-content"><a class="myside-content-text" href="motionid_new.html">&gt; 모션 아이디 리스트</a></li>
+						<li class="myside-content active"><a class="myside-content-text" href="category_new.html">&gt; 모션 카테고리 설정</a></li>
+						<li class="myside-menu">Models</li>
+						<li class="myside-content"><a class="myside-content-text" href="../models/modelList.html">&gt; 모델 측정 리스트</a></li>
+						<li class="myside-content"><a class="myside-content-text" href="../models/modelGroup.html">&gt; 모델 카테고리 설정</a></li>
+				</ul><br>
+			</div><br>
 
-	<div class="col-sm-10">
-		<div class="container" style="width:100%">
-			<h4>카테고리/파라미터 관리 화면</h4>
+			<div class="col-sm-10">
+				<div class="myHeader">
+					<h2 class="myHeader-title">모션 카테고리 설정</h2>
+					<p class="myHeader-content">
+							아래 테이블은 각 카테고리에 대한 데이터를 보여줍니다.
+					</p>
+				</div>
 				<div class="row">
 					<div style="float:left">
 						<input class="btn btn-default" type="button" data-toggle="modal" data-target="#ParamModal" id="param_btn" value="파라미터 관리" style="margin-left:0px">
@@ -55,8 +37,7 @@
 					<input class="btn btn-default" type="button" data-toggle="modal" data-target="#TypeModal" id="make_btn" value="카테고리 추가">
 				</div>
 				<div class="row">
-					<table class="table table-bordered">
-						<caption>결과</caption>
+					<table class="table table-bordered myTable">
 						<thead>
 							<tr>
 								<th><input type="checkbox" name="_selected_all_"></th>
@@ -90,8 +71,10 @@
 						</li>
 					</ul>
 				</nav>
+			</div>
 		</div>
 	</div>
+	
 	
 	<!--파라미터 관리 모달 창-->
 	<div class="modal fade" id="ParamModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -442,8 +425,7 @@
 						async:false,
 						data: {	"table": "tb_category"},
 						success: function(data){
-							result = JSON.parse(data); 
-
+							result = JSON.parse(data);
 							for(i=4; i<result.length; i++){
 								$("#modify_param_list" + index).append('<label class="btn btn-primary"><input type="checkbox" autocomplete="off" value="' + result[i][0]+ '">' + result[i][0] + '</label>');
 							}
@@ -546,8 +528,9 @@
 			$.ajax({
 					url: "php/load_paramlist.php",
 					async:false,
+					data: {	"table": "tb_category"},
 					success: function(data){
-						result = JSON.parse(data); 
+						result = JSON.parse(data);
 				
 						for(i=4; i<result.length; i++){
 							$("#param_list").append('<label class="btn btn-primary"><input type="checkbox" autocomplete="off" value="' +
@@ -600,6 +583,7 @@
 			$.ajax({
 				url: "php/load_paramlist.php",
 				async:false,
+				data: {	"table": "tb_category"},
 				success: function(data){
 					result = JSON.parse(data); 
 																													

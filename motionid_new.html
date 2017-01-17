@@ -9,100 +9,83 @@
 </head>
 <body>	
 	
-	<nav class="navbar navbar-inverse visible-xs">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<h3 style="color: white; margin: 3%;">메뉴</h3>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav">
-					<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-					<li><a href="category.html">카테고리/파라미터</a></li>
-					<li class="active"><a href="#">모션아이디</a></li>
-					<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
-					<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
-					<li><a href="../models/logList.html">로그 관리</a></li>
-				</ul>
-			</div>
-		</div>
-   </nav>
-	
-	<div class="col-sm-2 sidenav hidden-xs" style="background-color:#eee; height:100%;">
-		<h4>메뉴</h4>
-		<ul class="nav nav-pills nav-stacked">
-			<li><a href="testing.php" target="_blank" style="border-bottom:1px solid">테스팅</a></li>
-			<li><a href="category.html">카테고리/파라미터</a></li>
-			<li class="active"><a href="#">모션아이디</a></li>
-			<li><a href="../models/modelList.html">모델 측정 리스트</a></li>
-			<li><a href="../models/modelGroup.html">모델 그룹 설정</a></li>
-			<li><a href="../models/logList.html">로그 관리</a></li>
-		</ul>
-	</div>
-	
-  <div class="col-sm-10">
-		<div class="container" style="width:100%">
-			<h4>모션아이디 관리 화면</h4>
-			<div class="row">
-				<div class="dropdown">
-						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-							카테고리 선택
-							<span class="caret"></span>
-						</button>
-						<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-						</ul>
+	<div class="container-fluid">
+		<div class="row content">
+			<div class="col-sm-2 sidenav hidden-xs">
+				<h2 class="myside-title">WideMin</h2>
+				<ul class="nav nav-pills nav-stacked">
+						<li class="myside-menu">Motions</li>
+						<li class="myside-content active"><a class="myside-content-text" href="motionid_new.html">&gt; 모션 아이디 리스트</a></li>
+						<li class="myside-content"><a class="myside-content-text" href="category_new.html">&gt; 모션 카테고리 설정</a></li>
+						<li class="myside-menu">Models</li>
+						<li class="myside-content"><a class="myside-content-text" href="../models/modelList.html">&gt; 모델 측정 리스트</a></li>
+						<li class="myside-content"><a class="myside-content-text" href="../models/modelGroup.html">&gt; 모델 카테고리 설정</a></li>
+				</ul><br>
+			</div><br>
+			
+  		<div class="col-sm-10"> 
+				<div class="myHeader">
+					<h2 class="myHeader-title">모션 아이디 리스트</h2>
+					<p class="myHeader-content">
+							아래 테이블은 각 모션아이디에 대한 데이터를 보여줍니다.
+					</p>
+				</div>
+				<div class="row">
+					<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+								카테고리 선택
+								<span class="caret"></span>
+							</button>
+							<ul id="dropdownMenuResult" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							</ul>
+						</div>
+						<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="모션아이디 생성">
 					</div>
-					<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="모션아이디 생성">
-				</div>
-				<div class="row">
-					<table class="table table-bordered">
-						<caption>결과</caption>
-						<thead>
-							<tr>
-								<th><input type="checkbox" name="_selected_all_"></th>
-								<th>카테고리</th>
-								<th>모션아이디</th>
-								<th>이메일</th>
-								<th>사용자1_1</th>
-								<th>사용자1_2</th>
-								<th>사용자1_3</th>
-								<th>사용자2_1</th>
-								<th>사용자2_2</th>
-								<th>사용자2_3</th>
-								<th>사용자3_1</th>
-								<th>사용자3_2</th>
-								<th>사용자3_3</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-				<div class="row">
-					<p id="count">총 결과 개수 :</p>
-					<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
-					<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
-				</div>
-				<nav style="text-align:center">
-					<ul class="pagination">
-						<li id="prev">
-							<a href="#" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-						<li id="first_page" class="active"><a href="#" class="page">1</a></li>
-						<li id="after">
-							<a href="#" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
+					<div class="row">
+						<table class="table table-bordered myTable">
+							<thead>
+								<tr>
+									<th><input type="checkbox" name="_selected_all_"></th>
+									<th>카테고리</th>
+									<th>모션아이디</th>
+									<th>이메일</th>
+									<th>사용자1</th>
+									<th>디바이스1</th>
+									<th>업데이트 날짜1</th>
+									<th>사용자2</th>
+									<th>디바이스2</th>
+									<th>업데이트 날짜2</th>
+									<th>사용자3</th>
+									<th>디바이스3</th>
+									<th>업데이트 날짜3</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<div class="row">
+						<p id="count">총 결과 개수 :</p>
+						<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
+						<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
+					</div>
+					<nav style="text-align:center">
+						<ul class="pagination">
+							<li id="prev">
+								<a href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li id="first_page" class="active"><a href="#" class="page">1</a></li>
+							<li id="after">
+								<a href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+			</div>
+			
 		</div>
 	</div>
 	
