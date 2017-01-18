@@ -1,7 +1,7 @@
 
 h4 {text-align: center}
 .btn .caret {margin-left: 10px}
-.btn-primary,.btn-primary.active {background-color: #2A3F54;border-color: #2A3F54;color: #ffffff}
+.btn-primary {background-color: #2A3F54;border-color: #2A3F54;color: #ffffff}
 #dropdownMenu1 {margin: 0px} 
 #dropdownMenu2 {margin-right: 20px}
 #add_count {margin-left: 10px; width: 30%}
@@ -24,6 +24,7 @@ thead > tr{background-color: antiquewhite}
 .item {text-align: left;margin: 0px 0 0 20%;}
 .btn-group {margin-bottom: 10px} 
 .btn-group > .btn-primary {color: #2A3F54;background-color: #eee;border-color: #ddd;}
+.btn-group > .btn-primary.active {background-color: #2A3F54;border-color: #2A3F54;color: #ffffff}
 #Pparam_list {margin-top: 10px}
 #Pparam_list > label, #param_list > label, #modify_param_list > label {border-radius: 5px; margin: 2px}
 #Pparam_list > .btn.btn-primary {background-color: #2A3F54;border-color: #2A3F54;color: #ffffff}
