@@ -679,10 +679,9 @@
 									"cate_serial" : document.getElementById("make_cate_serial").value,
 									"cate_params" : param,
 									"param_value": paramValue},
-					success: function(data){
-						console.log(data);
+					success: function(data){ 
 						if(data.length > 1){  
-							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
+							alert(data);
 						}
 						else{
 							alert("추가되었습니다.");
