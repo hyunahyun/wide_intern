@@ -282,6 +282,7 @@
 			$("#make_cate_name").val(null);
 			$("#make_cate_serial").val(null);
 			$("#param_list").children().remove();
+			$(".temp-row").remove();
 			
 			$("#TypeModal").modal('hide');
 		}
@@ -609,7 +610,7 @@
 																				result[i][0]+ '">' + result[i][0] + '</label>');
 							
 							//필요 파라미터에 대한 수정할 폼 출력
-							$("#param_list").parent().parent().append('<div class="row modal-row" style="display:none"><p>'
+							$("#param_list").parent().parent().append('<div class="row modal-row temp-row" style="display:none"><p>'
 																												+ result[i][0] + ' : </p><input class="form-control" id="add_'
 																												+ result[i][0] + '"></div>');
 						}
