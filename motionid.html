@@ -525,7 +525,8 @@
 				}
 				if(check == $('input[name=_selected_]:checked').length){
 					alert("삭제되었습니다.");
-					cateClicked($("input[value=" + current_cate + "]"));
+					if (current_cate == null) window.location.reload(true);
+					else cateClicked($("input[value=" + current_cate + "]"));
 				}
 			}
 			else alert("삭제할 데이터의 체크박스를 클릭해야 합니다.");
