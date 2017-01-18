@@ -11,7 +11,7 @@ else if(!strcmp($table, "tb_category")) $query = "select * from tb_category wher
 
 if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
-$count = mysqli_fetch_row($result);
-echo json_encode($count);
+$row = mysqli_fetch_row($result);
+echo json_encode($row);
 
 ?>

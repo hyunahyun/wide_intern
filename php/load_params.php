@@ -7,7 +7,7 @@ $param = $_GET['param'];
 $query = "select $param from tb_category where seq='$index';";
 if(!($result = $connect->query($query))) throw new Exception($connect->error);
 
-$count = mysqli_fetch_row($result);
-echo json_encode($count);
+$row = mysqli_fetch_row($result);
+echo json_encode($row);
 
 ?>

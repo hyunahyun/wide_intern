@@ -21,7 +21,7 @@
 						<li class="myside-content"><a class="myside-content-text" href="../models/modelList.html">&gt; 모델 측정 리스트</a></li>
 						<li class="myside-content"><a class="myside-content-text" href="../models/modelGroup.html">&gt; 모델 카테고리 설정</a></li>
 				</ul><br>
-			</div><br>
+			</div>
 
 			<div class="col-sm-10">
 				<div class="myHeader">
@@ -51,7 +51,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="row">
+				<div class="row"  style="margin-top:0px">
 					<p id="count">총 결과 개수 :</p>
 					<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
 					<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
@@ -153,8 +153,8 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
 					<h4 class="modal-title">카테고리 추가하기</h4>
 				</div>
-				<div class="modal-body">
-					<h5>ID 구분자는 motionID의 앞의 두 글자로 카테고리를 대표할 숫자입니다. 숫자 두 글자만 입력하세요.</h5>
+				<div class="modal-body" id="TypeModalBody">
+					<h5 style="border-bottom:2px solid; padding-bottom:15px">ID 구분자는 motionID의 앞의 두 글자로 카테고리를 대표할 숫자입니다. 숫자 두 글자만 입력하세요.</h5>
 					<div class="row modal-row">
 						<p>카테고리 이름 : </p><input type="text" class="form-control" id="make_cate_name">
 					</div>
@@ -313,8 +313,36 @@
 						for(i=0; i<result.length; i++){
 
 						// 공통 부분(seq, cate_name, cate_serial, cate_params)
-						$('tbody:last').append('<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td></tr>');
+						$('tbody:last').append('<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][0] +'</td><td class="cate_data" data-container="body" data-toggle="popover" data-placement="top">'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td></tr>');
 						}
+						
+						//카테고리 호버 시
+						$(".cate_data").mouseover(function(){
+							var content = "";
+							$.ajax({
+								url: "php/load_params_value.php",
+								type: "GET",
+								async:false,
+								data: {	"category": $(this).text()},
+								success: function(data){
+									if(data != "0"){
+										content = data;
+									}
+								},
+								error: function(data){
+									alert("error by load_params_value.php");
+								}
+							});
+						
+							$(this).attr("data-content", content);
+							$(this).popover({
+								html: true
+							}).popover('show');
+							
+						});
+						$(".cate_data").mouseout(function(){
+							$(this).popover('hide');
+						});
 					}
 				},
 				error: function(data){
@@ -497,7 +525,7 @@
 				total_param = total_param.substring(0,total_param.length-1);
 				
 				//필요 파라미터 재클릭 시
-				$(".btn-group > label").on('click',function(){
+				$(".modify_temp_param > .btn-group > label").on('click',function(){
 					var idnum = $(this)[0].parentNode.getAttribute('id').split('_');
 					if($(this)[0].className.indexOf("active") == -1){
 						$("#modify_" + $(this)[0].childNodes[0].value + "_" + idnum[idnum.length-1]).parent().css('display', 'inline');
@@ -534,7 +562,7 @@
 				}
 				temp = temp.substring(0,temp.length-1);
 				temp_value = temp_value.substring(0,temp_value.length-1);
-				
+	
 				var paramValue = "";
 				paramValue += ($('#modify_name_' + index).val() + ";");
 				paramValue += ($('#modify_serial_' + index).val() + ";");
@@ -577,12 +605,27 @@
 						for(i=4; i<result.length; i++){
 							$("#param_list").append('<label class="btn btn-primary"><input type="checkbox" autocomplete="off" value="' +
 																				result[i][0]+ '">' + result[i][0] + '</label>');
+							
+							//필요 파라미터에 대한 수정할 폼 출력
+							$("#param_list").parent().parent().append('<div class="row modal-row" style="display:none"><p>'
+																												+ result[i][0] + ' : </p><input class="form-control" id="add_'
+																												+ result[i][0] + '"></div>');
 						}
 					},
 					error: function(data){
 						alert("error by load_paramlist.php");
 					}
-				});	
+				});
+		
+			//필요 파라미터 재클릭 시
+			$("#param_list > label").on('click',function(){
+				if($(this)[0].className.indexOf("active") == -1){
+					$("#add_" + $(this)[0].childNodes[0].value).parent().css('display', 'block');
+				}
+				else{
+					$("#add_" + $(this)[0].childNodes[0].value).parent().css('display', 'none');
+				}
+			});
 		});
 		
 		// 카테고리 추가 모달 창에서 카테고리 추가 버튼 클릭 시
@@ -592,19 +635,31 @@
 					alert("카테고리 이름과 ID구분자는 필수 입력해야 합니다.");
 			}
 			else{
-				var str = "";
+				var param = "";
 				for(var i=0; i<$("#param_list > .active").length; i++){
-					str += $("#param_list > .active")[i].childNodes[0].value + ",";
+					param += $("#param_list > .active")[i].childNodes[0].value + ",";
 				}
-				str = str.substring(0,str.length-1);
+				param = param.substring(0,param.length-1);
 
+				//paramValue처리
+				var temp = "";
+				var paramValue = "";
+				for(var i=0; i<$("#param_list > label").length; i++){
+					var str = $("#param_list > label")[i];
+					if(str.className == "btn btn-primary active"){
+						paramValue += $('#add_' + str.childNodes[0].value).val() + ",";
+					}
+				}
+				paramValue = paramValue.substring(0,paramValue.length-1);
+				
 				$.ajax({
 					url: "php/make_cate.php",
 					type: "GET",
 					async:false,
 					data: {	"cate_name": document.getElementById("make_cate_name").value,
 									"cate_serial" : document.getElementById("make_cate_serial").value,
-									"cate_params" : str},
+									"cate_params" : param,
+									"param_value": paramValue},
 					success: function(data){
 						if(data.length > 1){  
 							alert("기존의 카테고리와 이름이 동일하거나 고유키가 동일할 경우 만들 수 없습니다.");
@@ -617,7 +672,7 @@
 					error: function(data){
 						alert("error by make_cate.php");
 					}
-				});	
+				});
 			}
 		});
 
@@ -756,7 +811,7 @@
 				}
 			});	
 		});
-		
+		 
 	</script>
 	
 </body>

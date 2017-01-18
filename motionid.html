@@ -21,7 +21,7 @@
 						<li class="myside-content"><a class="myside-content-text" href="../models/modelList.html">&gt; 모델 측정 리스트</a></li>
 						<li class="myside-content"><a class="myside-content-text" href="../models/modelGroup.html">&gt; 모델 카테고리 설정</a></li>
 				</ul><br>
-			</div><br>
+			</div>
 			
   		<div class="col-sm-10"> 
 				<div class="myHeader">
@@ -64,7 +64,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="row">
+					<div class="row" style="margin-top:0px">
 						<p id="count">총 결과 개수 :</p>
 						<input class="btn btn-default" type="button" id="delete_btn" value="삭제">
 						<input class="btn btn-default" type="button" id="modify_btn" data-toggle="modal" data-target="#ModifyModal" value="수정">
@@ -319,10 +319,39 @@
 						if(result != null){
 							for(i=0; i<result.length; i++){
 								// 공통 부분(seq, motion_type, motion_id)
-								var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td>'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td><td>'+ result[i][5] +'</td><td>'+ result[i][6] +'</td><td>'+ result[i][7] +'</td><td>'+ result[i][8] +'</td><td>'+ result[i][9] +'</td><td>'+ result[i][10] +'</td><td>'+ result[i][11] +'</td><td>'+ result[i][12] +'</td></tr>';
+								var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td class="cate_data" data-container="body" data-toggle="popover" data-placement="top">'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td><td>'+ result[i][5] +'</td><td>'+ result[i][6] +'</td><td>'+ result[i][7] +'</td><td>'+ result[i][8] +'</td><td>'+ result[i][9] +'</td><td>'+ result[i][10] +'</td><td>'+ result[i][11] +'</td><td>'+ result[i][12] +'</td></tr>';
 
 								$('tbody:last').append(str);
 							}
+							
+							//카테고리 호버 시
+							$(".cate_data").mouseover(function(){
+								var content = "";
+								$.ajax({
+									url: "php/load_params_value.php",
+									type: "GET",
+									async:false,
+									data: {	"category": $(this).text()},
+									success: function(data){
+										if(data != "0"){
+											content = data;
+										}
+									},
+									error: function(data){
+										alert("error by load_params_value.php");
+									}
+								});
+
+								$(this).attr("data-content", content);
+								$(this).popover({
+									html: true
+								}).popover('show');
+
+							});
+							$(".cate_data").mouseout(function(){
+								$(this).popover('hide');
+							});
+						
 						}
 					}
 				},
