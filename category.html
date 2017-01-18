@@ -565,43 +565,55 @@
 		$("#modify_btn_Modal").on('click', function(){
 			var check = 0;
 			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
-				var temp = "";
-				var temp_value = "";
-				for(var i=0; i<$("#modify_param_list_" + index+ " > label").length; i++){
-					var str = $("#modify_param_list_" + index + " > label")[i];
-					if(str.className == "btn btn-primary active"){
-						temp += str.childNodes[0].value + ",";
-						temp_value += $('#modify_' + str.childNodes[0].value + '_' + index).val() + ",";
-					}
-					else{
-						temp_value += ",";
-					}	
+				if((document.getElementById("modify_name_" + index).value == "")
+					|| (document.getElementById("modify_serial_" + index).value == "")){
+						alert("카테고리 이름과 ID구분자는 필수 입력해야 합니다.");
+						break;
 				}
-				temp = temp.substring(0,temp.length-1);
-				temp_value = temp_value.substring(0,temp_value.length-1);
-	
-				var paramValue = "";
-				paramValue += ($('#modify_name_' + index).val() + ";");
-				paramValue += ($('#modify_serial_' + index).val() + ";");
-				paramValue += temp + ";";
-				paramValue += temp_value;
-				
-				
-				$.ajax({
-					url: "php/modify_by_index.php",
-					type: "GET",
-					async:false,
-					data: {	"seq": $('input[name=_selected_]:checked')[index].value,
-									"cate_params": total_param,
-									"param_value": paramValue,
-									"table": "tb_category"},
-					success: function(data){	
-						check += 1;
-					},		 
-					error: function(data){
-						alert("error by modify_by_index.php");
-					} 
-				});
+				else{
+					var temp = "";
+					var temp_value = "";
+					for(var i=0; i<$("#modify_param_list_" + index+ " > label").length; i++){
+						var str = $("#modify_param_list_" + index + " > label")[i];
+						if(str.className == "btn btn-primary active"){
+							temp += str.childNodes[0].value + ",";
+							temp_value += $('#modify_' + str.childNodes[0].value + '_' + index).val() + ",";
+						}
+						else{
+							temp_value += ",";
+						}	
+					}
+					temp = temp.substring(0,temp.length-1);
+					temp_value = temp_value.substring(0,temp_value.length-1);
+
+					var paramValue = "";
+					paramValue += ($('#modify_name_' + index).val() + ";");
+					paramValue += ($('#modify_serial_' + index).val() + ";");
+					paramValue += temp + ";";
+					paramValue += temp_value;
+
+
+					$.ajax({
+						url: "php/modify_by_index.php",
+						type: "GET",
+						async:false,
+						data: {	"seq": $('input[name=_selected_]:checked')[index].value,
+										"cate_params": total_param,
+										"param_value": paramValue,
+										"table": "tb_category"},
+						success: function(data){
+							if(data.length > 1){  
+								alert((index+1) + "번째 수정데이터 오류\n" + data);
+							}
+							else{
+								check += 1;
+							}
+						},		 
+						error: function(data){
+							alert("error by modify_by_index.php");
+						} 
+					});
+				}
 			}	
 			
 			if(check == $('input[name=_selected_]:checked').length){

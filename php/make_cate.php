@@ -21,9 +21,9 @@ if(!($temp1 = $connect->query($check_query1))) throw new Exception($connect->err
 $check_query2 = "select seq from tb_category where cate_serial='$serial';";
 if(!($temp2 = $connect->query($check_query2))) throw new Exception($connect->error);
 
-if(($temp1->num_rows != 0) && ($temp2->num_rows != 0)) echo "기존의 카테고리와 이름과 고유키가 동일합니다.";
-else if($temp1->num_rows != 0) echo "기존의 카테고리와 이름이 동일합니다.";
-else if($temp2->num_rows != 0) echo "기존의 카테고리와 고유키가 동일합니다.";
+if(($temp1->num_rows != 0) && ($temp2->num_rows != 0)) echo "카테고리의 이름과 고유키가 이미 존재합니다.";
+else if($temp1->num_rows != 0) echo "카테고리의 이름이 이미 존재합니다.";
+else if($temp2->num_rows != 0) echo "카테고리의 고유키가 이미 존재합니다.";
 else{ // 겹치지 않을 경우
 	$param_arr = split(",",$params);
 	$param_value = split(",",$values);
