@@ -375,7 +375,15 @@
 					event.target.style.backgroundColor = 'transparent';
 				}
 			}
-		} 
+		}
+		
+		$("input, textarea").keyup(function(){
+			var value = $(this).val();
+			if(value.indexOf(",") != -1){
+					value = value.substr(0, value.indexOf(","));
+					$(this).val(value);				
+			}
+		});
 
 		// 다음 버튼 클릭 시
 		$("#after").on('click', function(){
