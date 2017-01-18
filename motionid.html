@@ -693,7 +693,12 @@
 					
 					var csvString = 'motion_type(category),motion_id(motionID)\r\n';
 					for(i=0; i<document.getElementById("add_count").value; i++){
-						csvString += add_current_cate + ',' + generateId(add_current_cate) + '\r\n';
+						var temp_id = generateId(add_current_cate);
+						
+						//엑셀 내에서도 중복 검색
+						while(csvString.indexOf("," + temp_id) != -1) temp_id = generateId(add_current_cate);
+						
+						csvString += add_current_cate + ',' + temp_id + '\r\n';
 					}
 					tempString = csvString.substring(43,csvString.length);
 					
