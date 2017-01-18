@@ -44,7 +44,7 @@
 						<input class="btn btn-default" type="button" data-toggle="modal" data-target="#AddModal" value="모션아이디 생성">
 					</div>
 					<div class="row">
-						<table class="table table-bordered myTable">
+						<table class="table table-bordered myTable" style="font-size:smaller">
 							<thead>
 								<tr>
 									<th><input type="checkbox" name="_selected_all_"></th>
@@ -600,8 +600,9 @@
 				var paramValue = "";
 				for(i=3; i<13; i++){
 					var tempValue = head_arr[i][0] + "_" + index;
-					paramValue += ($('#' + tempValue).val() + ",");
+					paramValue += ($('#' + tempValue).val() + ",,");
 				}
+				
 				$.ajax({
 					url: "php/modify_by_index.php",
 					type: "GET",

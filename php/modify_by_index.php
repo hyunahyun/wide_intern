@@ -10,7 +10,7 @@ if(!strcmp($table,"tb_motionid")){
 	$query = "update tb_motionid set ";
 
 	$param_arr = split(",",$params);
-	$value_arr = split(",",$values);
+	$value_arr = split(",,",$values);
 
 	for($i=0;$i< sizeof($param_arr);$i++){
 		if($i < (sizeof($param_arr)-1) ){
