@@ -246,6 +246,8 @@
 					alert("error by load_cate.php");
 				}
 			});
+		
+			notAllowedComma();
 		};
 		
 		// 이전 버튼 클릭 시
@@ -377,13 +379,15 @@
 			}
 		}
 		
-		$("input, textarea").keyup(function(){
-			var value = $(this).val();
-			if(value.indexOf(",") != -1){
-					value = value.substr(0, value.indexOf(","));
-					$(this).val(value);				
-			}
-		});
+		function notAllowedComma(){
+			$("input, textarea").keyup(function(){
+				var value = $(this).val();
+				if(value.indexOf(",") != -1){
+						value = value.substr(0, value.indexOf(","));
+						$(this).val(value);				
+				}
+			});
+		}
 
 		// 다음 버튼 클릭 시
 		$("#after").on('click', function(){
@@ -460,6 +464,8 @@
 																																 + result[i][0] + ' : </p><input class="form-control" id="modify_'
 																																 + result[i][0] + '_' + index + '"></div>');
 								if(index == 0) total_param += result[i][0] + ",";
+								
+								notAllowedComma();
 							}
 								 
 							parameter_num = result.length - 4;
@@ -621,6 +627,8 @@
 							$("#param_list").parent().parent().append('<div class="row modal-row temp-row" style="display:none"><p>'
 																												+ result[i][0] + ' : </p><input class="form-control" id="add_'
 																												+ result[i][0] + '"></div>');
+							
+							notAllowedComma();
 						}
 					},
 					error: function(data){
@@ -712,6 +720,7 @@
 						$("#param" + (i-3)).css('background-color','white');
 																																																																					
 						i++;
+						notAllowedComma();
 
 						//삭제
 						$(".glyphicon-remove").on('click',function(){
@@ -736,6 +745,8 @@
 						$(this).siblings()[0].style.color = 'black';
 						$(this).siblings()[0].type = 'text';
 						$(this).siblings()[0].style.backgroundColor = 'white';
+						
+						notAllowedComma();
 					});
 
 					//DB등록버튼을 눌렀을 때
