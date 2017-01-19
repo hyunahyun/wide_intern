@@ -314,9 +314,25 @@
 					//개수 출력
 					if(result != null){
 						for(i=0; i<result.length; i++){
+							var param = "";
+							$.ajax({
+								url: "php/load_params_value.php",
+								type: "GET",
+								async:false,
+								data: {	"category": result[i][1]},
+								success: function(data){
+									if(data != "0"){
+										param = data;
+									}
+								},
+								error: function(data){
+									alert("error by load_params_value.php");
+								}
+							});
+							
 
-						// 공통 부분(seq, cate_name, cate_serial, cate_params)
-						$('tbody:last').append('<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td class="cate_data" data-container="body" data-toggle="popover" data-placement="top">'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td></tr>');
+							// 공통 부분(seq, cate_name, cate_serial, cate_params)
+							$('tbody:last').append('<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td class="cate_data" data-container="body" data-toggle="popover" data-placement="top">'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ param +'</td></tr>');
 						}
 						
 						//카테고리 호버 시

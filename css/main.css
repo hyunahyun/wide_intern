@@ -145,6 +145,11 @@ body,
 		font-size: 107%;
 }
 
+.myTable > thead > tr > th,
+.myTable > tbody > tr > td {
+		vertical-align: middle;
+}
+
 .pagination > li.active > a, .pagination > li.active > a:hover, .pagination > li.active > a:focus{
 		background-color: #2A3F54;
 		border-color: #2A3F54;
