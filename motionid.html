@@ -320,7 +320,11 @@
 						//결과 출력
 						if(result != null){
 							for(i=0; i<result.length; i++){
-								// 공통 부분(seq, motion_type, motion_id)
+								//업데이트 날짜 시간부분 삭제
+								if(result[i][6] != null) result[i][6] = result[i][6].substring(0,10);
+								if(result[i][9] != null) result[i][9] = result[i][9].substring(0,10);
+								if(result[i][12] != null) result[i][12] = result[i][12].substring(0,10);
+								
 								var str = '<tr id="tr_' + (i+1) + '"><td><input type="checkbox" name="_selected_" value="' + result[i][0] +'"></td><td class="cate_data" data-container="body" data-toggle="popover" data-placement="top">'+ result[i][1] +'</td><td>'+ result[i][2] +'</td><td>'+ result[i][3] +'</td><td>'+ result[i][4] +'</td><td>'+ result[i][5] +'</td><td>'+ result[i][6] +'</td><td>'+ result[i][7] +'</td><td>'+ result[i][8] +'</td><td>'+ result[i][9] +'</td><td>'+ result[i][10] +'</td><td>'+ result[i][11] +'</td><td>'+ result[i][12] +'</td></tr>';
 
 								$('tbody:last').append(str);
@@ -562,15 +566,20 @@
 							})
  
 							for(i=(result.length - 1); i>2; i--){
-								var string = '<div class="row modal-row modify_param"><p>' + head_name[i] + ' : </p><input class="form-control"';
-								if((i%3 == 0) && (i != 3)) string += ' type="date"';
-								string += ' id="' + head_arr[i][0] +'_' + index + '"></div>';
+								var string = "";
+								
+								if((i%3 == 0) && (i != 3)) string = '<p id="' + head_arr[i][0] + '_' + index + '">' + head_name[i] + ' : ' +  + '</p>';
+								else{
+									string = '<div class="row modal-row modify_param"><p>' + head_name[i] + ' : </p><input class="form-control" id="'
+														+ head_arr[i][0] +'_' + index + '"></div>';
+								}
 								
 								$("#modify_id" + index).after(string);
 							}
 
 							for(i=3; i<result.length; i++)
-								$('#' + head_arr[i][0] + '_' + index).val(result[i]);
+								if((i%3 == 0) && (i != 3)) $('#' + head_arr[i][0] + '_' + index).text(head_name[i] + " : " + result[i]);
+								else $('#' + head_arr[i][0] + '_' + index).val(result[i]);
  
 						},
 						error: function(data){
@@ -592,15 +601,20 @@
 			var check = 0;
 			var param_arr = "";
 			for(i=3; i<13; i++){
-				if (i == 12) param_arr += head_arr[i][0];
-				else param_arr += head_arr[i][0] + ",";
+				if((i%3 == 0) && (i != 3)) continue;
+				else{
+					if (i == 11) param_arr += head_arr[i][0];
+					else param_arr += head_arr[i][0] + ",";
+				}
 			}
 					
 			for(var index = 0; index < $('input[name=_selected_]:checked').length; index++){
 				var paramValue = "";
 				for(i=3; i<13; i++){
-					var tempValue = head_arr[i][0] + "_" + index;
-					paramValue += ($('#' + tempValue).val() + ",,");
+					if((i%3 == 0) && (i != 3)) continue;
+					else{
+						paramValue += ($('#' + head_arr[i][0] + "_" + index).val() + ",,");
+					}
 				}
 				
 				$.ajax({
@@ -617,7 +631,7 @@
 					error: function(data){
 						alert("error by modify_by_index.php");
 					}
-				}); 
+				});
 			}	
 			
 			if(check == $('input[name=_selected_]:checked').length)	{
