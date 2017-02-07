@@ -299,7 +299,7 @@
 			$('input[name=_selected_]').prop('checked', this.checked);
 		});
 		
-		$(".myTable > tbody > tr").on('click', function(){
+		$(".myTable tbody").on('click', 'tr' , function(){
 			var index = $(this)[0].childNodes[0].childNodes[0].value;
 			
 			if($('input[name=_selected_][value=' + index + ']').is(":checked"))
@@ -307,8 +307,6 @@
 			else
 				$('input[name=_selected_][value=' + index + ']').prop('checked', true);
 		});
-		
-		
 		
 		function loadCate(page_num){
 			$.ajax({
