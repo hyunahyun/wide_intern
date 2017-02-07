@@ -294,10 +294,21 @@
 			$("#ParamModal").modal('hide');
 		}
 		
-		// 체크박스 관리
+		// 체크박스 all 관리
 		$('input[name=_selected_all_]').on('change', function(){
 			$('input[name=_selected_]').prop('checked', this.checked);
 		});
+		
+		$(".myTable > tbody > tr").on('click', function(){
+			var index = $(this)[0].childNodes[0].childNodes[0].value;
+			
+			if($('input[name=_selected_][value=' + index + ']').is(":checked"))
+				$('input[name=_selected_][value=' + index + ']').prop('checked', false);
+			else
+				$('input[name=_selected_][value=' + index + ']').prop('checked', true);
+		});
+		
+		
 		
 		function loadCate(page_num){
 			$.ajax({
